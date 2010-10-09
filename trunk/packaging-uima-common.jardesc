@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
-    <jar path="uima-common/target/uima-common-v101007.jar"/>
+    <jar path="uima-common/target/uima-common-v101009.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/uima-common/packaging-uima-common.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
@@ -11,10 +11,14 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
-        <folder path="/uima-common/target"/>
         <file path="/uima-common/packaging-uima-common.jardesc"/>
+        <file path="/uima-common/.project"/>
+        <file path="/uima-common/ChangeLog"/>
+        <folder path="/uima-common/.settings"/>
+        <file path="/uima-common/LICENSE"/>
         <javaElement handleIdentifier="=uima-common/src"/>
         <file path="/uima-common/.classpath"/>
-        <file path="/uima-common/.project"/>
+        <file path="/uima-common/README"/>
+        <file path="/uima-common/TODO"/>
     </selectedElements>
 </jardesc>
