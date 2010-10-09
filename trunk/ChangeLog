@@ -18,10 +18,23 @@
 # specific language governing permissions and limitations
 # under the License.  
 #
-# Fichier TODO
-# 2010-10-01  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+# Fichier ChangeLog
+# 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
-	* Passer les paramètres Input View/Annotation/Feature et output 
-	View/Annotation/Feature qui semblent pertinents en Array 
-	* Faire en sorte  qu'execute recoivent un Index des annotations de la zone 
-	qu'il couvre et non seulement le texte
+2010-10-09  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+	* AnalysisEngine.java: Refactoring paramètre InputAnnotationString -> InputAnnotationStringArray
+	
+2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+	*  AnalysisEngine.java: Refactoring browseInput -> browseInputAnnotation et browseView
+	
+	
+YYYY-MM-DD  John Doe  <johndoe@example.com>
+
+    * myfile.ext (myfunction): my changes made
+    additional changes
+
+    * myfile.ext (unrelated_change): my changes made
+    to myfile.ext but completely unrelated to the above
+
+    * anotherfile.ext (somefunction): more changes
+
