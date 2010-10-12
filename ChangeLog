@@ -21,6 +21,10 @@
 # Fichier ChangeLog
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+2010-10-12  Nicolas Hernandez  <nicolas.hernandez@>
+	* UIMAUtilities.java et AnalysisEngine.java: subiterator à base de FScontraint à la place du subiterator standard 
+	(notamment pour le contexte)
+
 2010-10-09  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 	* AnalysisEngine.java: Refactoring paramètre InputAnnotationString -> InputAnnotationStringArray
 	

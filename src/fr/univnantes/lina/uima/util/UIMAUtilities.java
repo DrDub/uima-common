@@ -22,11 +22,25 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.CASException;
+import org.apache.uima.cas.ConstraintFactory;
+import org.apache.uima.cas.FSIndex;
+import org.apache.uima.cas.FSIntConstraint;
+import org.apache.uima.cas.FSIterator;
+import org.apache.uima.cas.FSMatchConstraint;
+import org.apache.uima.cas.FSTypeConstraint;
+import org.apache.uima.cas.Feature;
+import org.apache.uima.cas.FeaturePath;
+import org.apache.uima.cas.FeatureStructure;
 import org.apache.uima.cas.Type;
+import org.apache.uima.cas.text.AnnotationIndex;
 import org.apache.uima.jcas.JCas;
+import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.jcas.tcas.Annotation;
 
 import fr.univnantes.lina.util.JavaUtilities;
@@ -146,39 +160,54 @@ public class UIMAUtilities {
 	 * @return result
 	 * @throws AnalysisEngineProcessException
 	 */
-		public static String invokeStringGetMethod(Class InputAnnotationClass, Annotation inputAnnotation, String inputFeatureString) throws AnalysisEngineProcessException {
+	public static String invokeStringGetMethod(Class InputAnnotationClass, Annotation inputAnnotation, String inputFeatureString) throws AnalysisEngineProcessException {
 
-			String result = "";
-			
-			// Récupère la méthode pour "getter" la value de l'InputFeature
-			String getFeatureMethodName = "get" + inputFeatureString.substring(0, 1).toUpperCase() + inputFeatureString.substring(1);
+		String result = "";
 
-			Method getFeatureMethod = null;
-			try {
-				getFeatureMethod = InputAnnotationClass.getMethod(getFeatureMethodName);
-			} catch (SecurityException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		// Récupère la méthode pour "getter" la value de l'InputFeature
+		String getFeatureMethodName = "get" + inputFeatureString.substring(0, 1).toUpperCase() + inputFeatureString.substring(1);
 
-			// Test contre la création d'annotations fantomes
-			 
-			try {
-				result = (String) getFeatureMethod.invoke(inputAnnotation);
-			} catch (IllegalArgumentException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+		Method getFeatureMethod = null;
+		try {
+			getFeatureMethod = InputAnnotationClass.getMethod(getFeatureMethodName);
+		} catch (SecurityException e) {
+			String errmsg = "Error: a SecurityException with getMethod " + getFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { getFeatureMethodName },e);	
+			//e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			String errmsg = "Error: NoSuchMethodException getMethod " + getFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { getFeatureMethodName },e);	
+			//e.printStackTrace();
+		}
+
+		// Test contre la création d'annotations fantomes
+
+		try {
+			result = (String) getFeatureMethod.invoke(inputAnnotation);
+		} catch (IllegalArgumentException e) {
+			String errmsg = "Error: IllegalArgumentException invoked " + inputAnnotation
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { inputAnnotation },e);	
+			//e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			String errmsg = "Error: IllegalAccessException invoked " + inputAnnotation
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { inputAnnotation },e);	
+			//e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			String errmsg = "Error: InvocationTargetException invoked " + inputAnnotation
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { inputAnnotation },e);	
+			//e.printStackTrace();
+		}
+
 		return result;
 	}
 
@@ -257,7 +286,7 @@ public class UIMAUtilities {
 
 			// value -> setValue
 			String setFeatureMethodName = "set" + featureNameToSet.substring(0, 1).toUpperCase() + featureNameToSet.substring(1);
-			
+
 			Method setValue = TgtClass.getMethod(setFeatureMethodName, String.class);
 
 			// Ajouts à l'annotation du type target
@@ -307,7 +336,7 @@ public class UIMAUtilities {
 			//e.printStackTrace();
 		}
 	}
-	
+
 	/**
 	 * This method create a view.
 	 * 
@@ -335,6 +364,154 @@ public class UIMAUtilities {
 		}
 	}
 
+	/**
+	 * This method get an FeatureStructure Array of selected annotation types
+	 * 
+	 * @param aJCas
+	 *            the CAS over which the process is performed
+	 * @param annotationHashMap
+	 * 			Map of annotations to filter in the JCas
+	 * @return ArrayList<FeatureStructure>
+	 * 			Filtered JCas with the selected annotation 
+	 * @throws AnalysisEngineProcessException 
+	 */
+	public static ArrayList<FeatureStructure> getAnnotationArray(JCas aJCas, HashMap annotationHashMap) throws AnalysisEngineProcessException {
+
+		//System.out.println("Debug: getAnnotationArray HashMap.size>"+annotationHashMap.size()+"<");
+
+		ArrayList<FeatureStructure> result =  new ArrayList<FeatureStructure>();
+		//FSIndex<Annotation> result =  null;
+		AnnotationIndex annotationIndex = (AnnotationIndex)
+		aJCas.getAnnotationIndex();
+		FSIterator annotationIndexIterator = annotationIndex.iterator();
+		
+		//Iterator keyIter = annotationHashMap.keySet().iterator();
+		//while (keyIter.hasNext()){
+		//	String key = (String) keyIter.next();
+		//	System.out.println("Debug: key>"+key+"<");
+		//}
+		
+		while (annotationIndexIterator.hasNext()) {
+			//      On peut le manipuler comme on veut ...
+			Object annotationObject = annotationIndexIterator.next();
+			Class  annotationClass = annotationObject.getClass();
+			String className = "null";
+			if (annotationClass != null ) {
+				className = annotationClass.getName(); //.toString();
+				//System.out.println("Debug: class>"+className+"<");
+				if (annotationHashMap.containsKey(className)) {
+					result.add((FeatureStructure) annotationObject);
+					Annotation annotation = (Annotation) annotationObject;
+					//System.out.println("Debug: "+className + "\t" + annotation.getCoveredText()+ "\t" + annotation.getBegin() + "\t" +annotation.getEnd());
+				
+				}
+			}
+				
+		}
+
+		return result;
+	}
+
+
+	
+	/**
+	 * 
+	 * This method provides an iterator over typed annotations that either 
+	 * have an offset embedded in that of a given annotation in a document, 
+	 * or have the same offset as these annotation. 
+	 * 
+	 * @param aJCas  the document in which stand the source and
+	 *                                         target annotations
+	 * @param contextAnnotation  the source annotation under which target 
+	 *                                         annotations that have to be drawn out
+	 * @param inputAnnotationType            the type of the target annotations that have 
+	 *                                         to be drawn out from the document under 
+	 *                                         the source annotation
+	 * @param isStrict              the boolean that defines the offset matching,
+	 *                                         offsets strictly equal if isStrict is true, begin 
+	 *                                         offsets greater or equal and end offsets less 
+	 *                                         or equal otherwise.  	
+	 * @return                           the iterator over the type theType annotations 
+	 *                                          which stand under the annotation theAnnotation 
+	 *                                          in the document theDocument 
+	 *                                should include the context annotation itself...          
+	 * 
+	 * @author Fabien Poulard
+	 * @author Jérôme Rocheteau
+	 * @author hernandez
+	 * @throws AnalysisEngineProcessException 
+	 * 
+	 * @license Apache 2.0
+	 */
+	public static FSIterator subiterator(JCas aJCas, Annotation contextAnnotation, HashMap inputAnnotationHashMap, boolean isStrict) throws AnalysisEngineProcessException {
+		//,Type inputAnnotationType,  boolean isStrict) {
+	
+		// Ajout: déclaration de la variable type
+		Type contextAnnotationType = contextAnnotation.getType();
+
+		// On utilise le constraint factory
+		ConstraintFactory theConstraints = aJCas.getConstraintFactory();
+
+		// On définit les contraintes sur le début de l'annotation
+		FSIntConstraint beginConstraint = theConstraints.createIntConstraint();
+		if (isStrict) { 
+			beginConstraint.eq(contextAnnotation.getBegin());
+		} else {
+			beginConstraint.
+			geq(contextAnnotation.getBegin()-1); 
+		}
+		Feature beginFeature = contextAnnotationType.getFeatureByBaseName("begin");
+		FeaturePath beginPath = aJCas.createFeaturePath();
+		beginPath.addFeature(beginFeature);
+		FSMatchConstraint begin = theConstraints.embedConstraint(beginPath,beginConstraint);
+
+
+		// ... puis sur la fin de l'annotation
+		FSIntConstraint endConstraint = theConstraints.createIntConstraint();
+		if (isStrict) {
+			endConstraint.eq(contextAnnotation.getEnd());
+		} else {
+			endConstraint.leq(contextAnnotation.getEnd()+1);
+		}
+		Feature endFeature = contextAnnotationType.getFeatureByBaseName("end");
+		FeaturePath endPath = aJCas.createFeaturePath();
+		endPath.addFeature(endFeature);
+		FSMatchConstraint end = theConstraints.embedConstraint(endPath, endConstraint);
+
+		
+		// JR: on définit une contrainte sur le type d'annotation
+		// NH: à partir d'une Map d'annotations
+		FSTypeConstraint typeConstraint = theConstraints.createTypeConstraint();
+
+		System.out.println("Debug: contextAnnotationType.getName()>"+contextAnnotationType.getName()+"<");
+
+		System.out.println("Debug: contextAnnotation.getCoveredText()>"+contextAnnotation.getCoveredText()+"<");
+		System.out.println("Debug: contextAnnotation.getBegin()>"+contextAnnotation.getBegin()+"<");
+		System.out.println("Debug: contextAnnotation.getEnd()>"+contextAnnotation.getEnd()+"<");
+
+		Iterator keyIter = inputAnnotationHashMap.keySet().iterator();
+		while (keyIter.hasNext()){
+			String key = (String) keyIter.next();
+			System.out.println("Debug: key>"+key+"<");
+			typeConstraint.add(getType(aJCas,key));
+		} 
+		FeaturePath typePath = aJCas.createFeaturePath();
+		FSMatchConstraint type = theConstraints.embedConstraint(typePath, typeConstraint);
+
+
+		// On combine les contraintes
+		FSMatchConstraint typeAndBeginAndEnd = null; 
+		typeAndBeginAndEnd =  theConstraints.and(type,theConstraints.and(begin, end));
+
+
+		// On génère un itérateur respectant ces contraintes
+		FSIterator filteredIterator = null;
+		filteredIterator = aJCas.createFilteredIterator(aJCas.getAnnotationIndex().iterator(), typeAndBeginAndEnd);
+
+
+		return filteredIterator;
+	}
+	
 	
 	/**
 	 * Return the sofaDataString of a JCAS corresponding to the given view 
