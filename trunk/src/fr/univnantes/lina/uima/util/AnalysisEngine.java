@@ -420,12 +420,8 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 			FSIterator contextualizedInputAnnotationsFSIter = null;
 			contextualizedInputAnnotationsFSIter = UIMAUtilities.subiterator(inputViewJCas, contextAnnotation, inputAnnotationStringHashMap,false);
 
-			// Pour chaque inputAnnotation présent dans le context ou input view
+			// Pour chaque inputAnnotation présent dans le context 
 			while (contextualizedInputAnnotationsFSIter.hasNext()) {
-
-				String inputTextToProcess = "" ;
-				int beginFeatureValueFromAnnotationToCreate ; 
-				int endFeatureValueFromAnnotationToCreate; 
 
 				// Récupère le texte à traiter et ses offsets qui pourront éventuellement servir
 				// si l'outputType est Annotation
@@ -433,50 +429,53 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 				// Récupère et cast l'inputAnnotation courante à manipuler
 				Object annotationObject = contextualizedInputAnnotationsFSIter.next();
-				Annotation inputAnnotation = (Annotation) annotationObject;
+				Class  annotationClass = annotationObject.getClass();
+				//if (annotationClass != null ) {				
+				String className = "null";
+				className = annotationClass.getName(); //.toString(
+				//System.out.println("Debug: class>"+className+"<");
+				Class<Annotation> inputAnnotationClass = UIMAUtilities.getClass(className);
 
+				Annotation inputAnnotation = (Annotation) annotationObject;
+				inputAnnotationClass.cast(inputAnnotation);
 				//System.out.println("inputAnnotationType.getName()>"+inputAnnotation.getType().getName()+"<");
 				//System.out.println("inputAnnotation.coveredText>"+inputAnnotation.getCoveredText()+"<");
 				//System.out.println("inputAnnotation.begin>"+inputAnnotation.getBegin()+"<");
 				//System.out.println("inputAnnotation.end>"+inputAnnotation.getEnd()+"<");
 
-				Class  annotationClass = annotationObject.getClass();
-				String className = "null";
-				if (annotationClass != null ) {
-					className = annotationClass.getName(); //.toString(
-					System.out.println("class>"+className+"<");
-					Class<Annotation> inputAnnotationClass = UIMAUtilities.getClass(className);
-					inputAnnotationClass.cast(inputAnnotation);
 
-					// Invoque la récupération de la valeur dont l'inputFeatureString est spécifiée pour l'annotation courante 
-					// inputTextToProcess = inputAnnotation.getCoveredText();
-					inputTextToProcess = UIMAUtilities.invokeStringGetMethod(inputAnnotationClass, inputAnnotation, inputFeatureString);
+				// Invoque la récupération de la valeur dont l'inputFeatureString est spécifiée pour l'annotation courante 
+				String inputTextToProcess = "" ;
+				// inputTextToProcess = inputAnnotation.getCoveredText();
+				inputTextToProcess = UIMAUtilities.invokeStringGetMethod(inputAnnotationClass, inputAnnotation, inputFeatureString);
+				//log ("Debug: inputTextToProcess>"+inputTextToProcess+"<");
 
-					//log ("Debug: inputTextToProcess>"+inputTextToProcess+"<");
-					beginFeatureValueFromAnnotationToCreate = inputAnnotation.getBegin(); 
-					endFeatureValueFromAnnotationToCreate= inputAnnotation.getEnd(); 
+				int beginFeatureValueFromAnnotationToCreate; 
+				int endFeatureValueFromAnnotationToCreate; 
+				beginFeatureValueFromAnnotationToCreate = inputAnnotation.getBegin(); 
+				endFeatureValueFromAnnotationToCreate= inputAnnotation.getEnd(); 
 
-					/** -- Execute and get result **/
-					log("Executing and getting the result");
-					String commandLocalResultString = "";
-					commandLocalResultString =  analyse (inputViewJCas, inputTextToProcess, beginFeatureValueFromAnnotationToCreate, endFeatureValueFromAnnotationToCreate);
+				/** -- Execute and get result **/
+				log("Executing and getting the result");
+				String commandLocalResultString = "";
+				commandLocalResultString =  analyse (inputViewJCas, inputTextToProcess, beginFeatureValueFromAnnotationToCreate, endFeatureValueFromAnnotationToCreate);
 
-					// Soit pour chaque annotation en entrée à traiter soit pour la vue en entrée
-					if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
-						/** -- Create annotation**/
-						log("Creating output annotation");
-						UIMAUtilities.createAnnotation(outputViewJCas,outputAnnotationString, beginFeatureValueFromAnnotationToCreate,endFeatureValueFromAnnotationToCreate,outputFeatureString,commandLocalResultString);
-					}
-					else { 
-						// L'output_type est view
-						// On stocke les résultats obtenus pour chaque annotation
-						// On copiera le tout dans le sofaDataString en une seule fois
-
-						log("Concating the result");
-						commandResultString += 
-							commandLocalResultString;
-					}
+				// Soit pour chaque annotation en entrée à traiter soit pour la vue en entrée
+				if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
+					/** -- Create annotation**/
+					log("Creating output annotation");
+					UIMAUtilities.createAnnotation(outputViewJCas,outputAnnotationString, beginFeatureValueFromAnnotationToCreate,endFeatureValueFromAnnotationToCreate,outputFeatureString,commandLocalResultString);
 				}
+				else { 
+					// L'output_type est view
+					// On stocke les résultats obtenus pour chaque annotation
+					// On copiera le tout dans le sofaDataString en une seule fois
+
+					log("Concating the result");
+					commandResultString += 
+						commandLocalResultString;
+				}
+				//}
 
 			}
 
