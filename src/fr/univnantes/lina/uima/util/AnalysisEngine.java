@@ -110,7 +110,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	// 
 	private static String INPUTTYPE_ANNOTATION = "annotation";
 	private static String INPUTTYPE_VIEW = "view";
-	private static String OUTPUTTYPE_ANNOTATION = "annotation";
+	protected static String OUTPUTTYPE_ANNOTATION = "annotation";
 	private static String OUTPUTTYPE_VIEW = "view";
 
 
@@ -248,7 +248,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		log("-----------------------------------------------------------------------------------------------------------------");
 		if (inputType.equalsIgnoreCase(INPUTTYPE_ANNOTATION)) {
 			log("Process the input annotation of a given type (potentially covered by a context annotation of a given type)");
-			browseInputAnnotation(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
+			browseContextualizedInputAnnotation(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
 		}
 		else {
 			log("Process the input view");
@@ -256,6 +256,195 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		}
 	}
 
+
+
+	/**
+	 * This method is invoked when the analysis has to be processed for   
+	 * some input annotations which are covered by specific contextAnnotation.
+	 * 
+	 * @param aJCas
+	 *            the CAS over which the process is performed
+	 * @param inputViewString
+	 * @param contextAnnotationType
+	 *            Type name of the annotations to consider as the context
+	 *            annotations in which the process will be performed
+	 * @param inputAnnotationType
+	 *            Type name of the annotations to consider as the token units to
+	 *            be processed
+	 * @param inputFeatureString
+	 * @param outputViewString
+	 * @param outputViewTypeMimeString
+	 * @param outputAnnotationString
+	 * @param ouputFeatureString
+	 * @throws AnalysisEngineProcessException
+	 */
+	private void browseContextualizedInputAnnotation(JCas aJCas, String inputViewString, String contextAnnotationString, String[] inputAnnotationStringArray, String inputFeatureString, String outputViewString, String outputViewTypeMimeString, String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
+
+
+
+		/** -- Prepare the view to be processed**/
+		log("Getting the inputViewJCas");
+		JCas inputViewJCas = UIMAUtilities.getView(aJCas,inputViewString);
+
+		/** -- In case of the output type is annotation, get the view to store the result **/
+		// si les param annotations sont renseignés alors cela signifie que l'on
+		// suppose qu'une vue existe pour accueillir les annotations
+		// on effectue ici le getView pour d'éviter de le faire à chaque tour de boucle 
+		// si l'inputType est annotation
+		JCas outputViewJCas = null;
+		if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
+			log("Getting the outputViewJCas");
+			outputViewJCas = UIMAUtilities.getView(aJCas,outputViewString);		
+		}	
+
+		// Récupère les types de context annotations 
+		AnnotationIndex<Annotation> contextAnnotationIndex = null; 
+		Type contextAnnotationType = null;
+		contextAnnotationType = UIMAUtilities.getType(inputViewJCas, contextAnnotationString);
+
+		log("Getting the Context Annotation index");
+		// Récupère une liste de contexts
+		// Récupération d'index d'annotations à partir de type d'annotation!
+		// soit comme cela
+		//   AnnotationIndex idxMonType = (AnnotationIndex)
+		//   cas.getAnnotationIndex(inputAnnotationType);
+		//   FSIterator monTypeIt = idxMonType.iterator();
+		//   while (monTypeIt.hasNext()) {
+		//      On peut le manipuler comme on veut ...
+		//   }
+		// soit comme cela
+		// sans reflect
+		//    FSIndex tokenAnnotationFSIdx =
+		//    aJCas.getAnnotationIndex(TokenAnnotation.type);
+		// avec reflect
+		//    FSIndex<Annotation> inputAnnotationFSIdx = aJCas
+		//    .getAnnotationIndex(inputAnnotationType);
+		Iterator<Annotation> contextAnnotationIndexIterator = null;
+		contextAnnotationIndex = (AnnotationIndex<Annotation>) inputViewJCas
+		.getAnnotationIndex(contextAnnotationType);
+		contextAnnotationIndexIterator = contextAnnotationIndex.iterator();
+		
+		// var to concat the results in case of a view as the output type 
+		String commandResultString = "";
+
+		// Pour chaque context ou input view
+		while (contextAnnotationIndexIterator.hasNext()) {
+
+			// Context Annotation suivante de même type
+			Annotation contextAnnotation = null ;
+			contextAnnotation = (Annotation) contextAnnotationIndexIterator.next();
+
+			// Récupère le type d'input annotations 
+			//				Type inputAnnotationType = null;
+			//				inputAnnotationType = UIMAUtilities.getType(inputViewJCas, inputAnnotationString);
+			//Type inputAnnotationType = null;
+			//inputAnnotationType = UIMAUtilities.getType(inputViewJCas, inputAnnotationStringHashMap.keySet().iterator().next());
+
+			log("Getting the Input Annotations index ");
+			// Récupération de la liste des inputAnnotation
+			//Iterator<Annotation> inputAnnotationIterator = null;
+			//inputAnnotationIterator = inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
+			FSIterator contextualizedInputAnnotationsFSIter = null;
+			contextualizedInputAnnotationsFSIter = UIMAUtilities.subiterator(inputViewJCas, contextAnnotation, inputAnnotationStringHashMap,false);
+
+			commandResultString = browseInputAnnotation(inputViewJCas,
+					contextualizedInputAnnotationsFSIter, inputFeatureString,
+					outputViewJCas, outputAnnotationString);
+		}
+
+		
+		/** -- Create view **/
+		// output_v_string est défini ; potentiellement il est égal à input_v ; normalement la vue n'existe pas et est à créer
+		if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW)) {
+			log("Creating output view");
+			// ici on suppose que outputViewString ne correspond à aucune vue existante (a fortiori est différent de inputViewString) 
+			// et que createView génèrera une erreur si la vue existe déjà
+			UIMAUtilities.createView(aJCas, outputViewString, commandResultString, outputViewTypeMimeString);
+		}
+
+	}
+
+
+	/**
+	 * Implementation of browse an input annotation iterator
+	 * @param inputViewJCas
+	 * @param contextualizedInputAnnotationsFSIter
+	 * @param inputFeatureString
+	 * @param outputViewJCas
+	 * @param outputAnnotationString
+	 * @return
+	 * @throws AnalysisEngineProcessException
+	 */
+	protected String browseInputAnnotation(JCas inputViewJCas,
+			FSIterator contextualizedInputAnnotationsFSIter,
+			String inputFeatureString, JCas outputViewJCas,
+			String outputAnnotationString)
+			throws AnalysisEngineProcessException {
+		
+		log("Debug: AnalysisEngine - browseInputAnnotation");
+
+		String commandResultString = "";
+		
+		// Pour chaque inputAnnotation présent dans le context 
+		while (contextualizedInputAnnotationsFSIter.hasNext()) {
+
+			// Récupère le texte à traiter et ses offsets qui pourront éventuellement servir
+			// si l'outputType est Annotation
+			log("Getting the current annotation to be proceeded");
+
+			// Récupère et cast l'inputAnnotation courante à manipuler
+			Object annotationObject = contextualizedInputAnnotationsFSIter.next();
+			
+			Class  annotationClass = annotationObject.getClass();
+			//if (annotationClass != null ) {				
+			String className = "null";
+			className = annotationClass.getName(); //.toString(
+			//System.out.println("Debug: class>"+className+"<");
+			Class<Annotation> inputAnnotationClass = UIMAUtilities.getClass(className);
+
+			Annotation inputAnnotation = (Annotation) annotationObject;
+			inputAnnotationClass.cast(inputAnnotation);
+			//System.out.println("inputAnnotationType.getName()>"+inputAnnotation.getType().getName()+"<");
+			//System.out.println("inputAnnotation.coveredText>"+inputAnnotation.getCoveredText()+"<");
+			//System.out.println("inputAnnotation.begin>"+inputAnnotation.getBegin()+"<");
+			//System.out.println("inputAnnotation.end>"+inputAnnotation.getEnd()+"<");
+
+			// Invoque la récupération de la valeur dont l'inputFeatureString est spécifiée pour l'annotation courante 
+			String inputTextToProcess = "" ;
+			// inputTextToProcess = inputAnnotation.getCoveredText();
+			
+			inputTextToProcess = UIMAUtilities.invokeStringGetterMethod(inputAnnotation, UIMAUtilities.getStringGetterMethod(inputAnnotationClass,inputFeatureString));
+			//log ("Debug: inputTextToProcess>"+inputTextToProcess+"<");
+
+			
+			int beginFeatureValueFromAnnotationToCreate; 
+			int endFeatureValueFromAnnotationToCreate; 
+			beginFeatureValueFromAnnotationToCreate = inputAnnotation.getBegin(); 
+			endFeatureValueFromAnnotationToCreate= inputAnnotation.getEnd(); 
+
+			/** -- Execute and get result **/
+			log("Executing and getting the result");
+			String commandLocalResultString = "";
+			commandLocalResultString =  analyse (inputViewJCas, inputTextToProcess, beginFeatureValueFromAnnotationToCreate, endFeatureValueFromAnnotationToCreate);
+
+			// Soit pour chaque annotation en entrée à traiter soit pour la vue en entrée
+			if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
+				/** -- Create annotation**/
+				log("Creating output annotation");
+				UIMAUtilities.createAnnotation(outputViewJCas,outputAnnotationString, beginFeatureValueFromAnnotationToCreate,endFeatureValueFromAnnotationToCreate,outputFeatureString,commandLocalResultString);
+			}
+			else { 
+				// L'output_type est view
+				// On stocke les résultats obtenus pour chaque annotation
+				// On copiera le tout dans le sofaDataString en une seule fois
+				log("Concating the result");
+				commandResultString += 
+					commandLocalResultString;
+			}
+		}
+		return commandResultString;
+	}
+	
 
 
 	/**
@@ -314,13 +503,11 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		}
 		else { 
 			/** -- Create view**/
-
 			// L'output_type est view
 			// On stocke les résultats obtenus pour chaque annotation
 			// On copiera le tout dans le sofaDataString en une seule fois
 			//if (commandResultString == null ) {commandResultString = commandLocalResultString;}
 			//else {
-
 			log("Creating output view");
 			// ici on suppose que outputViewString ne correspond à aucune vue existante (a fortiori est différent de inputViewString) 
 			// et que createView génèrera une erreur si la vue existe déjà
@@ -331,166 +518,6 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 	}
 
-
-	/**
-	 * This method is invoked when the analysis has to be processed for   
-	 * some input annotations which are covered by specific contextAnnotation.
-	 * 
-	 * @param aJCas
-	 *            the CAS over which the process is performed
-	 * @param inputViewString
-	 * @param contextAnnotationType
-	 *            Type name of the annotations to consider as the context
-	 *            annotations in which the process will be performed
-	 * @param inputAnnotationType
-	 *            Type name of the annotations to consider as the token units to
-	 *            be processed
-	 * @param inputFeatureString
-	 * @param outputViewString
-	 * @param outputViewTypeMimeString
-	 * @param outputAnnotationString
-	 * @param ouputFeatureString
-	 * @throws AnalysisEngineProcessException
-	 */
-	private void browseInputAnnotation(JCas aJCas, String inputViewString, String contextAnnotationString, String[] inputAnnotationStringArray, String inputFeatureString, String outputViewString, String outputViewTypeMimeString, String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
-
-		// var to concat the results in case of a view as the output type 
-		String commandResultString = "";
-
-		/** -- Prepare the view to be processed**/
-		log("Getting the inputViewJCas");
-		JCas inputViewJCas = UIMAUtilities.getView(aJCas,inputViewString);
-
-		/** -- In case of the output type is annotation, get the view to store the result **/
-		// si les param annotations sont renseignés alors cela signifie que l'on
-		// suppose qu'une vue existe pour accueillir les annotations
-		// on effectue ici le getView pour d'éviter de le faire à chaque tour de boucle 
-		// si l'inputType est annotation
-		JCas outputViewJCas = null;
-		if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
-			log("Getting the outputViewJCas");
-			outputViewJCas = UIMAUtilities.getView(aJCas,outputViewString);		
-		}	
-
-		// Récupère les types de context annotations 
-		AnnotationIndex<Annotation> contextAnnotationIndex = null; 
-		Type contextAnnotationType = null;
-		contextAnnotationType = UIMAUtilities.getType(inputViewJCas, contextAnnotationString);
-
-		log("Getting the Context Annotation index");
-		// Récupère une liste de contexts
-		// Récupération d'index d'annotations à partir de type d'annotation!
-		// soit comme cela
-		//   AnnotationIndex idxMonType = (AnnotationIndex)
-		//   cas.getAnnotationIndex(inputAnnotationType);
-		//   FSIterator monTypeIt = idxMonType.iterator();
-		//   while (monTypeIt.hasNext()) {
-		//      On peut le manipuler comme on veut ...
-		//   }
-		// soit comme cela
-		// sans reflect
-		//    FSIndex tokenAnnotationFSIdx =
-		//    aJCas.getAnnotationIndex(TokenAnnotation.type);
-		// avec reflect
-		//    FSIndex<Annotation> inputAnnotationFSIdx = aJCas
-		//    .getAnnotationIndex(inputAnnotationType);
-		Iterator<Annotation> contextAnnotationIndexIterator = null;
-		contextAnnotationIndex = (AnnotationIndex<Annotation>) inputViewJCas
-		.getAnnotationIndex(contextAnnotationType);
-		contextAnnotationIndexIterator = contextAnnotationIndex.iterator();
-
-
-		// Pour chaque context ou input view
-		while (contextAnnotationIndexIterator.hasNext()) {
-
-			// Context Annotation suivante de même type
-			Annotation contextAnnotation = null ;
-			contextAnnotation = (Annotation) contextAnnotationIndexIterator.next();
-
-			// Récupère le type d'input annotations 
-			//				Type inputAnnotationType = null;
-			//				inputAnnotationType = UIMAUtilities.getType(inputViewJCas, inputAnnotationString);
-			//Type inputAnnotationType = null;
-			//inputAnnotationType = UIMAUtilities.getType(inputViewJCas, inputAnnotationStringHashMap.keySet().iterator().next());
-
-			log("Getting the Input Annotations index ");
-			// Récupération de la liste des inputAnnotation
-			//Iterator<Annotation> inputAnnotationIterator = null;
-			//inputAnnotationIterator = inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
-			FSIterator contextualizedInputAnnotationsFSIter = null;
-			contextualizedInputAnnotationsFSIter = UIMAUtilities.subiterator(inputViewJCas, contextAnnotation, inputAnnotationStringHashMap,false);
-
-			// Pour chaque inputAnnotation présent dans le context 
-			while (contextualizedInputAnnotationsFSIter.hasNext()) {
-
-				// Récupère le texte à traiter et ses offsets qui pourront éventuellement servir
-				// si l'outputType est Annotation
-				log("Getting the text to proceed");
-
-				// Récupère et cast l'inputAnnotation courante à manipuler
-				Object annotationObject = contextualizedInputAnnotationsFSIter.next();
-				Class  annotationClass = annotationObject.getClass();
-				//if (annotationClass != null ) {				
-				String className = "null";
-				className = annotationClass.getName(); //.toString(
-				//System.out.println("Debug: class>"+className+"<");
-				Class<Annotation> inputAnnotationClass = UIMAUtilities.getClass(className);
-
-				Annotation inputAnnotation = (Annotation) annotationObject;
-				inputAnnotationClass.cast(inputAnnotation);
-				//System.out.println("inputAnnotationType.getName()>"+inputAnnotation.getType().getName()+"<");
-				//System.out.println("inputAnnotation.coveredText>"+inputAnnotation.getCoveredText()+"<");
-				//System.out.println("inputAnnotation.begin>"+inputAnnotation.getBegin()+"<");
-				//System.out.println("inputAnnotation.end>"+inputAnnotation.getEnd()+"<");
-
-
-				// Invoque la récupération de la valeur dont l'inputFeatureString est spécifiée pour l'annotation courante 
-				String inputTextToProcess = "" ;
-				// inputTextToProcess = inputAnnotation.getCoveredText();
-				inputTextToProcess = UIMAUtilities.invokeStringGetMethod(inputAnnotationClass, inputAnnotation, inputFeatureString);
-				//log ("Debug: inputTextToProcess>"+inputTextToProcess+"<");
-
-				int beginFeatureValueFromAnnotationToCreate; 
-				int endFeatureValueFromAnnotationToCreate; 
-				beginFeatureValueFromAnnotationToCreate = inputAnnotation.getBegin(); 
-				endFeatureValueFromAnnotationToCreate= inputAnnotation.getEnd(); 
-
-				/** -- Execute and get result **/
-				log("Executing and getting the result");
-				String commandLocalResultString = "";
-				commandLocalResultString =  analyse (inputViewJCas, inputTextToProcess, beginFeatureValueFromAnnotationToCreate, endFeatureValueFromAnnotationToCreate);
-
-				// Soit pour chaque annotation en entrée à traiter soit pour la vue en entrée
-				if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
-					/** -- Create annotation**/
-					log("Creating output annotation");
-					UIMAUtilities.createAnnotation(outputViewJCas,outputAnnotationString, beginFeatureValueFromAnnotationToCreate,endFeatureValueFromAnnotationToCreate,outputFeatureString,commandLocalResultString);
-				}
-				else { 
-					// L'output_type est view
-					// On stocke les résultats obtenus pour chaque annotation
-					// On copiera le tout dans le sofaDataString en une seule fois
-
-					log("Concating the result");
-					commandResultString += 
-						commandLocalResultString;
-				}
-				//}
-
-			}
-
-		}
-
-		/** -- Create view **/
-		// output_v_string est défini ; potentiellement il est égal à input_v ; normalement la vue n'existe pas et est à créer
-		if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW)) {
-			log("Creating output view");
-			// ici on suppose que outputViewString ne correspond à aucune vue existante (a fortiori est différent de inputViewString) 
-			// et que createView génèrera une erreur si la vue existe déjà
-			UIMAUtilities.createView(aJCas, outputViewString, commandResultString, outputViewTypeMimeString);
-		}
-
-	}
 
 	/**
 	 * This abstract method corresponds to the main process method 

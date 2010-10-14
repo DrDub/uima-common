@@ -150,23 +150,30 @@ public class UIMAUtilities {
 		return annotationClass;
 
 	}
+	
+	/**
+	 * Return the corresponding method getter name of a feature name
+	 * @param featureNameString
+	 * @return getFeatureMethodName
+	 */
+	public static String getFeatureName (String featureNameString) {
+		String getFeatureMethodName = "get" + featureNameString.substring(0, 1).toUpperCase() + featureNameString.substring(1);
+		return getFeatureMethodName;
+	}
 
 	/**
-	 * Invoke a getter method of a given annotation Class/Annotation which return a String  
-	 * Allow to know the method of the annotation to handle only at the runtime level
+	 * Return the getter method of a given feature name
 	 * @param InputAnnotationClass
 	 * @param inputAnnotation
 	 * @param inputFeatureString
 	 * @return result
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static String invokeStringGetMethod(Class InputAnnotationClass, Annotation inputAnnotation, String inputFeatureString) throws AnalysisEngineProcessException {
-
-		String result = "";
+	public static Method getStringGetterMethod(Class InputAnnotationClass,String inputFeatureString) throws AnalysisEngineProcessException {
 
 		// Récupère la méthode pour "getter" la value de l'InputFeature
-		String getFeatureMethodName = "get" + inputFeatureString.substring(0, 1).toUpperCase() + inputFeatureString.substring(1);
-
+		String getFeatureMethodName = getFeatureName(inputFeatureString);
+		
 		Method getFeatureMethod = null;
 		try {
 			getFeatureMethod = InputAnnotationClass.getMethod(getFeatureMethodName);
@@ -183,9 +190,22 @@ public class UIMAUtilities {
 					new Object[] { getFeatureMethodName },e);	
 			//e.printStackTrace();
 		}
+		return getFeatureMethod;
+	}
 
+	/**
+	 * Invoke a getter method of a given annotation Annotation which returns a String  
+	 * Allow to know the method of the annotation to handle only at the runtime level
+	 * @param inputAnnotation
+	 * @param getFeatureMethod
+	 * @return result
+	 * @throws AnalysisEngineProcessException
+	 */
+	public static String invokeStringGetterMethod(Annotation inputAnnotation, Method getFeatureMethod) throws AnalysisEngineProcessException {
+
+		String result = "";
+		
 		// Test contre la création d'annotations fantomes
-
 		try {
 			result = (String) getFeatureMethod.invoke(inputAnnotation);
 		} catch (IllegalArgumentException e) {
