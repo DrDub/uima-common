@@ -38,3 +38,7 @@ La méthode `initialize`
   * (7) idem que (4) ; ALERT crée n vues avec le même contenu ; doute sur intérêt donc non implémentée
   * (8) idem que (5) ; ALERT créé une même annotation sur plusieurs vues existantes distinctes ; doute sur intérêt donc non implémentée
   * (9) idem que (6)
+
+  * 1 ou n I_A soit on traite un FSIndex de I_A soit chaque I_A les unes après les autres  
+  * 1 ou n C_A on traite un FSIndex de C_A les unes après les autres  
+  * 1 ou n I_V on traite les vues les unes après les autres  
