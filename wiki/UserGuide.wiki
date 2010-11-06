@@ -23,3 +23,15 @@ La méthode `initialize`
   * Si `InputAnnotation` ou `InputFeature` est défini, alors les deux doivent l'être 
   * Si `OutputAnnotation` ou `OutputFeature` est défini, alors les deux doivent l'être 
   * Si `OutputAnnotation` existe alors on éditera seulement l'`OutputView` pour y rajouter des annotations sinon on créera l'`OutputView` spécifiée
+
+
+
+  * (4) O_A null => O_V à créer ; si O_V n'existe pas alors on la crée PASS ; sinon si existe FAIL
+  * (1) O_V == default i.e. O_I donc FAIL car existe déjà lorsqu'on tente de créer
+
+  * (5) O_A != null => O_V à éditer ; si O_V non existante FAIL ; si existante PASS mais offsets des annotations créées peuvent déborder de la vue
+  * (2) O_V == default i.e. O_I donc PASS sans débordement d'annotations
+
+  * (3) idem que (5,2) ; crée n annotation avec même value ; doute sur intérêt donc non implémentée
+  * (6) idem que (3)
+
