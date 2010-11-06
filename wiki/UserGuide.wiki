@@ -17,7 +17,7 @@
 
 La méthode `initialize`
   * Récupération de la liste des `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name
-  * OutputView name, `OutputAnnotation` type name
-  * Sachant que `InputView` et OutputView ont des valeurs par défaut, respectivement `_InitialView` et la valeur de l'`InputView`
+  * `OutputView` name, `OutputAnnotation` type name
+  * Sachant que `InputView` et `OutputView` ont des valeurs par défaut, respectivement `_InitialView` et la valeur de l'`InputView`
   * De même `ContextAnnotation` a pour valeur par défaut `uima.tcas.DocumentAnnotation`
   * Si l'un ou l'autre de `InputAnnotation` et `InputFeature` est défini, les deux doivent l'être  
