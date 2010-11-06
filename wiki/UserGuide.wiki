@@ -13,24 +13,37 @@
   * `OutputFeature` Feature name of the annotation whose string value will contain the analysis result
 	
 
-=== Methods ===
 
-La méthode `initialize`
-  * Récupération de la liste des `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name
-  * `OutputView` name, `OutputAnnotation` type name
-  * Sachant que `InputView` et `OutputView` ont des valeurs par défaut, respectivement `_InitialView` et la valeur de l'`InputView`
-  * De même `ContextAnnotation` a pour valeur par défaut `uima.tcas.DocumentAnnotation`
+
+=== Constraints ===
+
+  * `InputView` a pour valeur par défaut `_InitialView` 
+  * 1 ou n `InputView` on traite les vues les unes après les autres 
+
+  * `OutputView` a pour valeur par défaut la valeur de l'`InputView`
+  * 1 seule possible
+
+  * `ContextAnnotation` a pour valeur par défaut `uima.tcas.DocumentAnnotation` 
+  * 1 ou n `ContextAnnotation` on traite un FSIndex de `ContextAnnotation` les unes après les autres 
+
+  * `InputAnnotation` n'a pas de valeur par défaut
+  * 0 `InputAnnotation` on traite la zone de texte couverte par les `ContextAnnotation`
+  * 1 ou n `InputAnnotation` on traite un FSIndex de `InputAnnotation` soit chaque `InputAnnotation` les unes après les autres soit comme un tout ou autre si on étend la méthode processInputAnnotation 
+
+
   * Si `InputAnnotation` ou `InputFeature` est défini, alors les deux doivent l'être 
   * Si `OutputAnnotation` ou `OutputFeature` est défini, alors les deux doivent l'être 
+
   * Si `OutputAnnotation` existe alors on éditera seulement l'`OutputView` pour y rajouter des annotations sinon on créera l'`OutputView` spécifiée
 
 
 
-  * (4) O_A null => O_V à créer ; si O_V n'existe pas alors on la crée PASS ; sinon si existe FAIL
-  * (1) O_V == default i.e. O_I donc FAIL car existe déjà lorsqu'on tente de créer
 
-  * (5) O_A != null => O_V à éditer ; si O_V non existante FAIL ; si existante PASS mais offsets des annotations créées peuvent déborder de la vue
-  * (2) O_V == default i.e. O_I donc PASS sans débordement d'annotations
+  * (4) `OutputAnnotation` null => `OutputView` à créer ; si `OutputView` n'existe pas alors on la crée PASS ; sinon si existe FAIL
+  * (1) `OutputView` == default i.e. `InputView` donc FAIL car existe déjà lorsqu'on tente de créer
+
+  * (5) `OutputAnnotation` != null => `OutputView` à éditer ; si `OutputView` non existante FAIL ; si existante PASS mais offsets des annotations créées peuvent déborder de la vue
+  * (2) `OutputView` == default i.e. `InputView` donc PASS sans débordement d'annotations
 
   * (3) idem que (5,2) ; ALERT crée n annotation avec même value ; doute sur intérêt donc non implémentée
   * (6) idem que (3)
@@ -39,6 +52,8 @@ La méthode `initialize`
   * (8) idem que (5) ; ALERT créé une même annotation sur plusieurs vues existantes distinctes ; doute sur intérêt donc non implémentée
   * (9) idem que (6)
 
-  * 1 ou n I_A soit on traite un FSIndex de I_A soit chaque I_A les unes après les autres  
-  * 1 ou n C_A on traite un FSIndex de C_A les unes après les autres  
-  * 1 ou n I_V on traite les vues les unes après les autres  
+=== Methods ===
+
+La méthode `initialize`
+  * Récupération de la liste des `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name
+  * `OutputView` name, `OutputAnnotation` type name
