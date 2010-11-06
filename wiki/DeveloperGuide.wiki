@@ -1,6 +1,9 @@
 #summary Developer Guidelines
 #labels Phase-Implementation
 
-
-
-  * how to generate the javadoc http://enicolashernandez.blogspot.com/2009/12/creer-un-projet-sous-googlecode.html (roughly delete the directory and add a new one)
+Following a code modification
+  * Update the TODO, 
+  * Update the ChangeLog
+  * Commit
+  * Export and upload manually the javadoc http://enicolashernandez.blogspot.com/2009/12/creer-un-projet-sous-googlecode.html (roughly delete the directory and add a new one)
+  * Export jar and upload manually on the forge
