@@ -20,4 +20,6 @@ La méthode `initialize`
   * `OutputView` name, `OutputAnnotation` type name
   * Sachant que `InputView` et `OutputView` ont des valeurs par défaut, respectivement `_InitialView` et la valeur de l'`InputView`
   * De même `ContextAnnotation` a pour valeur par défaut `uima.tcas.DocumentAnnotation`
-  * Si l'un ou l'autre de `InputAnnotation` et `InputFeature` est défini, les deux doivent l'être  
+  * Si `InputAnnotation` ou `InputFeature` est défini, alors les deux doivent l'être 
+  * Si `OutputAnnotation` ou `OutputFeature` est défini, alors les deux doivent l'être 
+  * Si `OutputAnnotation` existe alors on éditera seulement l'`OutputView` pour y rajouter des annotations sinon on créera l'`OutputView` spécifiée
