@@ -1,0 +1,6 @@
+#summary Developer Guidelines
+#labels Phase-Implementation
+
+
+
+  * how to generate the javadoc http://enicolashernandez.blogspot.com/2009/12/creer-un-projet-sous-googlecode.html (roughly delete the directory and add a new one)
