@@ -32,6 +32,9 @@ La méthode `initialize`
   * (5) O_A != null => O_V à éditer ; si O_V non existante FAIL ; si existante PASS mais offsets des annotations créées peuvent déborder de la vue
   * (2) O_V == default i.e. O_I donc PASS sans débordement d'annotations
 
-  * (3) idem que (5,2) ; crée n annotation avec même value ; doute sur intérêt donc non implémentée
+  * (3) idem que (5,2) ; ALERT crée n annotation avec même value ; doute sur intérêt donc non implémentée
   * (6) idem que (3)
 
+  * (7) idem que (4) ; ALERT crée n vues avec le même contenu ; doute sur intérêt donc non implémentée
+  * (8) idem que (5) ; ALERT créé une même annotation sur plusieurs vues existantes distinctes ; doute sur intérêt donc non implémentée
+  * (9) idem que (6)
