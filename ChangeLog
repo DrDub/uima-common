@@ -21,6 +21,14 @@
 # Fichier ChangeLog
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+2010-11-06  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+  * vérification de l'existence de inputAnnotationArray par rapport à null et sa taille
+  * un default inputFeatureString pour les ContextAnnotation et aussi InputView
+  * renommage des méthodes principales en processContextAnnotations, processInputAnnotations et processAnnotationFeatureStringValue
+  * commentaires des méthodes
+  * passage par DocumentAnnotation pour simuler le travail sur la vue (concrètement on ne récupère plus le   inputTextToProcess par inputViewJCas.getSofaDataString() mais par la value de feature de l'annotation) 
+  * mise à jour de la forge et ajout  dans le dossier doc de l'arbre des possibles des interprétations des paramétrages
+  
 2010-10-12  Nicolas Hernandez  <nicolas.hernandez@>
 	* UIMAUtilities.java et AnalysisEngine.java: subiterator à base de FScontraint à la place du subiterator standard 
 	(notamment pour le contexte)
