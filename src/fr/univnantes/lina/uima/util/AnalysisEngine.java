@@ -136,25 +136,25 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 
 
-	/*
+	/**
 	 * InputAnnotation	Ordered list of annotation names to consider as the Feature Structure index to process
 	 */
 	protected String[] inputAnnotationStringArray = null;
 	protected HashMap<String, Integer> inputAnnotationStringHashMap = null;
-	/*
+	/**
 	 * InputFeature Feature name of the annotations whose string value will be processed
 	 */
 	protected String inputFeatureString = null;
-	/*
+	/**
 	 * OutputView View name to consider as the view to receive the result; to be created whether OutputAnnotation is empty or simply to edit if OutputAnnotation is defined
 	 */
 	protected String outputViewString = null;
 	protected String outputViewTypeMimeString = null;
-	/*
+	/**
 	 * OutputAnnotation Name of the annotation to create as the analysis result
 	 */
 	protected String outputAnnotationString = null;
-	/*
+	/**
 	 * OutputFeature Feature name of the annotation whose string value will contain the analysis result
 	 */
 	protected String outputFeatureString = null;
