@@ -51,6 +51,10 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	/** Common component constants
 	 * To define when you create a new component 
 	 * */
+	
+	/**
+	 * Name of the component
+	 */
 	private String COMPONENT_NAME = "";
 	private String COMPONENT_VERSION = "";
 	private String COMPONENT_ID = COMPONENT_NAME + "-"
@@ -59,7 +63,8 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	private final String MESSAGE_DIGEST = COMPONENT_ID+"_Messages";
 	//tmp file
 	//log
-
+	
+	
 	/** Common component parameters in descriptor file*/
 	// View name to consider as the view to process
 	private static String PARAM_NAME_INPUT_VIEW = "InputView";
@@ -118,19 +123,40 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	/** Common component variables */
 	private String runIdString = null;
 
+	/**
+	 * InputView List of view names to process
+	 */
 	protected String inputViewString = null;
+	/**
+	 * ContextAnnotation List of annotation names which delimits the text areas or the covered annotations to process
+	 */
 	protected String contextAnnotationString = null;
 	//protected String inputAnnotationString = null;
+
+
+
+
+	/*
+	 * InputAnnotation	Ordered list of annotation names to consider as the Feature Structure index to process
+	 */
 	protected String[] inputAnnotationStringArray = null;
 	protected HashMap<String, Integer> inputAnnotationStringHashMap = null;
-
-
+	/*
+	 * InputFeature Feature name of the annotations whose string value will be processed
+	 */
 	protected String inputFeatureString = null;
-
+	/*
+	 * OutputView View name to consider as the view to receive the result; to be created whether OutputAnnotation is empty or simply to edit if OutputAnnotation is defined
+	 */
 	protected String outputViewString = null;
 	protected String outputViewTypeMimeString = null;
-
+	/*
+	 * OutputAnnotation Name of the annotation to create as the analysis result
+	 */
 	protected String outputAnnotationString = null;
+	/*
+	 * OutputFeature Feature name of the annotation whose string value will contain the analysis result
+	 */
 	protected String outputFeatureString = null;
 
 	protected String inputType = "";
