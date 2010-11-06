@@ -277,7 +277,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		// for (int i = 0; i < patternStrings.length; i++) {
 		// mPatterns[i] = Pattern.compile(patternStrings[i]);
 		// }
-
+		
 		// dans le process
 		// Vérifier que context, input et output AnnotationString  si !=null alors ont un type défini dans le TS
 		// Vérifier aussi que l'input view existe
@@ -295,14 +295,18 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		/** -- process the analysis **/
 
 		log("-----------------------------------------------------------------------------------------------------------------");
-		//if (inputType.equalsIgnoreCase(INPUTTYPE_ANNOTATION)) {
+		if (inputType.equalsIgnoreCase(INPUTTYPE_ANNOTATION)) {
 			log("Process the input annotation of a given type (potentially covered by a context annotation of a given type)");
-			processContextAnnotations(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
-		//}
-		//else {
+			//		processContextAnnotations(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
+		}
+		else {
+			log("Process the input view; actually the default ContextAnnotation DocumentAnnotation");
 		//	log("Process the input view");
 		//	processInputViewType(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
-		//}
+		}
+		processContextAnnotations(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
+			
+			
 	}
 
 
@@ -393,14 +397,16 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 			// Par défaut ContextAnnotation est au moins égal à DocumentAnnotation
 			// et possède la feature coveredText
 			if (inputAnnotationStringHashMap.isEmpty()) {
-				System.out.println("Debug: contextAnnotationString"+contextAnnotationString);
+				//System.out.println("Debug: contextAnnotationString"+contextAnnotationString);
 				inputAnnotationStringHashMap.put(contextAnnotationString, 1);
+				log("Building an Input Annotations index from the ContextAnnotations");
 			}
 			// Si InputAnnotation est renseigné 
 			// alors on construit un iterator ordonné à partir de celles renseignées
 			//else 
 			{
 				log("Getting the Input Annotations index ");
+			}
 				// Récupération de la liste des inputAnnotation
 				//Iterator<Annotation> inputAnnotationIterator = null;
 				//inputAnnotationIterator = inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
@@ -410,7 +416,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 				commandResultString = processInputAnnotations(inputViewJCas,
 						contextualizedInputAnnotationsFSIter, inputFeatureString,
 						outputViewJCas, outputAnnotationString);
-			}
+			
 		}
 
 
@@ -447,7 +453,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 			String outputAnnotationString)
 	throws AnalysisEngineProcessException {
 
-		log("Debug: AnalysisEngine - browseInputAnnotation");
+		log("Debug: AnalysisEngine - processInputAnnotations");
 
 		String commandResultString = "";
 
