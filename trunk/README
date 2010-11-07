@@ -45,8 +45,11 @@ FEATURES
   * you want to create a new view (also called _OutputView_) or a new 
   annotation (also called _OutputAnnotation_) to receive the processing result 
   and you want to set their name generically;
-  * you want to handle the methods which support such generic handlings 
-
+  * you want to handle  methods to get a view, an annotation type, a class, a 
+  feature, a feature getter method from their string name, to invoke an 
+  getter/setter method associated to a given annotation, or to create 
+  annotations from its name and feature name to set and views, or to subiterate 
+  with FeatureConstraints methods.
 	
 	
 DESCRIPTION

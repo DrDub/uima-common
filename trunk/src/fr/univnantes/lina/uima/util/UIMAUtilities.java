@@ -46,6 +46,38 @@ import org.apache.uima.jcas.tcas.Annotation;
 import fr.univnantes.lina.util.JavaUtilities;
 
 /**
+ * Library of UIMA Utilities such as methods to get 
+ * <p>
+ * from its string name
+ * <ul>
+ * <li>a view </li>
+ * <li>an annotation type  </li>
+ * <li>a class </li>
+ * <li>a feature</li>
+ * <li>a feature getter method</li>
+ * </ul>
+ * </p>
+ * <p>
+ * or methods to invoke 
+ * <ul>
+ * <li>an getter/setter method associated to a given annotation</li>
+ * </ul>
+ * </p>
+ * <p>
+ * or methods to create 
+ * <ul>
+ * <li>annotations from its name and feature name to set</li>
+ * <li>views  </li>
+ * </ul>
+ * </p>
+
+ * <p>
+ * or methods to subiterate with FeatureConstraints 
+ * </p>
+ * <p>
+ * Take in charge the exceptions
+ * </p>
+ * 
  * @author hernandez
  *
  */

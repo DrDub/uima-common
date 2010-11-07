@@ -38,7 +38,30 @@ import org.apache.uima.resource.ResourceInitializationException;
 
 
 /**
- * UIMA Analysis Engine
+ * <p>UIMA Analysis Engine abstract class</p>
+ * 
+ * <p>
+ * <ul>
+ * <li>Perform some process on some annotations (also called InputAnnotation) 
+ * covered by some others (also called ContextAnnotation) which are only 
+ * present in some views (also called InputView).
+ * </li>
+ * <li>Create a new view (also called OutputView) or a new annotation (also 
+ * called OutputAnnotation) to receive the processing result.
+ * </li>
+ * </ul>
+ * </p>
+ * 
+ * <p>
+ * The process has to be implemented (see the abstract method of the class).
+ * </p>
+ * 
+ * <p>
+ * The class is type system agnostic and so handle generically the views and 
+ * the annotations you process. This is made possible by specifying the names 
+ * of the handled views and annotations by parameters.
+ * </p>
+ * 
  * @author Nicolas Hernandez
  */
 public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
