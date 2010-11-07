@@ -1,7 +1,9 @@
 #summary User Guide
 #labels Featured
 
+This page mainly presents the `AnalysisEngine` class.
 
+Without an implementation, the class cannot work. There are several ways of using it. The package comes with an example of descriptor, which should also be extended to be used.
 
 === Parameters ===
   * `InputView` List of view names to process 
@@ -54,6 +56,10 @@
 
 === Methods ===
 
-La méthode `initialize`
-  * Récupération de la liste des `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name
-  * `OutputView` name, `OutputAnnotation` type name
+*`initialize` Method *
+  * Getting the list of `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name, `OutputView` name, `OutputAnnotation` type name
+
+*`process` Method *
+*`` Method *
+*`` Method *
+*`` Method *
