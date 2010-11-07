@@ -5,6 +5,9 @@ This page mainly presents the abstract `AnalysisEngine` class.
 
 Without an implementation, the class cannot work. There are several ways of using it. They depends on the extension points, in other words, the methods which are extended. The package comes with an example of descriptor, which should also be extended to be used.
 
+Many of the tricks assumes that the handled annotations are based on `uima.tcas.Annotation` and `uima.tcas.DocumentAnnotation`.
+
+
 == Parameters ==
 
 
@@ -63,11 +66,32 @@ Without an implementation, the class cannot work. There are several ways of usin
   * Getting the list of `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name, `OutputView` name, `OutputAnnotation` type name
 
 *`process` Method *
+  * The method routes toward the correct subprocess method depending on the InputType which is either Annotation or View. Recent modifications led to use the same subprocess method. Indeed the InputView will be processed indirectly by the DocumentAnnotation.
+
+*`processInputViews` Method *
+  *
+
 *`` Method *
+  *
+
 *`` Method *
-*`` Method *
+  *
 
 == Algorithm ==
+
+{{{
+process(JCas aJCas)
+   processInputViews(   aJCas, 
+			inputViewStringArray, 
+			contextAnnotationStringArray, 
+			inputAnnotationStringArray,  inputFeatureString, 
+			outputViewString, outputViewTypeMimeString, 
+			outputAnnotationString, outputFeatureString);
+}}}
+
+{{{
+
+}}}
 
 == Descriptors ==
 
