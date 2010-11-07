@@ -22,10 +22,15 @@
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
 2010-11-06  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+  * ajout du ant-javadoc.xml
+  * complement a minima du readme
+  * ajout d'un descripteur exemple
+  * passage du parametre ContextAnnotation String en StringArray
   * vérification de l'existence de inputAnnotationArray par rapport à null et sa taille
   * un default inputFeatureString pour les ContextAnnotation et aussi InputView
+  * ajout de la méthode processInputViews
   * renommage des méthodes principales en processContextAnnotations, processInputAnnotations et processAnnotationFeatureStringValue
-  * commentaires des méthodes
+  * javadoc des méthodes et des variables principales
   * passage par DocumentAnnotation pour simuler le travail sur la vue (concrètement on ne récupère plus le   inputTextToProcess par inputViewJCas.getSofaDataString() mais par la value de feature de l'annotation) 
   * mise à jour de la forge et ajout  dans le dossier doc de l'arbre des possibles des interprétations des paramétrages
   

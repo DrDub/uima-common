@@ -21,7 +21,7 @@
 # Fichier TODO
 # 2010-10-01  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
-	* Passer les paramètres Input View  et contextAnnotation en Array
+	* Passer les paramètres Input View en Array
 	* UIMAUtilitiles.subiterator pour contextAnnotation
 	* ordered UIMAUtilitiles.subiterator
 	* Faire en sorte  qu analysis recoivent un Index des annotations de la zone 
