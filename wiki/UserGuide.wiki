@@ -22,7 +22,7 @@ Many of the tricks assumes that the handled annotations are based on `uima.tcas.
 
 Some other parameters allows you
   * to specify the output view [http://en.wikipedia.org/wiki/Internet_media_type media type (also called type MIME)] to create.
-  * 
+
 
 == Constraints ==
 
@@ -86,13 +86,14 @@ process () {
 {{{
 processInputViews() {
    foreach InputView {
-      define the OutputView;
+      define the corresponding OutputView;
       if OutputType.isView then get the OutputView;
-      build the index of ContextAnnotation;         
 
-      processContextAnnotations();   
+      build the index of ContextAnnotation; // If the parameter was empty, as a default contains DocumentAnnotation         
+
+      concatenatedContextAnnotationResult += processContextAnnotations();   
    }
-   if OutputType.isView then createView OutputView;
+   if OutputType.isView then createView OutputView with concatenatedContextAnnotationResult as content;
 }
 }}}
 
@@ -101,10 +102,12 @@ processInputViews() {
 {{{
 processContextAnnotations() {
    foreach ContextAnnotation {
-      build the index of InputAnnotation; 
-      contextAnnotationResult = processInputAnnotations()
+
+      build the index of InputAnnotation; // If the parameter was empty, as a default contains ContextAnnotations          
+
+      concatenatedInputAnnotationResult += processInputAnnotations()
    }
-   return concatenedContextAnnotationAnalysisResult
+   return concatenatedInputAnnotationResult
 }
 }}}
 
@@ -113,11 +116,11 @@ processContextAnnotations() {
 {{{
 processInputAnnotations() {
    foreach InputAnnotation {
-       inputAnnotationResult = processAnnotationFeatureStringValue() ;
+       annotationFeatureStringValueResult = processAnnotationFeatureStringValue() ;
        if OutputType.isAnnotation then createAnnotation in the given OutputView;
-       else concat the result
+       else concatenatedInputAnnotationResult+=annotationFeatureStringValueResult
    }
-   return concatenedInputAnnotationAnalysisResult
+   return concatenatedInputAnnotationResult
 }
 }}}
 
@@ -128,6 +131,7 @@ processInputAnnotations() {
 
 processAnnotationFeatureStringValue() {
    // any process
+   return annotationFeatureStringValueResult
 }
 
 
