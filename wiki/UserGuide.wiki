@@ -3,9 +3,11 @@
 
 This page mainly presents the abstract `AnalysisEngine` class.
 
-Without an implementation, the class cannot work. There are several ways of using it. The package comes with an example of descriptor, which should also be extended to be used.
+Without an implementation, the class cannot work. There are several ways of using it. They depends on the extension points, in other words, the methods which are extended. The package comes with an example of descriptor, which should also be extended to be used.
 
 == Parameters ==
+
+
   * `InputView` List of view names to process 
   * `ContextAnnotation` List of annotation names which delimits the text areas or the covered annotations to process
   * `InputAnnotation`	Ordered list of annotation names to consider as the Feature Structure index to process 
@@ -14,7 +16,6 @@ Without an implementation, the class cannot work. There are several ways of usin
   * `OutputAnnotation` Name of the annotation to create as the analysis result
   * `OutputFeature` Feature name of the annotation whose string value will contain the analysis result
 	
-
 
 == Constraints ==
 
@@ -38,16 +39,21 @@ Without an implementation, the class cannot work. There are several ways of usin
   * Si `OutputAnnotation` existe alors on éditera seulement l'`OutputView` pour y rajouter des annotations sinon on créera l'`OutputView` spécifiée
 
 
-  * (4) `OutputAnnotation` null => `OutputView` à créer ; si `OutputView` n'existe pas alors on la crée PASS ; sinon si existe FAIL
-  * (1) `OutputView` == default i.e. `InputView` donc FAIL car existe déjà lorsqu'on tente de créer
+(ne pas tenir compte des codes (`x`))
+  * (4) Si `OutputAnnotation` == null alors `OutputView` est à créer ; si `OutputView` n'existe pas alors on la crée PASS ; sinon si existe FAIL
+  * (1) Si `OutputView` == default i.e. `InputView` donc FAIL car existe déjà lorsqu'on tente de créer
 
-  * (5) `OutputAnnotation` != null => `OutputView` à éditer ; si `OutputView` non existante FAIL ; si existante PASS mais offsets des annotations créées peuvent déborder de la vue
-  * (2) `OutputView` == default i.e. `InputView` donc PASS sans débordement d'annotations
+  * (5) Si `OutputAnnotation` != null alors `OutputView` est à éditer ; si `OutputView` est non existante alors FAIL ; si existante alors PASS mais offsets des annotations créées peuvent déborder de la vue
+  * (2) Si `OutputView` == default i.e. `InputView` donc PASS sans débordement d'annotations
 
+  * n `OutputAnnotation`
   * (3) idem que (5,2) ; ALERT crée n annotation avec même value ; doute sur intérêt donc non implémentée
   * (6) idem que (3)
 
+  * n `OutputView`
   * (7) idem que (4) ; ALERT crée n vues avec le même contenu ; doute sur intérêt donc non implémentée
+
+  * n `OutputView` et n `OutputAnnotation`
   * (8) idem que (5) ; ALERT créé une même annotation sur plusieurs vues existantes distinctes ; doute sur intérêt donc non implémentée
   * (9) idem que (6)
 
@@ -60,6 +66,8 @@ Without an implementation, the class cannot work. There are several ways of usin
 *`` Method *
 *`` Method *
 *`` Method *
+
+== Algorithm ==
 
 == Descriptors ==
 
