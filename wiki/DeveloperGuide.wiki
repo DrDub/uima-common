@@ -6,6 +6,9 @@ Following a code modification
   * Update the ChangeLog
   * Commit
   * Potentially tag
+{{{
+svn copy https://uima-common.googlecode.com/svn/trunk/ https://uima-common.googlecode.com/svn/tags/`date +%y%m%d` --username nicolas.hernandez -m "new tag"
+}}}
   * Export and upload manually the javadoc http://enicolashernandez.blogspot.com/2009/12/creer-un-projet-sous-googlecode.html
      * Roughly delete the directory and add a new one
  {{{
