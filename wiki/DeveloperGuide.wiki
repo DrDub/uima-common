@@ -27,5 +27,5 @@ cd ..
 rm -rf uima-common
 }}}
   * Export jar and upload manually on the forge 
-     * In the download section select and delete the file(depreciated)
+     * In the download section select and delete the file ( for depreciated reason)
      * Add the new one with the same descriptor (without date reference in it) and set as Feature to display it on the home page
