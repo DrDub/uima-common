@@ -327,8 +327,13 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 
 	/**
-	 * Depending on the InputAnnotation parameter, the InputType is either Annotation or View
-	 * The current method routes toward the correct subprocess method
+	 * 
+	 * The method routes toward the correct subprocess method
+	 * depending on the InputType which is either Annotation or View
+	 * 
+	 * Recent modifications led to use the same subprocess method. 
+	 * Indeed the InputView will be processed indirectly by the DocumentAnnotation.
+	 * 
 	 * @see JCasAnnotator_ImplBase#process(JCas)
 	 */
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
@@ -356,21 +361,33 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 
 	/**
-	 * Process each inputView of the JCas
+	 * Process sequentially each InputView of a given JCas. 
+	 * Eventually may create a view with the concatenated 
+	 * results obtained for each view. 
 	 * 
 	 * @param aJCas
 	 * 				the CAS over which the process is performed
 	 * @param inputViewString[]
 	 * 				List of names of each InputView to process
 	 * @param contextAnnotationStringArray
-	 *            	List of Context Annotation names
+	 *            	List of the Context Annotation names to process
 	 * @param inputAnnotationStringArray
-	 *            List of Input Annotation names
+	 *            	List of Input Annotation names to process
 	 * @param inputFeatureString
+	 * 				Feature name of the inputAnnotation whose String Value will 
+	 * 				be actually processed
 	 * @param outputViewString
+	 * 				View name to consider as the view to receive the result; to 
+	 * 				be created whether `OutputAnnotation` is empty or simply to 
+	 * 				edit if `OutputAnnotation` is defined
 	 * @param outputViewTypeMimeString
+	 * 				Type Mime of the view to create
 	 * @param outputAnnotationString
-	 * @param ouputFeatureString
+	 * 				Name of the annotation to create as the analysis result
+	 * @param ouputFeatureString 
+	 * 				Feature name of the annotation whose string value will 
+	 * 				contain the analysis result
+	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
 	protected void processInputViews(JCas aJCas, 
@@ -469,25 +486,29 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	}
 
 
-
-
-
 	/**
-	 * Process each contextAnnotation.
+	 * Process sequentially each ContextAnnotation of a given InputView. 
+	 * Returns the ontatenated results obtained for each Context Annotation.
 	 * 
 	 * @param inputViewJCas
 	 * 				the CAS View over which the process is performed
 	 * @param contextAnnotationsFSIter
 	 * 				FSIterator of context Annotations
 	 * @param inputAnnotationStringArray
-	 *            List of Input Annotation names
+	 *            	List of Input Annotation names to process
 	 * @param inputFeatureString
+	 * 				Feature name of the inputAnnotation whose String Value will 
+	 * 				be actually processed
 	 * @param outputViewJCas
 	 * 				the CAS View to update with potential future created annotations
 	 * @param outputAnnotationString
-	 * @param ouputFeatureString
+	 * 				Name of the annotation to create as the analysis result
+	 * @param ouputFeatureString 
+	 * 				Feature name of the annotation whose string value will 
+	 * 				contain the analysis result
 	 * 
-	 * @return
+	 * @return contextAnnotationResultString
+	 * 				Contatenated results obtained for each Context Annotation 
 	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
@@ -538,7 +559,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 			contextAnnotationResultString += processInputAnnotations(inputViewJCas,
 					contextualizedInputAnnotationsFSIter, inputFeatureString,
-					outputViewJCas, outputAnnotationString);
+					outputViewJCas, outputAnnotationString, ouputFeatureString);
 		}
 
 		return contextAnnotationResultString;
@@ -546,16 +567,27 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 	/**
 	 * Process each InputAnnotation by analyzing the value of its InputFeature
-	 * If some OutputAnnotations are specified then they are created and their OutFeature is set with the analysis result 
-	 * (Else) it returns the concatenation of the analysis result for each InputAnnotation
-	 * 
+	 * If some OutputAnnotations are specified then they are created and their 
+	 * OutputFeature is set with the analysis result 
+	 * (Else) it returns the contatenated results obtained for each InputAnnotation
+	 *  
 	 * @param inputViewJCas
+	 * 				the CAS View over which the process is performed
 	 * @param contextualizedInputAnnotationsFSIter
+	 * 				FSIterator of the input Annotations to process
 	 * @param inputFeatureString
+	 * 				Feature name of the Input Annotations whose String Value will 
+	 * 				be actually processed
 	 * @param outputViewJCas
+	 * 				the CAS View to update with potential future created annotations
 	 * @param outputAnnotationString
+	 * 				Name of the annotation to create as the analysis result
+	 * @param ouputFeatureString 
+	 * 				Feature name of the annotation whose string value will 
+	 * 				contain the analysis result
 	 * 
-	 * @return returns the concatenation of the analysis result for each InputAnnotation
+	 * @return contextAnnotationResultString
+	 * 				returns the contatenated results obtained for each InputAnnotation
 	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
@@ -563,7 +595,8 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 			FSIterator contextualizedInputAnnotationsFSIter,
 			String inputFeatureString, 
 			JCas outputViewJCas,
-			String outputAnnotationString)
+			String outputAnnotationString,
+			String ouputFeatureString)
 	throws AnalysisEngineProcessException {
 
 		log("Debug: AnalysisEngine - processInputAnnotations");
