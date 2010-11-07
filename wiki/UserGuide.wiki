@@ -89,19 +89,39 @@ Some other parameters allows you
 Basically the algorithm works like this, except that the methods are not embedded but called to simulate the embedding. Each extension of the `AnalysisEngine` class can choose the methods to reimplement.
 
 {{{
-process (JCas aJCas) {
+process () {
+
    processInputViews() {
       foreach InputView {
+         define the OutputView;
+         if OutputType.isView then get the OutputView;
+         build the index of ContextAnnotation;         
+
          processContextAnnotations() {
-            processInputAnnotations() {
-               processAnnotationFeatureStringValue() {
+            foreach ContextAnnotation {
+
+               build the index of InputAnnotation; 
+
+               contextAnnotationResult = processInputAnnotations() {
+                  foreach InputAnnotation {
+
+                     inputAnnotationResult = processAnnotationFeatureStringValue() {
+                         // any process
+                     }
+                     if OutputType.isAnnotation then createAnnotation in the given OutputView;
+                     else concat the result
+                  }
+                  return concatenedInputAnnotationAnalysisResult
+ 
                }
             }
+            return concatenedContextAnnotationAnalysisResult
          }
       }
+      if OutputType.isView then createView OutputView;
    }
 }
-processAnnotationFeatureStringValue
+
 
 }}}
 
