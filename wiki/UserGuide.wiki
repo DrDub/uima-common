@@ -126,6 +126,46 @@ process () {
 }}}
 
 
+{{{
+process () {
+   processInputViews();
+}
+
+processInputViews() {
+   foreach InputView {
+      define the OutputView;
+      if OutputType.isView then get the OutputView;
+      build the index of ContextAnnotation;         
+
+      processContextAnnotations();   
+   }
+   if OutputType.isView then createView OutputView;
+}
+
+processContextAnnotations() {
+   foreach ContextAnnotation {
+      build the index of InputAnnotation; 
+      contextAnnotationResult = processInputAnnotations()
+   }
+   return concatenedContextAnnotationAnalysisResult
+}
+
+processInputAnnotations() {
+   foreach InputAnnotation {
+       inputAnnotationResult = processAnnotationFeatureStringValue() ;
+       if OutputType.isAnnotation then createAnnotation in the given OutputView;
+       else concat the result
+   }
+   return concatenedInputAnnotationAnalysisResult
+}
+
+processAnnotationFeatureStringValue() {
+   // any process
+}
+
+
+}}}
+
 == Descriptors ==
 
 The current package also contains a descriptor example. This cannot be used as it. The name of the java class file should be changed to point the class which extends the AnalysisEngine class. New parameters can be added as well as type systems and capabilities...
