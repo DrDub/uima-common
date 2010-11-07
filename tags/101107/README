@@ -1,0 +1,71 @@
+# UIMA Common
+# Copyright (C) 2010  Nicolas Hernandez
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+# 
+#   http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.  
+#
+# Fichier README
+# 2010-10-01  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+
+
+OVERVIEW
+
+	The *uima-common* package aims at *assembling common and generic code 
+	snippets that can be usefully reused* in several distinct UIMA 
+	developments (like analysis engine or any application).
+
+	It is made of three parts 
+	  * an abstract `AnalysisEngine` class which extends `JCasAnnotator_ImplBase`.
+	  * some UIMA Utilities 
+	  * and some Java Utilities 
+
+
+FEATURES
+  
+  * you want to develop type system agnostic analysis engines and so to handle 
+  generically the views and the annotations you process. This is made possible 
+  by specifying the names of the handled views and annotations by parameters;
+  * you want to perform some process on some annotations (also called 
+  _InputAnnotation_) covered by some others (also called _ContextAnnotation_) 
+  which are only present in some views (also called _InputView_);
+  * you want to create a new view (also called _OutputView_) or a new 
+  annotation (also called _OutputAnnotation_) to receive the processing result 
+  and you want to set their name generically;
+  * you want to handle the methods which support such generic handlings 
+
+	
+	
+DESCRIPTION
+
+		Consult http://code.google.com/p/uima-common/ for more information.
+		
+		The current package also contains a descriptor example. This cannot be 
+		used as it. The name of the java class file should be changed to point 
+		the class which extends the AnalysisEngine? class. New parameters can 
+		be added as well as type systems and capabilities...
+		
+PARAMETERS		
+		
+		
+
+EXAMPLES
+	
+	
+
+TRICKS
+	
+CONTACT
