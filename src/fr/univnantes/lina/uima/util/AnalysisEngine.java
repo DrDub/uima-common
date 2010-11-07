@@ -51,7 +51,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	/** Common component constants
 	 * To define when you create a new component 
 	 * */
-	
+
 	/**
 	 * Name of the component
 	 */
@@ -63,8 +63,8 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	private final String MESSAGE_DIGEST = COMPONENT_ID+"_Messages";
 	//tmp file
 	//log
-	
-	
+
+
 	/** Common component parameters in descriptor file*/
 	// View name to consider as the view to process
 	private static String PARAM_NAME_INPUT_VIEW = "InputView";
@@ -126,14 +126,16 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	/**
 	 * InputView List of view names to process
 	 */
-	protected String inputViewString = null;
+	protected String[] inputViewStringArray = null;
+	//	protected String inputViewString = null;
+
+	
 	/**
 	 * ContextAnnotation List of annotation names which delimits the text areas or the covered annotations to process
 	 */
-	protected String contextAnnotationString = null;
-	//protected String inputAnnotationString = null;
-
-
+	protected String[] contextAnnotationStringArray = null;
+	protected HashMap<String, Integer> contextAnnotationStringHashMap = null;
+	//protected String contextAnnotationString = null;
 
 
 	/**
@@ -141,6 +143,8 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 */
 	protected String[] inputAnnotationStringArray = null;
 	protected HashMap<String, Integer> inputAnnotationStringHashMap = null;
+	//protected String inputAnnotationString = null;
+
 	/**
 	 * InputFeature Feature name of the annotations whose string value will be processed
 	 */
@@ -174,19 +178,35 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		runIdString = (String) aContext
 		.getConfigParameterValue(PARAM_NAME_RUNID); 
 
-		inputViewString = (String) aContext.getConfigParameterValue(PARAM_NAME_INPUT_VIEW);
-		if (inputViewString == null) {
+		inputViewStringArray = (String[]) aContext.getConfigParameterValue(PARAM_NAME_INPUT_VIEW);
+		if (inputViewStringArray == null) {
 			// If no input view is specified, we use the default (i.e. _InitialView)
-			inputViewString = DEFAULT_INPUT_VIEW;
+			inputViewStringArray = new String[1] ;
+			inputViewStringArray[0] = DEFAULT_INPUT_VIEW;
 		}
 
-		contextAnnotationString = (String) aContext
+		//contextAnnotationString = (String) aContext
+		//.getConfigParameterValue(PARAM_NAME_CONTEXT_ANNOTATION);
+		contextAnnotationStringArray = (String[]) aContext
 		.getConfigParameterValue(PARAM_NAME_CONTEXT_ANNOTATION);
-		if (contextAnnotationString == null) {
+
+		if (contextAnnotationStringArray == null) {
 			// If no context specified, we do over the whole CAS
 			// en d'autres termes, on traite le uima.tcas.DocumentAnnotation
-			contextAnnotationString = DEFAULT_CONTEXT_ANNOTATION;
+			contextAnnotationStringArray = new String[1] ;
+			contextAnnotationStringArray[0] = DEFAULT_CONTEXT_ANNOTATION;
 		}
+
+		contextAnnotationStringHashMap = new HashMap<String, Integer>();
+		if	(contextAnnotationStringArray != null) { 
+			if 	(contextAnnotationStringArray.length != 0) {
+				for (String c : contextAnnotationStringArray) {
+					contextAnnotationStringHashMap.put(c, 1);
+				}
+			}
+		}
+
+
 		// ... otherwise over segments covered by the contextAnnotation
 		// parameter
 
@@ -235,7 +255,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 					new Object[] {  });	
 			//e.printStackTrace();
 		}
-		
+
 		// Ce test intervient après avoir vérifier que le couple Annotation/Feature était bien complet
 		//
 		// Il est possible de ne pas avoir une méthode dédiée au traitement de vue 
@@ -255,17 +275,16 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		}
 
 		outputViewString = (String) aContext.getConfigParameterValue(PARAM_NAME_OUTPUT_VIEW);
-		if (outputViewString == null) {
-			// If no output view is specified, we set it to inputViewString
-			outputViewString = inputViewString;
-		}
+
 		outputViewTypeMimeString = (String) aContext.getConfigParameterValue(PARAM_NAME_OUTPUT_VIEW_TYPE_MIME);
 		if (outputViewTypeMimeString == null) {
 			// If no output view type mime is specified, we set it a default one
 			outputViewTypeMimeString = DEFAULT_OUTPUTVIEW_TYPEMIME;
 		}
+		
 		outputAnnotationString = (String) aContext
 		.getConfigParameterValue(PARAM_NAME_OUTPUT_ANNOTATION); 
+		
 		outputFeatureString = (String) aContext
 		.getConfigParameterValue(PARAM_NAME_OUTPUT_FEATURE); 
 		// outputAnnotationString ET outputFeatureString doivent être initialisés les deux à la fois ou aucun d'eux
@@ -281,15 +300,11 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		// Si l'input_type est annotation, alors on va traiter chacune d'elle
 		if (inputAnnotationStringArray != null) inputType = INPUTTYPE_ANNOTATION;
 		// Sinon on va traiter le datastring de la vue
-		else  {
-			inputType = INPUTTYPE_VIEW;
-			
-			
-		}
+		else 	inputType = INPUTTYPE_VIEW;
 
-		if ((outputAnnotationString != null) && (outputFeatureString != null)) {	
-			outputType = OUTPUTTYPE_ANNOTATION;
-		}	else outputType = OUTPUTTYPE_VIEW;
+		if ((outputAnnotationString != null) && (outputFeatureString != null))	
+			outputType = OUTPUTTYPE_ANNOTATION;	
+		else outputType = OUTPUTTYPE_VIEW;
 
 
 
@@ -303,7 +318,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		// for (int i = 0; i < patternStrings.length; i++) {
 		// mPatterns[i] = Pattern.compile(patternStrings[i]);
 		// }
-		
+
 		// dans le process
 		// Vérifier que context, input et output AnnotationString  si !=null alors ont un type défini dans le TS
 		// Vérifier aussi que l'input view existe
@@ -327,29 +342,30 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		}
 		else {
 			log("Process the input view; actually the default ContextAnnotation DocumentAnnotation");
-		//	log("Process the input view");
-		//	processInputViewType(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
+			//	log("Process the input view");
+			//	processInputViewType(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
 		}
-		processContextAnnotations(aJCas, inputViewString, contextAnnotationString, inputAnnotationStringArray,  inputFeatureString, outputViewString, outputViewTypeMimeString, outputAnnotationString, outputFeatureString);
-			
-			
+		
+		processInputViews(aJCas, 
+				inputViewStringArray, 
+				contextAnnotationStringArray, 
+				inputAnnotationStringArray,  inputFeatureString, 
+				outputViewString, outputViewTypeMimeString, 
+				outputAnnotationString, outputFeatureString);
 	}
 
 
-
 	/**
-	 * This method is invoked when the analysis has to be processed for   
-	 * some input annotations which are covered by specific contextAnnotation.
+	 * Process each inputView of the JCas
 	 * 
 	 * @param aJCas
-	 *            the CAS over which the process is performed
-	 * @param inputViewString
-	 * @param contextAnnotationType
-	 *            Type name of the annotations to consider as the context
-	 *            annotations in which the process will be performed
-	 * @param inputAnnotationType
-	 *            Type name of the annotations to consider as the token units to
-	 *            be processed
+	 * 				the CAS over which the process is performed
+	 * @param inputViewString[]
+	 * 				List of names of each InputView to process
+	 * @param contextAnnotationStringArray
+	 *            	List of Context Annotation names
+	 * @param inputAnnotationStringArray
+	 *            List of Input Annotation names
 	 * @param inputFeatureString
 	 * @param outputViewString
 	 * @param outputViewTypeMimeString
@@ -357,30 +373,19 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * @param ouputFeatureString
 	 * @throws AnalysisEngineProcessException
 	 */
-	private void processContextAnnotations(JCas aJCas, String inputViewString, String contextAnnotationString, String[] inputAnnotationStringArray, String inputFeatureString, String outputViewString, String outputViewTypeMimeString, String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
+	protected void processInputViews(JCas aJCas, 
+			String[] inputViewStringArray, 
+			String[] contextAnnotationStringArray, 
+			String[] inputAnnotationStringArray, String inputFeatureString, 
+			String outputViewString, String outputViewTypeMimeString, 
+			String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
 
-		/** -- Prepare the view to be processed**/
-		log("Getting the inputViewJCas");
-		JCas inputViewJCas = UIMAUtilities.getView(aJCas,inputViewString);
+		log("Getting the Absolute  Context Annotation ");
 
-		/** -- In case of the output type is annotation, get the view to store the result **/
-		// si les param annotations sont renseignés alors cela signifie que l'on
-		// suppose qu'une vue existe pour accueillir les annotations
-		// on effectue ici le getView pour d'éviter de le faire à chaque tour de boucle 
-		// si l'inputType est annotation
-		JCas outputViewJCas = null;
-		if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
-			log("Getting the outputViewJCas");
-			outputViewJCas = UIMAUtilities.getView(aJCas,outputViewString);		
-		}	
-
-		// Récupère les types de context annotations 
-		AnnotationIndex<Annotation> contextAnnotationIndex = null; 
-		Type contextAnnotationType = null;
-		contextAnnotationType = UIMAUtilities.getType(inputViewJCas, contextAnnotationString);
-
-		log("Getting the Context Annotation index");
-		// Récupère une liste de contexts
+		// Récupère le type de la DEFAULT_CONTEXT_ANNOTATION
+		AnnotationIndex<Annotation> absoluteContextAnnotationIndex = null; 
+		Type absoluteContextAnnotationType = null;
+		absoluteContextAnnotationType = UIMAUtilities.getType(aJCas, DEFAULT_CONTEXT_ANNOTATION);
 		// Récupération d'index d'annotations à partir de type d'annotation!
 		// soit comme cela
 		//   AnnotationIndex idxMonType = (AnnotationIndex)
@@ -396,67 +401,148 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		// avec reflect
 		//    FSIndex<Annotation> inputAnnotationFSIdx = aJCas
 		//    .getAnnotationIndex(inputAnnotationType);
-		Iterator<Annotation> contextAnnotationIndexIterator = null;
-		contextAnnotationIndex = (AnnotationIndex<Annotation>) inputViewJCas
-		.getAnnotationIndex(contextAnnotationType);
-		contextAnnotationIndexIterator = contextAnnotationIndex.iterator();
+		Iterator<Annotation> absoluteContextAnnotationIndexIterator = null;
+		absoluteContextAnnotationIndex = (AnnotationIndex<Annotation>) aJCas
+		.getAnnotationIndex(absoluteContextAnnotationType);
+		absoluteContextAnnotationIndexIterator = absoluteContextAnnotationIndex.iterator();
 
-		// var to concat the results in case of a view as the output type 
-		String commandResultString = "";
-
-		// Pour chaque context 
-		while (contextAnnotationIndexIterator.hasNext()) {
+		// Pour l'absolute context 
+		// il y a un seul élément à savoir DocumentAnnotation
+		while (absoluteContextAnnotationIndexIterator.hasNext()) {
 
 			// Context Annotation suivante de même type
-			Annotation contextAnnotation = null ;
-			contextAnnotation = (Annotation) contextAnnotationIndexIterator.next();
+			Annotation absoluteContextAnnotation = null ;
+			absoluteContextAnnotation = (Annotation) absoluteContextAnnotationIndexIterator.next();
 
+			// var to concat the results in case of a view as the output type 
+			String inputViewsConcatenedResults = "";
+
+			log("For each inputView");
+			for (String inputViewString : inputViewStringArray) {
+
+				/** -- Prepare the view to be processed**/
+				log("Getting the inputViewJCas "+ inputViewString);
+				JCas inputViewJCas = UIMAUtilities.getView(aJCas,inputViewString);
+
+				// On spécifie ici la valeur par défaut de l'outputView 
+				if (outputViewString == null) {
+					// If no output view is specified, we set it to inputViewString
+					outputViewString = inputViewString;
+				}
+				
+				/** -- In case of the output type is annotation, get the view to store the result **/
+				// si les param annotations sont renseignés alors cela signifie que l'on
+				// suppose qu'une vue existe pour accueillir les annotations
+				// on effectue ici le getView pour d'éviter de le faire à chaque tour de boucle 
+				// si l'inputType est annotation
+				JCas outputViewJCas = null;
+				if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
+					log("Getting the outputViewJCas");
+					outputViewJCas = UIMAUtilities.getView(aJCas,outputViewString);		
+				}	
+
+				log("Getting the Context Annotation index");
+				//Iterator<Annotation> inputAnnotationIterator = null;
+				//inputAnnotationIterator = inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
+				FSIterator contextAnnotationsFSIter = null;
+				contextAnnotationsFSIter = UIMAUtilities.subiterator(inputViewJCas, absoluteContextAnnotation, contextAnnotationStringHashMap,false);
+
+				inputViewsConcatenedResults+= processContextAnnotations(
+						inputViewJCas,
+						contextAnnotationsFSIter,
+						inputAnnotationStringArray,
+						inputFeatureString, 
+						outputViewJCas,
+						outputAnnotationString,
+						ouputFeatureString);	
+
+			}
+			/** -- Create view **/
+			// output_v_string est défini ; potentiellement il est égal à input_v ; normalement la vue n'existe pas et est à créer
+			if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW)) {
+				log("Creating output view");
+				// ici on suppose que outputViewString ne correspond à aucune vue existante (a fortiori est différent de inputViewString) 
+				// et que createView génèrera une erreur si la vue existe déjà
+				UIMAUtilities.createView(aJCas, outputViewString, inputViewsConcatenedResults, outputViewTypeMimeString);
+			}
+		}
+	}
+
+
+
+
+
+	/**
+	 * Process each contextAnnotation.
+	 * 
+	 * @param inputViewJCas
+	 * 				the CAS View over which the process is performed
+	 * @param contextAnnotationsFSIter
+	 * 				FSIterator of context Annotations
+	 * @param inputAnnotationStringArray
+	 *            List of Input Annotation names
+	 * @param inputFeatureString
+	 * @param outputViewJCas
+	 * 				the CAS View to update with potential future created annotations
+	 * @param outputAnnotationString
+	 * @param ouputFeatureString
+	 * 
+	 * @return
+	 * 
+	 * @throws AnalysisEngineProcessException
+	 */
+	protected String processContextAnnotations(
+			JCas inputViewJCas,
+			FSIterator contextAnnotationsFSIter,
+			String[] inputAnnotationStringArray,
+			String inputFeatureString, 
+			JCas outputViewJCas,
+			String outputAnnotationString,
+			String ouputFeatureString) throws AnalysisEngineProcessException {
+
+		// var to concat the results in case of a view as the output type 
+		String contextAnnotationResultString = "";
+
+		// Pour chaque inputAnnotation présent dans le context 
+		while (contextAnnotationsFSIter.hasNext()) {
+			
+			Annotation contextAnnotation = (Annotation) contextAnnotationsFSIter.next();
+			
 			// Récupère le type d'input annotations 
 			//				Type inputAnnotationType = null;
 			//				inputAnnotationType = UIMAUtilities.getType(inputViewJCas, inputAnnotationString);
 			//Type inputAnnotationType = null;
 			//inputAnnotationType = UIMAUtilities.getType(inputViewJCas, inputAnnotationStringHashMap.keySet().iterator().next());
 
-
 			// Si InputAnnotation n'est pas renseigné 
 			// alors on traite la valeur String d'une certaine feature de chaque ContextAnnotation
 			// Par défaut ContextAnnotation est au moins égal à DocumentAnnotation
 			// et possède la feature coveredText
 			if (inputAnnotationStringHashMap.isEmpty()) {
-				//System.out.println("Debug: contextAnnotationString"+contextAnnotationString);
-				inputAnnotationStringHashMap.put(contextAnnotationString, 1);
+				System.out.println("Debug: contextAnnotation.getType().getName()"+contextAnnotation.getType().getName());
+				inputAnnotationStringHashMap.put(contextAnnotation.getType().getName(), 1);
 				log("Building an Input Annotations index from the ContextAnnotations");
 			}
 			// Si InputAnnotation est renseigné 
 			// alors on construit un iterator ordonné à partir de celles renseignées
-			//else 
+			else 
 			{
 				log("Getting the Input Annotations index ");
 			}
-				// Récupération de la liste des inputAnnotation
-				//Iterator<Annotation> inputAnnotationIterator = null;
-				//inputAnnotationIterator = inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
-				FSIterator contextualizedInputAnnotationsFSIter = null;
-				contextualizedInputAnnotationsFSIter = UIMAUtilities.subiterator(inputViewJCas, contextAnnotation, inputAnnotationStringHashMap,false);
-
-				commandResultString = processInputAnnotations(inputViewJCas,
-						contextualizedInputAnnotationsFSIter, inputFeatureString,
-						outputViewJCas, outputAnnotationString);
 			
+			// Récupération de la liste des inputAnnotation
+			//Iterator<Annotation> inputAnnotationIterator = null;
+			//inputAnnotationIterator = inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
+			FSIterator contextualizedInputAnnotationsFSIter = null;
+			contextualizedInputAnnotationsFSIter = UIMAUtilities.subiterator(inputViewJCas, contextAnnotation, inputAnnotationStringHashMap,false);
+
+			contextAnnotationResultString += processInputAnnotations(inputViewJCas,
+					contextualizedInputAnnotationsFSIter, inputFeatureString,
+					outputViewJCas, outputAnnotationString);
 		}
 
-
-		/** -- Create view **/
-		// output_v_string est défini ; potentiellement il est égal à input_v ; normalement la vue n'existe pas et est à créer
-		if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW)) {
-			log("Creating output view");
-			// ici on suppose que outputViewString ne correspond à aucune vue existante (a fortiori est différent de inputViewString) 
-			// et que createView génèrera une erreur si la vue existe déjà
-			UIMAUtilities.createView(aJCas, outputViewString, commandResultString, outputViewTypeMimeString);
-		}
-
+		return contextAnnotationResultString;
 	}
-
 
 	/**
 	 * Process each InputAnnotation by analyzing the value of its InputFeature
@@ -475,7 +561,8 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 */
 	protected String processInputAnnotations(JCas inputViewJCas,
 			FSIterator contextualizedInputAnnotationsFSIter,
-			String inputFeatureString, JCas outputViewJCas,
+			String inputFeatureString, 
+			JCas outputViewJCas,
 			String outputAnnotationString)
 	throws AnalysisEngineProcessException {
 
@@ -542,7 +629,27 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 		}
 		return commandResultString;
 	}
+	
 
+
+	/**
+	 * This abstract method corresponds to the actual process to perform 
+	 * on the String Value of a given Feature of a given Annotation 
+	 * 
+	 * @param inputViewJCas the CAS view that will be processed. 
+	 * @param inputTextToProcess the text to process (actually it corresponds to the String Value of a given Feature of a given Annotation )
+	 * @param beginFeatureValue the begin offset of the Annotation whose one Feature is going to be processed
+	 * @param endFeatureValue the end offset of the Annotation whose one Feature is going to be processed
+	 * 
+	 * @throws AnalysisEngineProcessException if something wrong happened
+	 * while processing this CAS view. 
+	 * 
+	 * @return return the result of the performed processing 
+	 */
+	protected abstract String processAnnotationFeatureStringValue(JCas inputViewJCas, String inputTextToProcess, int beginFeatureValue, int endFeatureValue) throws AnalysisEngineProcessException;
+
+	
+	
 	/**
 	 * This method is invoked when the analysis has to be processed for some views 
 	 *  
@@ -611,23 +718,6 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 	}
 
-
-	/**
-	 * This abstract method corresponds to the actual process to perform 
-	 * on the String Value of a given Feature of a given Annotation 
-	 * 
-	 * @param inputViewJCas the CAS view that will be processed. 
-	 * @param inputTextToProcess the text to process (actually it corresponds to the String Value of a given Feature of a given Annotation )
-	 * @param beginFeatureValue the begin offset of the Annotation whose one Feature is going to be processed
-	 * @param endFeatureValue the end offset of the Annotation whose one Feature is going to be processed
-	 * 
-	 * @throws AnalysisEngineProcessException if something wrong happened
-	 * while processing this CAS view. 
-	 * 
-	 * @return return the result of the performed processing 
-	 */
-	protected abstract String processAnnotationFeatureStringValue(JCas inputViewJCas, String inputTextToProcess, int beginFeatureValue, int endFeatureValue) throws AnalysisEngineProcessException;
-
 	/**
 	 * Log messages
 	 * @param message to log 
@@ -689,70 +779,6 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 
 	/**
-	 * @return the iNPUTTYPE_ANNOTATION
-	 */
-	protected static String getINPUTTYPE_ANNOTATION() {
-		return INPUTTYPE_ANNOTATION;
-	}
-
-
-	/**
-	 * @param iNPUTTYPEANNOTATION the iNPUTTYPE_ANNOTATION to set
-	 */
-	protected static void setINPUTTYPE_ANNOTATION(String iNPUTTYPEANNOTATION) {
-		INPUTTYPE_ANNOTATION = iNPUTTYPEANNOTATION;
-	}
-
-
-	/**
-	 * @return the iNPUTTYPE_VIEW
-	 */
-	protected static String getINPUTTYPE_VIEW() {
-		return INPUTTYPE_VIEW;
-	}
-
-
-	/**
-	 * @param iNPUTTYPEVIEW the iNPUTTYPE_VIEW to set
-	 */
-	protected static void setINPUTTYPE_VIEW(String iNPUTTYPEVIEW) {
-		INPUTTYPE_VIEW = iNPUTTYPEVIEW;
-	}
-
-
-	/**
-	 * @return the oUTPUTTYPE_ANNOTATION
-	 */
-	protected static String getOUTPUTTYPE_ANNOTATION() {
-		return OUTPUTTYPE_ANNOTATION;
-	}
-
-
-	/**
-	 * @param oUTPUTTYPEANNOTATION the oUTPUTTYPE_ANNOTATION to set
-	 */
-	protected static void setOUTPUTTYPE_ANNOTATION(String oUTPUTTYPEANNOTATION) {
-		OUTPUTTYPE_ANNOTATION = oUTPUTTYPEANNOTATION;
-	}
-
-
-	/**
-	 * @return the oUTPUTTYPE_VIEW
-	 */
-	protected static String getOUTPUTTYPE_VIEW() {
-		return OUTPUTTYPE_VIEW;
-	}
-
-
-	/**
-	 * @param oUTPUTTYPEVIEW the oUTPUTTYPE_VIEW to set
-	 */
-	protected static void setOUTPUTTYPE_VIEW(String oUTPUTTYPEVIEW) {
-		OUTPUTTYPE_VIEW = oUTPUTTYPEVIEW;
-	}
-
-
-	/**
 	 * @return the runIdString
 	 */
 	protected String getRunIdString() {
@@ -769,50 +795,42 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 
 	/**
-	 * @return the inputViewString
+	 * @return the inputViewStringArray
 	 */
-	protected String getInputViewString() {
-		return inputViewString;
+	protected String[] getInputViewStringArray() {
+		return inputViewStringArray;
 	}
 
 
 	/**
-	 * @param inputViewString the inputViewString to set
+	 * @return the contextAnnotationStringArray
 	 */
-	protected void setInputViewString(String inputViewString) {
-		this.inputViewString = inputViewString;
+	protected String[] getContextAnnotationStringArray() {
+		return contextAnnotationStringArray;
 	}
 
 
 	/**
-	 * @return the contextAnnotationString
+	 * @return the contextAnnotationStringHashMap
 	 */
-	protected String getContextAnnotationString() {
-		return contextAnnotationString;
+	protected HashMap<String, Integer> getContextAnnotationStringHashMap() {
+		return contextAnnotationStringHashMap;
 	}
 
 
 	/**
-	 * @param contextAnnotationString the contextAnnotationString to set
+	 * @return the inputAnnotationStringArray
 	 */
-	protected void setContextAnnotationString(String contextAnnotationString) {
-		this.contextAnnotationString = contextAnnotationString;
-	}
-
-
-	/**
-	 * @return the inputAnnotationString
-	 */
-	protected String[] getInputAnnotationString() {
+	protected String[] getInputAnnotationStringArray() {
 		return inputAnnotationStringArray;
 	}
 
 
 	/**
-	 * @param inputAnnotationString the inputAnnotationString to set
+	 * @return the inputAnnotationStringHashMap
 	 */
-	protected void setInputAnnotationString(String[] inputAnnotationStringArray) {
-		this.inputAnnotationStringArray = inputAnnotationStringArray;
+	protected HashMap<String, Integer> getInputAnnotationStringHashMap() {
+		return inputAnnotationStringHashMap;
 	}
 
 
@@ -825,26 +843,10 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 
 	/**
-	 * @param inputFeatureString the inputFeatureString to set
-	 */
-	protected void setInputFeatureString(String inputFeatureString) {
-		this.inputFeatureString = inputFeatureString;
-	}
-
-
-	/**
 	 * @return the outputViewString
 	 */
 	protected String getOutputViewString() {
 		return outputViewString;
-	}
-
-
-	/**
-	 * @param outputViewString the outputViewString to set
-	 */
-	protected void setOutputViewString(String outputViewString) {
-		this.outputViewString = outputViewString;
 	}
 
 
@@ -857,26 +859,10 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 
 	/**
-	 * @param outputViewTypeMimeString the outputViewTypeMimeString to set
-	 */
-	protected void setOutputViewTypeMimeString(String outputViewTypeMimeString) {
-		this.outputViewTypeMimeString = outputViewTypeMimeString;
-	}
-
-
-	/**
 	 * @return the outputAnnotationString
 	 */
 	protected String getOutputAnnotationString() {
 		return outputAnnotationString;
-	}
-
-
-	/**
-	 * @param outputAnnotationString the outputAnnotationString to set
-	 */
-	protected void setOutputAnnotationString(String outputAnnotationString) {
-		this.outputAnnotationString = outputAnnotationString;
 	}
 
 
@@ -888,44 +874,6 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	}
 
 
-	/**
-	 * @param outputFeatureString the outputFeatureString to set
-	 */
-	protected void setOutputFeatureString(String outputFeatureString) {
-		this.outputFeatureString = outputFeatureString;
-	}
-
-
-	/**
-	 * @return the inputType
-	 */
-	protected String getInputType() {
-		return inputType;
-	}
-
-
-	/**
-	 * @param inputType the inputType to set
-	 */
-	protected void setInputType(String inputType) {
-		this.inputType = inputType;
-	}
-
-
-	/**
-	 * @return the outputType
-	 */
-	protected String getOutputType() {
-		return outputType;
-	}
-
-
-	/**
-	 * @param outputType the outputType to set
-	 */
-	protected void setOutputType(String outputType) {
-		this.outputType = outputType;
-	}
 
 
 
