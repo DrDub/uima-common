@@ -1,11 +1,11 @@
 #summary User Guide
 #labels Featured
 
-This page mainly presents the `AnalysisEngine` class.
+This page mainly presents the abstract `AnalysisEngine` class.
 
 Without an implementation, the class cannot work. There are several ways of using it. The package comes with an example of descriptor, which should also be extended to be used.
 
-=== Parameters ===
+== Parameters ==
   * `InputView` List of view names to process 
   * `ContextAnnotation` List of annotation names which delimits the text areas or the covered annotations to process
   * `InputAnnotation`	Ordered list of annotation names to consider as the Feature Structure index to process 
@@ -16,8 +16,7 @@ Without an implementation, the class cannot work. There are several ways of usin
 	
 
 
-
-=== Constraints ===
+== Constraints ==
 
   * `InputView` a pour valeur par défaut `_InitialView` 
   * 1 ou n `InputView` on traite les vues les unes après les autres 
@@ -39,8 +38,6 @@ Without an implementation, the class cannot work. There are several ways of usin
   * Si `OutputAnnotation` existe alors on éditera seulement l'`OutputView` pour y rajouter des annotations sinon on créera l'`OutputView` spécifiée
 
 
-
-
   * (4) `OutputAnnotation` null => `OutputView` à créer ; si `OutputView` n'existe pas alors on la crée PASS ; sinon si existe FAIL
   * (1) `OutputView` == default i.e. `InputView` donc FAIL car existe déjà lorsqu'on tente de créer
 
@@ -54,7 +51,7 @@ Without an implementation, the class cannot work. There are several ways of usin
   * (8) idem que (5) ; ALERT créé une même annotation sur plusieurs vues existantes distinctes ; doute sur intérêt donc non implémentée
   * (9) idem que (6)
 
-=== Methods ===
+== Methods ==
 
 *`initialize` Method *
   * Getting the list of `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name, `OutputView` name, `OutputAnnotation` type name
@@ -63,3 +60,7 @@ Without an implementation, the class cannot work. There are several ways of usin
 *`` Method *
 *`` Method *
 *`` Method *
+
+== Descriptors ==
+
+The current package also contains a descriptor example. This cannot be used as it. The name of the java class file should be changed to point the class which extends the AnalysisEngine class. New parameters can be added as well as type systems and capabilities...
