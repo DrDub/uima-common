@@ -511,7 +511,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 	/**
 	 * Process sequentially each ContextAnnotation of a given InputView. 
-	 * Returns the ontatenated results obtained for each Context Annotation.
+	 * Returns the contatenated results obtained for each Context Annotation.
 	 * 
 	 * @param inputViewJCas
 	 * 				the CAS View over which the process is performed
@@ -530,8 +530,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * 				Feature name of the annotation whose string value will 
 	 * 				contain the analysis result
 	 * 
-	 * @return contextAnnotationResultString
-	 * 				Contatenated results obtained for each Context Annotation 
+	 * @return Contatenated results obtained for each Context Annotation 
 	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
@@ -609,8 +608,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * 				Feature name of the annotation whose string value will 
 	 * 				contain the analysis result
 	 * 
-	 * @return contextAnnotationResultString
-	 * 				returns the contatenated results obtained for each InputAnnotation
+	 * @return the contatenated results obtained for each InputAnnotation
 	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
@@ -700,7 +698,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * @throws AnalysisEngineProcessException if something wrong happened
 	 * while processing this CAS view. 
 	 * 
-	 * @return return the result of the performed processing 
+	 * @return the result of the performed processing 
 	 */
 	protected abstract String processAnnotationFeatureStringValue(JCas inputViewJCas, String inputTextToProcess, int beginFeatureValue, int endFeatureValue) throws AnalysisEngineProcessException;
 

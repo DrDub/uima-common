@@ -25,7 +25,8 @@
   * ajout du ant-javadoc.xml
   * complement a minima du readme
   * ajout d'un descripteur exemple
-  * passage du parametre ContextAnnotation String en StringArray
+  * passage des parametres ContextAnnotation String et InputView String en StringArray
+  * UIMAUtilitiles.subiterator pour contextAnnotation
   * vérification de l'existence de inputAnnotationArray par rapport à null et sa taille
   * un default inputFeatureString pour les ContextAnnotation et aussi InputView
   * ajout de la méthode processInputViews
