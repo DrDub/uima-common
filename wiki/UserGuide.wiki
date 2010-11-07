@@ -86,28 +86,25 @@ Some other parameters allows you
 
 == Algorithm ==
 
+Basically the algorithm works like this, except that the methods are not embedded but called to simulate the embedding. Each extension of the `AnalysisEngine` class can choose the methods to reimplement.
+
 {{{
-process (JCas aJCas)
-   processInputViews(   aJCas, 
-			inputViewStringArray, 
-			contextAnnotationStringArray, 
-			inputAnnotationStringArray,  inputFeatureString, 
-			outputViewString, outputViewTypeMimeString, 
-			outputAnnotationString, outputFeatureString );
-      processContextAnnotations(
-	inputViewJCas,
-						contextAnnotationsFSIter,
-						inputAnnotationStringArray,
-						inputFeatureString, 
-						outputViewJCas,
-						outputAnnotationString,
-						ouputFeatureString);	
+process (JCas aJCas) {
+   processInputViews() {
+      foreach InputView {
+         processContextAnnotations() {
+            processInputAnnotations() {
+               processAnnotationFeatureStringValue() {
+               }
+            }
+         }
+      }
+   }
+}
+processAnnotationFeatureStringValue
 
 }}}
 
-{{{
-
-}}}
 
 == Descriptors ==
 
