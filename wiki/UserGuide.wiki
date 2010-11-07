@@ -10,15 +10,17 @@ Many of the tricks assumes that the handled annotations are based on `uima.tcas.
 
 == Parameters ==
 
-
   * `InputView` List of view names to process 
   * `ContextAnnotation` List of annotation names which delimits the text areas or the covered annotations to process
   * `InputAnnotation`	Ordered list of annotation names to consider as the Feature Structure index to process 
-  * `InputFeature`  Feature name of the annotations whose string value will be processed
+  * `InputFeature`  Feature name of the inputAnnotation whose String Value will be actually processed
   * `OutputView` View name to consider as the view to receive the result; to be created whether `OutputAnnotation` is empty or simply to edit if `OutputAnnotation` is defined
   * `OutputAnnotation` Name of the annotation to create as the analysis result
   * `OutputFeature` Feature name of the annotation whose string value will contain the analysis result
-	
+
+Some other parameters allows you
+  * to specify the output view [http://en.wikipedia.org/wiki/Internet_media_type media type (also called type MIME)] to create.
+  * 
 
 == Constraints ==
 
@@ -69,10 +71,10 @@ Many of the tricks assumes that the handled annotations are based on `uima.tcas.
   * The method routes toward the correct subprocess method depending on the InputType which is either Annotation or View. Recent modifications led to use the same subprocess method. Indeed the InputView will be processed indirectly by the DocumentAnnotation.
 
 *`processInputViews` Method *
-  *
+  * Process sequentially each InputView of a given JCas. Eventually may create a view with the concatenated results obtained for each view. 
 
-*`` Method *
-  *
+* `processContextAnnotations` Method *
+  * Process sequentially each ContextAnnotation of a given InputView. Returns the ontatenated results obtained for each Context Annotation.
 
 *`` Method *
   *
@@ -86,7 +88,16 @@ process(JCas aJCas)
 			contextAnnotationStringArray, 
 			inputAnnotationStringArray,  inputFeatureString, 
 			outputViewString, outputViewTypeMimeString, 
-			outputAnnotationString, outputFeatureString);
+			outputAnnotationString, outputFeatureString );
+      processContextAnnotations(
+	inputViewJCas,
+						contextAnnotationsFSIter,
+						inputAnnotationStringArray,
+						inputFeatureString, 
+						outputViewJCas,
+						outputAnnotationString,
+						ouputFeatureString);	
+
 }}}
 
 {{{
