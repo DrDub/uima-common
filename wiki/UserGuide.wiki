@@ -66,25 +66,28 @@ Some other parameters allows you
 
 == Methods ==
 
-*`initialize` Method *
+*`initialize`  *
   * Getting the list of `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name, `OutputView` name, `OutputAnnotation` type name
 
-*`process` Method *
+*`process`  *
   * The method routes toward the correct subprocess method depending on the InputType which is either Annotation or View. Recent modifications led to use the same subprocess method. Indeed the InputView will be processed indirectly by the DocumentAnnotation.
 
-*`processInputViews` Method *
+*`processInputViews`  *
   * Process sequentially each InputView of a given JCas. Eventually may create a view with the concatenated results obtained for each view. 
 
-* `processContextAnnotations` Method *
+* `processContextAnnotations`  *
   * Process sequentially each ContextAnnotation of a given InputView. Returns the ontatenated results obtained for each Context Annotation.
 
-*`` Method *
-  *
+*`processInputAnnotations`  *
+  * Process each InputAnnotation by analyzing the value of its InputFeature.  If some OutputAnnotations are specified then they are created and their OutputFeature is set with the analysis result. (Else) it returns the contatenated results obtained for each InputAnnotation
+
+*`processAnnotationFeatureStringValue`  *
+ * This abstract method corresponds to the actual process to perform  on the String Value of a given Feature of a given Annotation. Should be implemented in the extension of the class.
 
 == Algorithm ==
 
 {{{
-process(JCas aJCas)
+process (JCas aJCas)
    processInputViews(   aJCas, 
 			inputViewStringArray, 
 			contextAnnotationStringArray, 
