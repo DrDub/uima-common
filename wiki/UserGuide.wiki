@@ -66,55 +66,49 @@ Some other parameters allows you
 
 == Methods and Algorithm ==
 
-Basically the algorithm works like this. The `process` method calls  the `processInputViews` method which calls the `processContextAnnotations` method which calls the `processInputAnnotations` method which calls the  `processAnnotationFeatureStringValue` method.
+Basically the algorithm works like this. The `process` method calls  the `processInputView` method which calls the `processContextAnnotation` method which calls the `processInputAnnotation` method.
 
-Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure or simply implement the last abstract method.
+Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure or simply implement the last abstract method, which is the `processInputAnnotation` method.
+
+
 
 *` initialize`  *
   * Getting the list of `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name, `OutputView` name, `OutputAnnotation` type name
 
 * `process`  *
-  * The method routes toward the correct subprocess method depending on the InputType which is either Annotation or View. Recent modifications led to use the same subprocess method. Indeed the InputView will be processed indirectly by the DocumentAnnotation.
+  * From the given JCas, process sequentially each InputView. Eventually may create a view with the concatenated results obtained for each view. Previously the method was intending to route toward the correct subprocess method depending on the InputType which is either Annotation or View. Recent modifications led to use the same subprocess method. Indeed the InputView will be processed indirectly by the  DocumentAnnotation.
 {{{
 process () {
-   processInputViews();
-}
-}}}
-
-* `processInputViews`  *
-  * Process sequentially each InputView of a given JCas. Eventually may create a view with the concatenated results obtained for each view. 
-{{{
-processInputViews() {
    foreach InputView {
       define the corresponding OutputView;
       if OutputType.isView then get the OutputView;
 
-      build the index of ContextAnnotation; // If the parameter was empty, as a default contains DocumentAnnotation         
+      build the index of ContextAnnotation of the current InputView; // If the parameter was empty, as a default contains DocumentAnnotation         
 
-      concatenatedContextAnnotationResult += processContextAnnotations();   
+      concatenatedContextAnnotationResult += processInputView();   
    }
    if OutputType.isView then createView OutputView with concatenatedContextAnnotationResult as content;
 }
+}
 }}}
 
-* `processContextAnnotations`  *
-  * Process sequentially each ContextAnnotation of a given InputView. Returns the ontatenated results obtained for each Context Annotation.
+* `processInputView`  *
+  * From a given InputView, process sequentially each ContextAnnotation. Returns the contatenated results obtained for each Context Annotation.
 {{{
-processContextAnnotations() {
+processInputView() {
    foreach ContextAnnotation {
-
       build the index of InputAnnotation; // If the parameter was empty, as a default contains ContextAnnotations          
 
-      concatenatedInputAnnotationResult += processInputAnnotations()
+      concatenatedInputAnnotationResult += processContextAnnotation()
    }
    return concatenatedInputAnnotationResult
 }
 }}}
 
-* `processInputAnnotations`  *
+* `processContextAnnotation`  *
   * Process each InputAnnotation by analyzing the value of its InputFeature.  If some OutputAnnotations are specified then they are created and their OutputFeature is set with the analysis result. (Else) it returns the contatenated results obtained for each InputAnnotation
 {{{
-processInputAnnotations() {
+processContextAnnotation() {
    foreach InputAnnotation {
        annotationFeatureStringValueResult = processAnnotationFeatureStringValue() ;
        if OutputType.isAnnotation then createAnnotation in the given OutputView;
@@ -124,17 +118,13 @@ processInputAnnotations() {
 }
 }}}
 
-* `processAnnotationFeatureStringValue`  *
- * This abstract method corresponds to the actual process to perform  on the String Value of a given Feature of a given Annotation. Should be implemented in the extension of the class.
-
+* `processInputAnnotation`  *
+ * Could have been named processAnnotationFeatureStringValue. This abstract method corresponds to the actual process to perform  on the String Value of a given Feature of a given Annotation. Should be implemented in the extension of the class.
 {{{
-
-processAnnotationFeatureStringValue() {
+processInputAnnotation() {
    // any process
    return annotationFeatureStringValueResult
 }
-
-
 }}}
 
 == Descriptors ==
