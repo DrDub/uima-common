@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -182,13 +184,13 @@ public class UIMAUtilities {
 		return annotationClass;
 
 	}
-	
+
 	/**
 	 * Return the corresponding method getter name of a feature name
 	 * @param featureNameString
 	 * @return getFeatureMethodName
 	 */
-	public static String getFeatureName (String featureNameString) {
+	public static String getGetterFeatureMethodNameFromFeatureName (String featureNameString) {
 		String getFeatureMethodName = "get" + featureNameString.substring(0, 1).toUpperCase() + featureNameString.substring(1);
 		return getFeatureMethodName;
 	}
@@ -196,16 +198,15 @@ public class UIMAUtilities {
 	/**
 	 * Return the getter method of a given feature name
 	 * @param InputAnnotationClass
-	 * @param inputAnnotation
 	 * @param inputFeatureString
-	 * @return result
+	 * @return Method Get
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static Method getStringGetterMethod(Class InputAnnotationClass,String inputFeatureString) throws AnalysisEngineProcessException {
+	public static Method getAGetterMethod(Class InputAnnotationClass,String inputFeatureString) throws AnalysisEngineProcessException {
 
 		// Récupère la méthode pour "getter" la value de l'InputFeature
-		String getFeatureMethodName = getFeatureName(inputFeatureString);
-		
+		String getFeatureMethodName = getGetterFeatureMethodNameFromFeatureName(inputFeatureString);
+
 		Method getFeatureMethod = null;
 		try {
 			getFeatureMethod = InputAnnotationClass.getMethod(getFeatureMethodName);
@@ -226,20 +227,65 @@ public class UIMAUtilities {
 	}
 
 	/**
-	 * Invoke a getter method of a given annotation Annotation which returns a String  
+	 * Return the corresponding method setter name of a feature name
+	 * @param featureNameString
+	 * @return setFeatureMethodName
+	 */
+	public static String getSetterFeatureMethodNameFromFeatureName (String featureNameString) {
+		String getFeatureMethodName = "set" + featureNameString.substring(0, 1).toUpperCase() + featureNameString.substring(1);
+		return getFeatureMethodName;
+	}
+
+	/**
+	 * Return the setter method of a given feature name
+	 * @param InputAnnotationClass
+	 * @param inputFeatureString
+	 * @return a Method set
+	 * @throws AnalysisEngineProcessException
+	 */
+	public static Method getASetterMethod(Class InputAnnotationClass, String inputFeatureString) throws AnalysisEngineProcessException {
+
+		// Récupère la méthode pour "getter" la value de l'InputFeature
+		String setFeatureMethodName = getSetterFeatureMethodNameFromFeatureName(inputFeatureString);
+
+		Method setFeatureMethod = null;
+		try {
+			setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName);
+		} catch (SecurityException e) {
+			String errmsg = "Error: a SecurityException with getMethod " + setFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { setFeatureMethodName },e);	
+			//e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			String errmsg = "Error: NoSuchMethodException getMethod " + setFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { setFeatureMethodName },e);	
+			//e.printStackTrace();
+		}
+		return setFeatureMethod;
+	}
+
+	
+	/**
+	 * Invoke a getter method of a given annotation Annotation which returns an Object  
+	 * The Object should be called then with .toString() if we want it as a String
 	 * Allow to know the method of the annotation to handle only at the runtime level
+	 * 
 	 * @param inputAnnotation
 	 * @param getFeatureMethod
 	 * @return result
+	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static String invokeStringGetterMethod(Annotation inputAnnotation, Method getFeatureMethod) throws AnalysisEngineProcessException {
+	public static Object invokeObjectGetterMethod(Annotation inputAnnotation, Method getFeatureMethod) throws AnalysisEngineProcessException {
 
-		String result = "";
-		
+		Object result = null;
+
 		// Test contre la création d'annotations fantomes
 		try {
-			result = (String) getFeatureMethod.invoke(inputAnnotation);
+			result = (Object) getFeatureMethod.invoke(inputAnnotation);
 		} catch (IllegalArgumentException e) {
 			String errmsg = "Error: IllegalArgumentException invoked " + inputAnnotation
 			+ " !";
@@ -265,7 +311,31 @@ public class UIMAUtilities {
 
 
 	/**
-	 * This method create an annotation.
+	 * retrieveAndCastAnAnnotation
+	 * 
+	 * FAILED
+	 * 
+	 * @param annotationToLineFSIterator
+	 * @param annotationToLine
+	 * @return class Class<Annotation> inputAnnotationClass = 
+	 * @throws AnalysisEngineProcessException
+	 */
+	public static Class retrieveAndCastAnAnnotation(FSIterator annotationToLineFSIterator, Annotation annotationToLine) throws AnalysisEngineProcessException {
+
+		// Récupère et cast l'annotationToLine courante à manipuler
+		Object annotationObject = annotationToLineFSIterator.next();
+		Class  annotationClass = annotationObject.getClass();
+		String className = "null";
+		className = annotationClass.getName();
+		//System.out.println("Debug: class>"+className+"<");
+		Class<Annotation> inputAnnotationClass = UIMAUtilities.getClass(className);
+		annotationToLine = (Annotation) annotationObject;
+		inputAnnotationClass.cast(annotationToLine);
+		return inputAnnotationClass;
+	}
+
+	/**
+	 * This method create an annotation and set one feature with a String value.
 	 * 
 	 * @param aJCas
 	 *            the CAS over which the process is performed
@@ -389,6 +459,193 @@ public class UIMAUtilities {
 		}
 	}
 
+
+	/**
+	 * This method create an annotation 
+	 * 
+	 * @param aJCas
+	 *            the CAS over which the process is performed
+	 * @param annotationNameToCreate
+	 * @param beginFeatureValue
+	 * @param endFeatureValue
+
+	 * @throws AnalysisEngineProcessException 
+	 */
+	public static void createAnnotation(JCas aJCas, String annotationNameToCreate,
+			int beginFeatureValue, int endFeatureValue) throws AnalysisEngineProcessException {
+
+
+		try {
+			Object[] args = null;
+
+			Class<Annotation> TgtClass = (Class<Annotation>) Class
+			.forName(annotationNameToCreate);
+
+			// Génére le constructeur de la classe de l'annotation à créer
+			Constructor<?> tgtConstr = TgtClass
+			.getConstructor(new Class[] { JCas.class });
+
+			// Crée une annotation du type target
+			Object t = null;
+			t = tgtConstr.newInstance(new Object[] { aJCas });
+			TgtClass.cast(t);
+
+			Method addToIndexes = TgtClass.getMethod("addToIndexes",
+					new Class[] {});
+			// Récupère les méthodes pour accéder aux features souhaitées
+			Method setBegin = TgtClass.getMethod("setBegin", Integer.TYPE);
+			Method setEnd = TgtClass.getMethod("setEnd", Integer.TYPE);
+
+			// Ajouts à l'annotation du type target
+			setBegin.invoke(t, beginFeatureValue);
+			setEnd.invoke(t, endFeatureValue);
+			
+			// Test contre la création d'annotations fantomes
+			if (beginFeatureValue < endFeatureValue) 
+				addToIndexes.invoke(t, args);
+
+		} catch (IllegalArgumentException e) {
+			String errmsg = "Error: IllegalArgumentException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			String errmsg = "Error: IllegalAccessException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			String errmsg = "Error: InvocationTargetException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			String errmsg = "Error: ClassNotFoundException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (SecurityException e) {
+			String errmsg = "Error: SecurityException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			String errmsg = "Error: NoSuchMethodException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (InstantiationException e) {
+			String errmsg = "Error: InstantiationException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		}
+	}
+	
+
+	/**
+	 * This method create an annotation and set up a "list" 
+	 * (actually an hashMap) of features (couples name/value)
+	 * 
+	 * Should replace the methods with the same names but different number of features
+	 * Should be extended to accept any feature value types
+	 * 
+	 * @param aJCas
+	 *            the CAS over which the process is performed
+	 * @param annotationName
+	 * @param beginFeatureValue
+	 * @param endFeatureValue
+	 * @param featuresHashMap
+
+	 * @throws AnalysisEngineProcessException 
+	 */
+	public static void createAnnotation(JCas aJCas, String annotationName, HashMap<String,String> featureHashMap) throws AnalysisEngineProcessException {
+
+		try {
+			Object[] args = null;
+
+			Class<Annotation> annotationClass = (Class<Annotation>) Class
+			.forName(annotationName);
+
+			// Génére le constructeur de la classe de l'annotation à créer
+			Constructor<?> annotationClassConstructor = annotationClass
+			.getConstructor(new Class[] { JCas.class });
+
+			// Crée une annotation du type target
+			Object t = null;
+			t = annotationClassConstructor.newInstance(new Object[] { aJCas });
+			annotationClass.cast(t);
+
+			Method addToIndexes = annotationClass.getMethod("addToIndexes",
+					new Class[] {});
+			// Récupère les méthodes pour accéder aux features souhaitées
+		//	Method setBegin = annotationClass.getMethod("setBegin", Integer.TYPE);
+		//	Method setEnd = annotationClass.getMethod("setEnd", Integer.TYPE);
+
+			// Ajouts à l'annotation du type target
+		//	setBegin.invoke(t, beginFeatureValue);
+		//	setEnd.invoke(t, endFeatureValue);
+			
+			Iterator featureHashMapKeySetIterator = featureHashMap.keySet().iterator();
+			while (featureHashMapKeySetIterator.hasNext()) {
+				String featureName = (String) featureHashMapKeySetIterator.next();
+				// value -> setValue
+				String setFeatureMethodName = "set" + featureName.substring(0, 1).toUpperCase() + featureName.substring(1);
+			
+				//Object featureToColumnValueObject = UIMAUtilities.invokeObjectGetterMethod(annotationClass,
+				//		UIMAUtilities.getAGetterMethod(annotationClass,featureName));	
+				//featureToColumnValueString = featureToColumnValueObject.toString();
+				Method setValue = UIMAUtilities.getASetterMethod(annotationClass,featureName);
+			//	Method setValue = annotationClass.getMethod(setFeatureMethodName, String.class);
+				// TODO ce qui suit échoue
+				// voir http://java.developpez.com/faq/java/?page=langage_reflex
+				setValue.invoke(t, featureHashMap.get(featureName));
+			}
+			
+	
+			// Test contre la création d'annotations fantomes
+			//if (beginFeatureValue < endFeatureValue) 
+				addToIndexes.invoke(t, args);
+
+		} catch (IllegalArgumentException e) {
+			String errmsg = "Error: IllegalArgumentException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			String errmsg = "Error: IllegalAccessException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			String errmsg = "Error: InvocationTargetException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			String errmsg = "Error: ClassNotFoundException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (SecurityException e) {
+			String errmsg = "Error: SecurityException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			String errmsg = "Error: NoSuchMethodException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (InstantiationException e) {
+			String errmsg = "Error: InstantiationException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		}
+	}
+	
+	
 	/**
 	 * This method create a view.
 	 * 
@@ -436,13 +693,13 @@ public class UIMAUtilities {
 		AnnotationIndex annotationIndex = (AnnotationIndex)
 		aJCas.getAnnotationIndex();
 		FSIterator annotationIndexIterator = annotationIndex.iterator();
-		
+
 		//Iterator keyIter = annotationHashMap.keySet().iterator();
 		//while (keyIter.hasNext()){
 		//	String key = (String) keyIter.next();
 		//	System.out.println("Debug: key>"+key+"<");
 		//}
-		
+
 		while (annotationIndexIterator.hasNext()) {
 			//      On peut le manipuler comme on veut ...
 			Object annotationObject = annotationIndexIterator.next();
@@ -455,17 +712,14 @@ public class UIMAUtilities {
 					result.add((FeatureStructure) annotationObject);
 					Annotation annotation = (Annotation) annotationObject;
 					//System.out.println("Debug: "+className + "\t" + annotation.getCoveredText()+ "\t" + annotation.getBegin() + "\t" +annotation.getEnd());
-				
 				}
 			}
-				
 		}
-
 		return result;
 	}
 
 
-	
+
 	/**
 	 * 
 	 * This method provides an iterator over typed annotations that either 
@@ -497,7 +751,7 @@ public class UIMAUtilities {
 	 */
 	public static FSIterator subiterator(JCas aJCas, Annotation contextAnnotation, HashMap inputAnnotationHashMap, boolean isStrict) throws AnalysisEngineProcessException {
 		//,Type inputAnnotationType,  boolean isStrict) {
-	
+
 		// Ajout: déclaration de la variable type
 		Type contextAnnotationType = contextAnnotation.getType();
 
@@ -530,41 +784,68 @@ public class UIMAUtilities {
 		endPath.addFeature(endFeature);
 		FSMatchConstraint end = theConstraints.embedConstraint(endPath, endConstraint);
 
-		
+
 		// JR: on définit une contrainte sur le type d'annotation
 		// NH: à partir d'une Map d'annotations
 		FSTypeConstraint typeConstraint = theConstraints.createTypeConstraint();
 
-		System.out.println("Debug: contextAnnotationType.getName()>"+contextAnnotationType.getName()+"<");
-
-		System.out.println("Debug: contextAnnotation.getCoveredText()>"+contextAnnotation.getCoveredText()+"<");
-		System.out.println("Debug: contextAnnotation.getBegin()>"+contextAnnotation.getBegin()+"<");
-		System.out.println("Debug: contextAnnotation.getEnd()>"+contextAnnotation.getEnd()+"<");
+//		System.out.println("Debug: contextAnnotationType.getName()>"+contextAnnotationType.getName()+"<");
+//		System.out.println("Debug: contextAnnotation.getCoveredText()>"+contextAnnotation.getCoveredText()+"<");
+//		System.out.println("Debug: contextAnnotation.getBegin()>"+contextAnnotation.getBegin()+"<");
+//		System.out.println("Debug: contextAnnotation.getEnd()>"+contextAnnotation.getEnd()+"<");
 
 		Iterator keyIter = inputAnnotationHashMap.keySet().iterator();
 		while (keyIter.hasNext()){
 			String key = (String) keyIter.next();
-			System.out.println("Debug: key>"+key+"<");
+//			System.out.println("Debug: key>"+key+"<");
 			typeConstraint.add(getType(aJCas,key));
 		} 
 		FeaturePath typePath = aJCas.createFeaturePath();
 		FSMatchConstraint type = theConstraints.embedConstraint(typePath, typeConstraint);
 
-
 		// On combine les contraintes
 		FSMatchConstraint typeAndBeginAndEnd = null; 
 		typeAndBeginAndEnd =  theConstraints.and(type,theConstraints.and(begin, end));
-
 
 		// On génère un itérateur respectant ces contraintes
 		FSIterator filteredIterator = null;
 		filteredIterator = aJCas.createFilteredIterator(aJCas.getAnnotationIndex().iterator(), typeAndBeginAndEnd);
 
-
 		return filteredIterator;
 	}
-	
-	
+
+	/**
+	 * Remove duplicate annotations at the same offsets
+	 * from the index
+	 * 
+	 * http://www.mail-archive.com/uima-user@incubator.apache.org/msg01645.html
+	 * http://uima.apache.org/downloads/releaseDocs/2.3.0-incubating/docs/api/org/apache/uima/jcas/JCas.html#removeFsFromIndexes(org.apache.uima.cas.FeatureStructure)
+	 * 
+	 * @param aJCas  the CAS which contains the FSindex       
+
+	 * @author hernandez
+	 * @throws AnalysisEngineProcessException 
+	 * 
+	 */
+	public static void removeDuplicateFSAnnotationFromCASIndex(JCas aJCas) throws AnalysisEngineProcessException {
+		HashMap<String, String> alreadySeenFS = new HashMap<String, String>();
+		
+		// parse the FSIndex
+		// compute an hash of the current Annotation from Class.name alphabetcally ordered list of features with their value.toString()
+		// if alreadySeenFS this hash them remove from FS
+		// else add to alreadSeenFS
+		
+		//byte[] hash      = null;
+		//try {
+		//	hash= MessageDigest.getInstance("MD5").digest(aJCas.getSofaDataString().getBytes());
+		//} catch (NoSuchAlgorithmException e) {
+		//	// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+		
+	}
+
+
 	/**
 	 * Return the sofaDataString of a JCAS corresponding to the given view 
 	 * @param aJCas
