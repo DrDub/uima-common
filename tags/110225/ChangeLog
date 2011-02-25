@@ -1,0 +1,72 @@
+# UIMA Common
+# Copyright (C) 2010  Nicolas Hernandez
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+# 
+#   http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.  
+#
+# Fichier ChangeLog
+# 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+
+2011-02-25  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+  * src/fr/univnantes/lina/uima/util/AnalysisEngine.java: Changement de UIMAUtilities.invokeStringGetterMethod en UIMAUtilities.invokeObjectGetterMethod
+  * src/fr/univnantes/lina/uima/util/UIMAUtilities.java
+    * getFeatureName -> getGetterFeatureMethodNameFromFeatureName
+    * getStringGetterMethod-> getASetterMethod
+    * invokeStringGetterMethod -> invokeObjectGetterMethod
+    * retrieveAndCastAnAnnotation (en cours)
+    * createAnnotation(JCas aJCas, String annotationNameToCreate, int beginFeatureValue, int endFeatureValue)
+    * createAnnotation(JCas aJCas, String annotationName, HashMap<String,String> featureHashMap)
+    * subiterator(JCas aJCas, Annotation contextAnnotation, HashMap inputAnnotationHashMap, boolean isStrict)
+    * removeDuplicateFSAnnotationFromCASIndex(JCas aJCas)
+  * src/fr/univnantes/lina/util/JavaUtilities.java
+    * 
+
+2010-11-06  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+  * ajout du ant-javadoc.xml
+  * complement a minima du readme
+  * ajout d'un descripteur exemple
+  * passage des parametres ContextAnnotation String et InputView String en StringArray
+  * UIMAUtilitiles.subiterator pour contextAnnotation
+  * vérification de l'existence de inputAnnotationArray par rapport à null et sa taille
+  * un default inputFeatureString pour les ContextAnnotation et aussi InputView
+  * ajout de la méthode processInputViews
+  * renommage des méthodes principales en processContextAnnotations, processInputAnnotations et processAnnotationFeatureStringValue
+  * javadoc des méthodes et des variables principales
+  * passage par DocumentAnnotation pour simuler le travail sur la vue (concrètement on ne récupère plus le   inputTextToProcess par inputViewJCas.getSofaDataString() mais par la value de feature de l'annotation) 
+  * mise à jour de la forge et ajout  dans le dossier doc de l'arbre des possibles des interprétations des paramétrages
+  
+2010-10-12  Nicolas Hernandez  <nicolas.hernandez@>
+	* UIMAUtilities.java et AnalysisEngine.java: subiterator à base de FScontraint à la place du subiterator standard 
+	(notamment pour le contexte)
+
+2010-10-09  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+	* AnalysisEngine.java: Refactoring paramètre InputAnnotationString -> InputAnnotationStringArray
+	
+2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+	*  AnalysisEngine.java: Refactoring browseInput -> browseInputAnnotation et browseView
+	
+	
+YYYY-MM-DD  John Doe  <johndoe@example.com>
+
+    * myfile.ext (myfunction): my changes made
+    additional changes
+
+    * myfile.ext (unrelated_change): my changes made
+    to myfile.ext but completely unrelated to the above
+
+    * anotherfile.ext (somefunction): more changes
+
