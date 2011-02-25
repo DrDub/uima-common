@@ -130,3 +130,5 @@ processInputAnnotation() {
 == Descriptors ==
 
 The current package also contains a descriptor example. This cannot be used as it. The name of the java class file should be changed to point the class which extends the AnalysisEngine class. New parameters can be added as well as type systems and capabilities...
+
+You may consult the `desc/shell/test*` examples. The [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] of the [http://code.google.com/p/uima-shell/ uima-shell AE] project is an extension of the `AnalysisEngine` class.
