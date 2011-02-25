@@ -21,8 +21,14 @@
 # Fichier ChangeLog
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+
 2011-02-25  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
-  * src/fr/univnantes/lina/uima/util/AnalysisEngine.java: Changement de UIMAUtilities.invokeStringGetterMethod en UIMAUtilities.invokeObjectGetterMethod
+  * refactoring de desc en desc/common
+  * src/fr/univnantes/lina/uima/util/AnalysisEngine.java: 
+    * Changement de UIMAUtilities.invokeStringGetterMethod en UIMAUtilities.invokeObjectGetterMethod
+    * Rédéfinition des méthodes principales process, processInputView, processContextAnnotation, processInputAnnotation, processAnnotationFeatureStringValue
+    * La classe n'est plus abstract
+    
   * src/fr/univnantes/lina/uima/util/UIMAUtilities.java
     * getFeatureName -> getGetterFeatureMethodNameFromFeatureName
     * getStringGetterMethod-> getASetterMethod
@@ -33,7 +39,8 @@
     * subiterator(JCas aJCas, Annotation contextAnnotation, HashMap inputAnnotationHashMap, boolean isStrict)
     * removeDuplicateFSAnnotationFromCASIndex(JCas aJCas)
   * src/fr/univnantes/lina/util/JavaUtilities.java
-    * 
+    * ArrayList<String> readFromFileToLineArray(String fileName)
+    * ArrayList<String> readFromFileToLineArray(File file)
 
 2010-11-06  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
   * ajout du ant-javadoc.xml

@@ -118,7 +118,14 @@ Any Annotation type name et feature name can be used. In order to make
         <mandatory>false</mandatory>
       </configurationParameter>
     </configurationParameters>
-    <configurationParameterSettings/>
+    <configurationParameterSettings>
+      <nameValuePair>
+        <name>OutputView</name>
+        <value>
+          <string>aNewView</string>
+        </value>
+      </nameValuePair>
+    </configurationParameterSettings>
     <typeSystemDescription/>
     <typePriorities/>
     <fsIndexCollection/>
