@@ -2,30 +2,33 @@
 #labels Featured
 This page mainly presents the abstract `fr.univnantes.lina.uima.util.AnalysisEngine` class which allow you to develop AEs handling input/output view/annotations generically.
 
-== How to use the class? The basic Idea ==
+== How does the class work ?  ==
 
 The abstract `AnalysisEngine` class extends the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase`. Similarly you will find the same `initialize` and `process` methods.
 
 In extension,  for each specified _InputView_ (with default the `_InitialView`), the `process` method calls  the `processInputView` method. 
 In turn, for each specified _ContextAnnotation_ (annotation covering some text area or others annotations with DocumentAnnotation as default value), the `processInputView` method calls  the `processContextAnnotation` method. 
-In turn, for each specified _InputAnnotation_, the `processContextAnnotation` method calls the `processInputAnnotation` method
+In turn, for each specified _InputAnnotation_ (with a default value corresponding to the _ContextAnnotation_), the `processContextAnnotation` method calls the `processInputAnnotation` method
 which eventually calls the `processAnnotationFeatureStringValue` on a String feature value of the _InputAnnotation_.
-The current basic `processAnnotationFeatureStringValue` only echoes the value.
+The current basic `processAnnotationFeatureStringValue` (with _coveredText_ as default) only echoes the value.
 
 Each methods requires some parameters definitions. 
 The `process` method requires the _InputView_ parameters. 
-The `processInputView` method requiers the  _ContextAnnotation_ parameters
+The `processInputView` method requires the  _ContextAnnotation_ parameters.
+The `processContextAnnotation` method requires the  _InputAnnotation_ parameters.
+The `processInputAnnotation` method requires the  _InputFeature_ parameters.
+As mentioned above all these parameters have got some default values.
 
-Potentially there is a creation of an _output view_ at the process level based on the returned result of the embedded methods. And there is a creation of an _output annotation_ at the `processInputAnnotation` level. In practice, depending on the values of the _ContextAnnotation_ and the _InputAnnotation_ parameters you may create an output over the _InputView_ or the _ContextAnnotation_ 
+Potentially there is a creation of an _output view_ at the process level based on the returned result of the embedded methods. And there is a creation of an _output annotation_ at the `processInputAnnotation` level. In practice, depending on the values of the _ContextAnnotation_ and the _InputAnnotation_ parameters you may create an output over the _InputView_ (no _ContextAnnotation_ neither an _InputAnnotation_ should be specified) or the _ContextAnnotation_(at least a _ContextAnnotation_ should be defined). 
+
+Many of the tricks works because the handled annotations are based on `uima.tcas.Annotation` and `uima.tcas.DocumentAnnotation`. Part of the tricks relies also on the default values for the _InputView_, _ContextAnnotation_ and _InputAnnotation_ parameters.
+
+== How can I use it to develop my own generic Annotator Engine? In two words ==
+
+Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure and to take the benefit from the subsuming methods.
 
 
-
-
-Many of the tricks assumes that the handled annotations are based on `uima.tcas.Annotation` and `uima.tcas.DocumentAnnotation`.
-
-
-
-Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure or simply implement the last abstract method, which is the `processInputAnnotation` method.
+== How can I use it to develop my own generic Annotator Engine? With more words ==
 
 _Roughly speaking_
   * you have to extend the abstract `AnalysisEngine` class.
@@ -44,23 +47,16 @@ _Roughly speaking_
         }
 }}}
 
-  * then you call the super process
-{{{
+  * then you implement the processing method you want depending on what you want to work with: at the view level, at the context annotation level (a view area) or at the annotation level (annotations occurring in a given view area).
 
-        public void process(JCas aJCas) throws AnalysisEngineProcessException {
-                super.process(aJCas);
-        }
-}}}
-
-  * then you implement the processing method you want depending on what you want to work with: at the view level, on some context annotations (view area), or with some annotations (annotations occurring in a given view area).
     * implement the `process` method if you want to do the same thing as you do with the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase` of the Apache API. You probably won't do that since it does not offer to much comparing to the traditional Apache API. At least it gives you directly access to input/output parameters that you just have to declare (by overing them) in your AE descriptor.
-    * implement the `processInputView` method if you want *to perform your processing on each defined `InputView`*. You will have to declare and define the `InputView` array parameter for that.
-    * implement the `processContextAnnotation` method if you want *to perform your processing on some specific text areas* (covered by some known annotations), potentially on a list of defined `InputView`. You will have to declare and define the `ContextAnnotation` parameter to list the annotation names which delimits the text area you want to proceed.
-    * implement the `processInputAnnotation` method to specify the processing to perform to the value of the  `InputFeature` of the current `InputAnnotation`. The `InputFeature` is a string Feature name which can be different from `coveredText`. By default if no `InputAnnotation` is defined, it takes the `ContextAnnotation` value whose default value is `DocumentAnnotation`. The `InputFeature`, the `InputAnnotation` may be set. 
+    * implement the `processInputView` method if you want *to perform your processing on each defined _InputView_*. You will have to declare and define the _InputView_ array parameter for that.
+    * implement the `processContextAnnotation` method if you want *to perform your processing on some specific text areas* (covered by some known annotations), potentially on a list of defined `InputView`. You will have to declare and define the _ContextAnnotation_ parameter to list the annotation names which delimits the text area you want to proceed.
+    * implement the `processInputAnnotation` method to specify the processing to perform to the value of the  _InputFeature_ of the current `InputAnnotation`. The _InputFeature_ is a string Feature name which can be different from `coveredText`. By default if no _InputAnnotation_ is defined, it takes the _ContextAnnotation_ value whose default value is `DocumentAnnotation`. The _InputFeature_, the _InputAnnotation_ may be set. 
+    * implement the `processAnnotationFeatureStringValue` to benefit from the whole process chain and by only specifying the process you want to perform over an existing annotation type (the DocumentAnnotation at the InputView  level, or the ContextAnnotations, or some InputAnnotations) which holds a String feature.
 
 
-
-== Parameters ==
+== What are the parameters to override in my Annotator Engine descriptor?  ==
 
   * `InputView` List of view names to process 
   * `ContextAnnotation` List of annotation names which delimits the text areas or the covered annotations to process
@@ -74,7 +70,13 @@ Some other parameters allows you
   * to specify the output view [http://en.wikipedia.org/wiki/Internet_media_type media type (also called type MIME)] to create.
 
 
-== Constraints ==
+== Where can I find some descriptor examples ? ==
+
+The current package also contains a descriptor example. This cannot be used as it. The name of the java class file should be changed to point the class which extends the AnalysisEngine class. New parameters can be added as well as type systems and capabilities...
+
+You may consult the `desc/shell/test*` examples. The [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] of the [http://code.google.com/p/uima-shell/ uima-shell AE] project is an extension of the `AnalysisEngine` class.
+
+== Tell me again what are the default values and the parameter constraints ==
 
   * `InputView` a pour valeur par défaut `_InitialView` 
   * 1 ou n `InputView` on traite les vues les unes après les autres 
@@ -88,7 +90,6 @@ Some other parameters allows you
   * `InputAnnotation` n'a pas de valeur par défaut
   * 0 `InputAnnotation` on traite la zone de texte couverte par les `ContextAnnotation`
   * 1 ou n `InputAnnotation` on traite un FSIndex de `InputAnnotation` soit chaque `InputAnnotation` les unes après les autres soit comme un tout ou autre si on étend la méthode processInputAnnotation 
-
 
   * Si `InputAnnotation` ou `InputFeature` est défini, alors les deux doivent l'être 
   * Si `OutputAnnotation` ou `OutputFeature` est défini, alors les deux doivent l'être 
@@ -115,7 +116,7 @@ Some other parameters allows you
   * (9) idem que (6)
 
 
-== Methods ==
+== How does work each method ?==
 
 *` initialize`  *
   * Getting the list of `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name, `OutputView` name, `OutputAnnotation` type name
@@ -151,29 +152,34 @@ processInputView() {
 }}}
 
 * `processContextAnnotation`  *
-  * Process each InputAnnotation by analyzing the value of its InputFeature.  If some OutputAnnotations are specified then they are created and their OutputFeature is set with the analysis result. (Else) it returns the contatenated results obtained for each InputAnnotation
+  * Process each InputAnnotation and returns a contatenated result obtained from each InputAnnotation
 {{{
 processContextAnnotation() {
    foreach InputAnnotation {
-       annotationFeatureStringValueResult = processAnnotationFeatureStringValue() ;
-       if OutputType.isAnnotation then createAnnotation in the given OutputView;
-       else concatenatedInputAnnotationResult+=annotationFeatureStringValueResult
+       concatenatedInputAnnotationResult += processInputAnnotation() ;
+       
    }
    return concatenatedInputAnnotationResult
 }
 }}}
 
 * `processInputAnnotation`  *
- * Could have been named `processAnnotationFeatureStringValue`. This abstract method corresponds to the actual process to perform  on the String Value of a given Feature of a given Annotation. Should be implemented in the extension of the class.
+ * Analyze the value of its given InputFeature. If some OutputAnnotations are specified then they are created and their OutputFeature is set with the analysis result. 
 {{{
 processInputAnnotation() {
+   annotationFeatureStringValueResult=processAnnotationFeatureStringValue()
+   if OutputType.isAnnotation then createAnnotation in the given OutputView;
+
    // any process
    return annotationFeatureStringValueResult
 }
 }}}
 
-== Descriptors ==
 
-The current package also contains a descriptor example. This cannot be used as it. The name of the java class file should be changed to point the class which extends the AnalysisEngine class. New parameters can be added as well as type systems and capabilities...
-
-You may consult the `desc/shell/test*` examples. The [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] of the [http://code.google.com/p/uima-shell/ uima-shell AE] project is an extension of the `AnalysisEngine` class.
+* `processAnnotationFeatureStringValue`  *
+ *  This  method corresponds to the actual process performed  on the String Value of a given Feature of a given Annotation. Here the echo serves as  an example.
+{{{
+processAnnotationFeatureStringValue () {
+   echo the String feature value received as parameter
+}
+}}}
