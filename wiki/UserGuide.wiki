@@ -1,13 +1,48 @@
 #summary User Guide
 #labels Featured
+This page mainly presents the abstract `AnalysisEngine` (AE) class which allow you to develop AE and handling input/output view/annotations generically.
 
-== Description ==
+== How to use the class? ==
 
-This page mainly presents the abstract `AnalysisEngine` class.
-
-Without an implementation, the class cannot work. There are several ways of using it. They depends on the extension points, in other words, the methods which are extended. The package comes with an example of descriptor, which should also be extended to be used.
+Without an implementation, the class cannot work. There are several ways of using it. They depend on what generic parts you want to use.
 
 Many of the tricks assumes that the handled annotations are based on `uima.tcas.Annotation` and `uima.tcas.DocumentAnnotation`.
+
+Basically the algorithm works like this. The `process` method calls  the `processInputView` method which calls the `processContextAnnotation` method which calls the `processInputAnnotation` method.
+
+Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure or simply implement the last abstract method, which is the `processInputAnnotation` method.
+
+_Roughly speaking_
+  * you have to extend the abstract `AnalysisEngine` class.
+  * then you implement `initialize` method if you have some configParameterValues to get from the AE descriptor.
+{{{
+        public void initialize(UimaContext aContext)
+        throws ResourceInitializationException {
+                super.initialize(aContext);
+
+                // Strongly recommanded !!! (you have to define COMPONENT* in the header file as private static String for example)
+                this.setCOMPONENT_NAME(COMPONENT_NAME);
+                this.setCOMPONENT_VERSION(COMPONENT_VERSION);
+                this.setCOMPONENT_ID(COMPONENT_NAME+"-"+COMPONENT_VERSION);
+   
+                // TODO Here you get all your own ConfigParameterValues from the UimaContext
+        }
+}}}
+
+  * then you call the super process
+{{{
+
+        public void process(JCas aJCas) throws AnalysisEngineProcessException {
+                super.process(aJCas);
+        }
+}}}
+
+  * then you implement the processing method you want depending on what you want to work with: at the view level, on some context annotations (view area), or with some annotations (annotations occurring in a given view area).
+    * implement the `process` method if you want to do the same thing as you do with the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase` of the Apache API. You probably won't do that since it does not offer to much comparing to the traditional Apache API. At least it gives you directly access to input/output parameters that you just have to declare (by overing them) in your AE descriptor.
+    * implement the `processInputView` method if you want *to perform your processing on each defined `InputView`*. You will have to declare and define the `InputView` array parameter for that.
+    * implement the `processContextAnnotation` method if you want *to perform your processing on some specific text areas* (covered by some known annotations), potentially on a list of defined `InputView`. You will have to declare and define the `ContextAnnotation` parameter to list the annotation names which delimits the text area you want to proceed.
+    * implement the `processInputAnnotation` method to specify the processing to perform to the value of the  `InputFeature` of the current `InputAnnotation`. The `InputFeature` is a string Feature name which can be different from `coveredText`. By default if no `InputAnnotation` is defined, it takes the `ContextAnnotation` value whose default value is `DocumentAnnotation`. The `InputFeature`, the `InputAnnotation` may be set. 
+
 
 
 == Parameters ==
@@ -64,13 +99,8 @@ Some other parameters allows you
   * (8) idem que (5) ; ALERT créé une même annotation sur plusieurs vues existantes distinctes ; doute sur intérêt donc non implémentée
   * (9) idem que (6)
 
-== Methods and Algorithm ==
 
-Basically the algorithm works like this. The `process` method calls  the `processInputView` method which calls the `processContextAnnotation` method which calls the `processInputAnnotation` method.
-
-Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure or simply implement the last abstract method, which is the `processInputAnnotation` method.
-
-
+== Methods ==
 
 *` initialize`  *
   * Getting the list of `InputView` name, `ContextAnnotation` type name, `InputAnnotation` type name, `OutputView` name, `OutputAnnotation` type name
