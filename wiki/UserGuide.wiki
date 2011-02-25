@@ -1,14 +1,29 @@
 #summary User Guide
 #labels Featured
-This page mainly presents the abstract `AnalysisEngine` (AE) class which allow you to develop AE and handling input/output view/annotations generically.
+This page mainly presents the abstract `fr.univnantes.lina.uima.util.AnalysisEngine` class which allow you to develop AEs handling input/output view/annotations generically.
 
-== How to use the class? ==
+== How to use the class? The basic Idea ==
 
-Without an implementation, the class cannot work. There are several ways of using it. They depend on what generic parts you want to use.
+The abstract `AnalysisEngine` class extends the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase`. Similarly you will find the same `initialize` and `process` methods.
+
+In extension,  for each specified _InputView_ (with default the `_InitialView`), the `process` method calls  the `processInputView` method. 
+In turn, for each specified _ContextAnnotation_ (annotation covering some text area or others annotations with DocumentAnnotation as default value), the `processInputView` method calls  the `processContextAnnotation` method. 
+In turn, for each specified _InputAnnotation_, the `processContextAnnotation` method calls the `processInputAnnotation` method
+which eventually calls the `processAnnotationFeatureStringValue` on a String feature value of the _InputAnnotation_.
+The current basic `processAnnotationFeatureStringValue` only echoes the value.
+
+Each methods requires some parameters definitions. 
+The `process` method requires the _InputView_ parameters. 
+The `processInputView` method requiers the  _ContextAnnotation_ parameters
+
+Potentially there is a creation of an _output view_ at the process level based on the returned result of the embedded methods. And there is a creation of an _output annotation_ at the `processInputAnnotation` level. In practice, depending on the values of the _ContextAnnotation_ and the _InputAnnotation_ parameters you may create an output over the _InputView_ or the _ContextAnnotation_ 
+
+
+
 
 Many of the tricks assumes that the handled annotations are based on `uima.tcas.Annotation` and `uima.tcas.DocumentAnnotation`.
 
-Basically the algorithm works like this. The `process` method calls  the `processInputView` method which calls the `processContextAnnotation` method which calls the `processInputAnnotation` method.
+
 
 Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure or simply implement the last abstract method, which is the `processInputAnnotation` method.
 
@@ -149,7 +164,7 @@ processContextAnnotation() {
 }}}
 
 * `processInputAnnotation`  *
- * Could have been named processAnnotationFeatureStringValue. This abstract method corresponds to the actual process to perform  on the String Value of a given Feature of a given Annotation. Should be implemented in the extension of the class.
+ * Could have been named `processAnnotationFeatureStringValue`. This abstract method corresponds to the actual process to perform  on the String Value of a given Feature of a given Annotation. Should be implemented in the extension of the class.
 {{{
 processInputAnnotation() {
    // any process
