@@ -23,16 +23,13 @@ Potentially there is a creation of an _output view_ at the process level based o
 
 Many of the tricks works because the handled annotations are based on `uima.tcas.Annotation` and `uima.tcas.DocumentAnnotation`. Part of the tricks relies also on the default values for the _InputView_, _ContextAnnotation_ and _InputAnnotation_ parameters.
 
-== How can I use it to develop my own generic Annotator Engine? In two words ==
+== How can I use it to develop my own generic Annotator Engine? In a few words ==
 
 Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure and to take the benefit from the subsuming methods.
 
+_Roughly speaking_ you have to extend the abstract `AnalysisEngine` class.
 
-== How can I use it to develop my own generic Annotator Engine? With more words ==
-
-_Roughly speaking_
-  * you have to extend the abstract `AnalysisEngine` class.
-  * then you implement `initialize` method if you have some configParameterValues to get from the AE descriptor.
+Then you implement `initialize` method if you have some configParameterValues to get from the AE descriptor.
 {{{
         public void initialize(UimaContext aContext)
         throws ResourceInitializationException {
@@ -47,8 +44,7 @@ _Roughly speaking_
         }
 }}}
 
-  * then you implement the processing method you want depending on what you want to work with: at the view level, at the context annotation level (a view area) or at the annotation level (annotations occurring in a given view area).
-
+Then you implement the processing method you want depending on what you want to work with: at the view level, at the context annotation level (a view area) or at the annotation level (annotations occurring in a given view area).
     * implement the `process` method if you want to do the same thing as you do with the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase` of the Apache API. You probably won't do that since it does not offer to much comparing to the traditional Apache API. At least it gives you directly access to input/output parameters that you just have to declare (by overing them) in your AE descriptor.
     * implement the `processInputView` method if you want *to perform your processing on each defined _InputView_*. You will have to declare and define the _InputView_ array parameter for that.
     * implement the `processContextAnnotation` method if you want *to perform your processing on some specific text areas* (covered by some known annotations), potentially on a list of defined `InputView`. You will have to declare and define the _ContextAnnotation_ parameter to list the annotation names which delimits the text area you want to proceed.
@@ -70,11 +66,12 @@ Some other parameters allows you
   * to specify the output view [http://en.wikipedia.org/wiki/Internet_media_type media type (also called type MIME)] to create.
 
 
-== Where can I find some descriptor examples ? ==
+== Where can I find an extension example or some descriptor examples ? ==
 
-The current package also contains a descriptor example. This cannot be used as it. The name of the java class file should be changed to point the class which extends the AnalysisEngine class. New parameters can be added as well as type systems and capabilities...
+The current package contains a descriptor example. This cannot be used as it. The name of the java class file should be changed to point the class which extends the AnalysisEngine class. New parameters can be added as well as type systems and capabilities...
 
-You may consult the `desc/shell/test*` examples. The [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] of the [http://code.google.com/p/uima-shell/ uima-shell AE] project is an extension of the `AnalysisEngine` class.
+You may consult  the [http://code.google.com/p/uima-shell/ uima-shell AE] project. Its [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] is an extension of the `AnalysisEngine` class. The project has also some descriptor examples with the `desc/shell/test*` files.
+
 
 == Tell me again what are the default values and the parameter constraints ==
 
