@@ -1,10 +1,10 @@
 #summary User Guide
 #labels Featured
-This page mainly presents the abstract `fr.univnantes.lina.uima.util.AnalysisEngine` class which allow you to develop AEs handling input/output view/annotations generically.
+This page mainly presents the  `fr.univnantes.lina.uima.util.AnalysisEngine` class which allow you to develop AEs handling input/output view/annotations generically.
 
 == How does the class work ?  ==
 
-The abstract `AnalysisEngine` class extends the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase`. Similarly you will find the same `initialize` and `process` methods.
+The  `AnalysisEngine` class extends the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase`. Similarly you will find the same `initialize` and `process` methods.
 
 In extension,  for each specified _InputView_ (with default the `_InitialView`), the `process` method calls  the `processInputView` method. 
 In turn, for each specified _ContextAnnotation_ (annotation covering some text area or others annotations with DocumentAnnotation as default value), the `processInputView` method calls  the `processContextAnnotation` method. 
@@ -27,7 +27,7 @@ Many of the tricks works because the handled annotations are based on `uima.tcas
 
 Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure and to take the benefit from the subsuming methods.
 
-_Roughly speaking_ you have to extend the abstract `AnalysisEngine` class.
+_Roughly speaking_ you have to extend the `AnalysisEngine` class.
 
 Then you implement `initialize` method if you have some configParameterValues to get from the AE descriptor.
 {{{
