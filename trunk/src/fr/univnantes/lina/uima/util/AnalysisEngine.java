@@ -652,7 +652,7 @@ public abstract class AnalysisEngine extends JCasAnnotator_ImplBase {
 			String inputTextToProcess = "" ;
 			// inputTextToProcess = inputAnnotation.getCoveredText();
 
-			inputTextToProcess = UIMAUtilities.invokeStringGetterMethod(inputAnnotation, UIMAUtilities.getStringGetterMethod(inputAnnotationClass,inputFeatureString));
+			inputTextToProcess = UIMAUtilities.invokeObjectGetterMethod(inputAnnotation, UIMAUtilities.getAGetterMethod(inputAnnotationClass,inputFeatureString)).toString();
 			//log ("Debug: inputTextToProcess>"+inputTextToProcess+"<");
 
 
