@@ -47,11 +47,44 @@ Then you implement `initialize` method if you have some configParameterValues to
 Then you implement the processing method you want depending on what you want to work with: at the view level, at the context annotation level (a view area) or at the annotation level (annotations occurring in a given view area).
     * implement the `process` method if you want to do the same thing as you do with the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase` of the Apache API. You probably won't do that since it does not offer to much comparing to the traditional Apache API. At least it gives you directly access to input/output parameters that you just have to declare (by overing them) in your AE descriptor.
     * implement the `processInputView` method if you want *to perform your processing on each defined _InputView_*. You will have to declare and define the _InputView_ array parameter for that.
+{{{
+protected String processInputView(JCas inputViewJCas,
+			FSIterator contextAnnotationsFSIter,
+			HashMap<String, Integer> inputAnnotationStringHashMap,
+			String inputFeatureString, JCas outputViewJCas,
+			String outputAnnotationString, String ouputFeatureString)
+	throws AnalysisEngineProcessException {
+ // Here your code
+}
+}}}
     * implement the `processContextAnnotation` method if you want *to perform your processing on some specific text areas* (covered by some known annotations), potentially on a list of defined `InputView`. You will have to declare and define the _ContextAnnotation_ parameter to list the annotation names which delimits the text area you want to proceed.
-    * implement the `processInputAnnotation` method to specify the processing to perform to the value of the  _InputFeature_ of the current `InputAnnotation`. The _InputFeature_ is a string Feature name which can be different from `coveredText`. By default if no _InputAnnotation_ is defined, it takes the _ContextAnnotation_ value whose default value is `DocumentAnnotation`. The _InputFeature_, the _InputAnnotation_ may be set. 
+{{{
+	protected String processContextAnnotation(JCas inputViewJCas,
+			FSIterator contextAnnotationsFSIter,
+			FSIterator contextualizedInputAnnotationsFSIter, String inputFeatureString,
+			JCas outputViewJCas, String outputAnnotationString,
+			String ouputFeatureString) throws AnalysisEngineProcessException {
+ // Here your code
+}
+}}}
+    * implement the `processInputAnnotation` method to specify the processing to perform to the value of the  _InputFeature_ of the current `InputAnnotation`. The _InputFeature_ is a string Feature name which can be different from `coveredText`. By default if no _InputAnnotation_ is defined, it takes the _ContextAnnotation_ value whose default value is `DocumentAnnotation`. The _InputFeature_, the _InputAnnotation_ may be set.
+{{{ 
+	protected String processInputAnnotation(JCas inputViewJCas,
+			FSIterator contextAnnotationsFSIter,
+			FSIterator contextualizedInputAnnotationsFSIter, Object annotationObject, String inputFeatureString,
+			JCas outputViewJCas, String outputAnnotationString,
+			String ouputFeatureString) throws AnalysisEngineProcessException {
+  // Here your code
+}
+}}}
     * implement the `processAnnotationFeatureStringValue` to benefit from the whole process chain and by only specifying the process you want to perform over an existing annotation type (the DocumentAnnotation at the InputView  level, or the ContextAnnotations, or some InputAnnotations) which holds a String feature.
-
-
+{{{	protected String processAnnotationFeatureStringValue(
+			JCas inputViewJCas, String inputTextToProcess,
+			int beginFeatureValue, int endFeatureValue)
+	throws AnalysisEngineProcessException {
+          // Here your code
+        }
+}}}
 == What are the parameters to override in my Annotator Engine descriptor?  ==
 
   * `InputView` List of view names to process 
