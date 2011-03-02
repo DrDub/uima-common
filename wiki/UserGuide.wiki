@@ -78,13 +78,15 @@ protected String processInputView(JCas inputViewJCas,
 }
 }}}
     * implement the `processAnnotationFeatureStringValue` to benefit from the whole process chain and by only specifying the process you want to perform over an existing annotation type (the DocumentAnnotation at the InputView  level, or the ContextAnnotations, or some InputAnnotations) which holds a String feature.
-{{{	protected String processAnnotationFeatureStringValue(
+{{{	
+        protected String processAnnotationFeatureStringValue(
 			JCas inputViewJCas, String inputTextToProcess,
 			int beginFeatureValue, int endFeatureValue)
 	throws AnalysisEngineProcessException {
           // Here your code
         }
 }}}
+
 == What are the parameters to override in my Annotator Engine descriptor?  ==
 
   * `InputView` List of view names to process 
