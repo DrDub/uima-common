@@ -46,7 +46,7 @@ Then you implement `initialize` method if you have some configParameterValues to
 
 Then you implement the processing method you want depending on what you want to work with: at the view level, at the context annotation level (a view area) or at the annotation level (annotations occurring in a given view area).
     * implement the `process` method if you want to do the same thing as you do with the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase` of the Apache API. You probably won't do that since it does not offer to much comparing to the traditional Apache API. At least it gives you directly access to input/output parameters that you just have to declare (by overing them) in your AE descriptor.
-    * implement the `processInputView` method if you want *to perform your processing on each defined _InputView_*. You will have to declare and define the _InputView_ array parameter for that.
+    * implement the `processInputView` method if you want *to perform your processing on each defined _InputView_*. You will have to declare and define the _InputView_ array parameter for that. Since the method requires a return value, if is not relevant for your case, just return the coveredTest dataString itself by adding at the end `return inputViewJCas.getSofaDataString();`.
 {{{
 protected String processInputView(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
