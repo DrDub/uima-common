@@ -164,17 +164,24 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	protected HashMap<String, Integer> inputAnnotationStringHashMap = null;
 	// protected String inputAnnotationString = null;
 
+
+
 	/**
 	 * InputFeature Feature name of the annotations whose string value will be
 	 * processed
 	 */
 	protected String inputFeatureString = null;
+
+
+
 	/**
 	 * OutputView View name to consider as the view to receive the result; to be
 	 * created whether OutputAnnotation is empty or simply to edit if
 	 * OutputAnnotation is defined
 	 */
 	protected String outputViewString = null;
+
+
 	protected String outputViewTypeMimeString = null;
 	/**
 	 * OutputAnnotation Name of the annotation to create as the analysis result
@@ -262,9 +269,13 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		}
 		inputFeatureString = (String) aContext
 		.getConfigParameterValue(PARAM_NAME_INPUT_FEATURE);
-		if (((inputFeatureString != null) && (inputAnnotationStringArray == null))
-				|| ((inputFeatureString != null) && ((inputAnnotationStringArray != null) && (inputAnnotationStringArray.length == 0)))
-				|| ((inputFeatureString == null) && ((inputAnnotationStringArray != null) && (inputAnnotationStringArray.length != 0)))) {
+		//		if (((inputFeatureString != null) && (inputAnnotationStringArray == null))
+		//				|| ((inputFeatureString != null) && ((inputAnnotationStringArray != null) && (inputAnnotationStringArray.length == 0)))
+		//				|| ((inputFeatureString == null) && ((inputAnnotationStringArray != null) && (inputAnnotationStringArray.length != 0)))) {
+		if (((inputFeatureString != null) && (inputAnnotationStringHashMap == null))
+				|| ((inputFeatureString != null) && ((inputAnnotationStringHashMap != null) && (inputAnnotationStringHashMap.size() == 0)))
+				|| ((inputFeatureString == null) && ((inputAnnotationStringHashMap != null) && (inputAnnotationStringHashMap.size() != 0)))) {
+
 			String errmsg = "Error: If one of the parameter "
 				+ PARAM_NAME_INPUT_ANNOTATION + " or "
 				+ PARAM_NAME_INPUT_FEATURE + " is defined, both must be !";
@@ -478,6 +489,8 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 			// var to concat the results in case of a view as the output type
 			String inputViewsConcatenedResults = "";
 
+			Boolean atLeastOneInputViewIsEqualToOutputView = false;
+
 			log("For each inputView");
 			for (String inputViewString : inputViewStringArray) {
 
@@ -524,17 +537,22 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 						inputFeatureString, outputViewJCas,
 						outputAnnotationString, outputFeatureString);
 
+				//
+				if (inputViewString.equalsIgnoreCase(outputViewString)) {atLeastOneInputViewIsEqualToOutputView = true; }
 			}
 			/** -- Create view **/
 			// output_v_string est défini ; potentiellement il est égal à
 			// input_v ; normalement la vue n'existe pas et est à créer
-			if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW)) {
+			if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && !atLeastOneInputViewIsEqualToOutputView) {
 				log("Creating output view");
 				// ici on suppose que outputViewString ne correspond à aucune
 				// vue existante (a fortiori est différent de inputViewString)
 				// et que createView génèrera une erreur si la vue existe déjà
 				UIMAUtilities.createView(aJCas, outputViewString,
 						inputViewsConcatenedResults, outputViewTypeMimeString);
+			}
+			else if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView) {
+				System.out.println("Warning! outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView");
 			}
 		}
 	}
@@ -751,7 +769,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 		inputTextToProcess = UIMAUtilities.invokeObjectGetterMethod(
 				inputAnnotation,
-				UIMAUtilities.getAGetterMethod(inputAnnotationClass,
+				UIMAUtilities.getGetterMethod(inputAnnotationClass,
 						inputFeatureString)).toString();
 		// log ("Debug: inputTextToProcess>"+inputTextToProcess+"<");
 
@@ -1042,6 +1060,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		return outputAnnotationString;
 	}
 
+
 	/**
 	 * @return the outputFeatureString
 	 */
@@ -1049,4 +1068,42 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		return outputFeatureString;
 	}
 
+
+	/**
+	 * @param outputViewString the outputViewString to set
+	 */
+	protected void setOutputViewString(String outputViewString) {
+		this.outputViewString = outputViewString;
+	}
+
+
+	/**
+	 * @param outputAnnotationString the outputAnnotationString to set
+	 */
+	protected void setOutputAnnotationString(String outputAnnotationString) {
+		this.outputAnnotationString = outputAnnotationString;
+	}
+
+	/**
+	 * @param inputAnnotationString the inputAnnotationString to set
+	 */
+	protected void setInputAnnotationString(String inputAnnotationString) {
+		// TODO 	this.input = inputAnnotationString;
+	}
+
+	/**
+	 * @param inputFeatureString the inputFeatureString to set
+	 */
+	protected void setInputFeatureString(String inputFeatureString) {
+		this.inputFeatureString = inputFeatureString;
+	}
+
+
+	/**
+	 * @param inputAnnotationStringHashMap the inputAnnotationStringHashMap to set
+	 */
+	protected void setInputAnnotationStringHashMap(
+			HashMap<String, Integer> inputAnnotationStringHashMap) {
+		this.inputAnnotationStringHashMap = inputAnnotationStringHashMap;
+	}
 }

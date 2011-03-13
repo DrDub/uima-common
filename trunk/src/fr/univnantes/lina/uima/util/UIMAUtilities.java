@@ -83,7 +83,7 @@ import fr.univnantes.lina.util.JavaUtilities;
  * @author hernandez
  *
  */
-public class UIMAUtilities {
+public class UIMAUtilities  {
 
 
 
@@ -190,9 +190,9 @@ public class UIMAUtilities {
 	 * @param featureNameString
 	 * @return getFeatureMethodName
 	 */
-	public static String getGetterFeatureMethodNameFromFeatureName (String featureNameString) {
-		String getFeatureMethodName = "get" + featureNameString.substring(0, 1).toUpperCase() + featureNameString.substring(1);
-		return getFeatureMethodName;
+	public static String buildGetterMethodName (String featureNameString) {
+		String featureMethodName = "get" + featureNameString.substring(0, 1).toUpperCase() + featureNameString.substring(1);
+		return featureMethodName;
 	}
 
 	/**
@@ -202,10 +202,10 @@ public class UIMAUtilities {
 	 * @return Method Get
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static Method getAGetterMethod(Class InputAnnotationClass,String inputFeatureString) throws AnalysisEngineProcessException {
+	public static Method getGetterMethod(Class InputAnnotationClass,String inputFeatureString) throws AnalysisEngineProcessException {
 
 		// Récupère la méthode pour "getter" la value de l'InputFeature
-		String getFeatureMethodName = getGetterFeatureMethodNameFromFeatureName(inputFeatureString);
+		String getFeatureMethodName = buildGetterMethodName(inputFeatureString);
 
 		Method getFeatureMethod = null;
 		try {
@@ -231,9 +231,9 @@ public class UIMAUtilities {
 	 * @param featureNameString
 	 * @return setFeatureMethodName
 	 */
-	public static String getSetterFeatureMethodNameFromFeatureName (String featureNameString) {
-		String getFeatureMethodName = "set" + featureNameString.substring(0, 1).toUpperCase() + featureNameString.substring(1);
-		return getFeatureMethodName;
+	public static String buildSetterMethodName (String featureNameString) {
+		String featureMethodName = "set" + featureNameString.substring(0, 1).toUpperCase() + featureNameString.substring(1);
+		return featureMethodName;
 	}
 
 	/**
@@ -243,14 +243,46 @@ public class UIMAUtilities {
 	 * @return a Method set
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static Method getASetterMethod(Class InputAnnotationClass, String inputFeatureString) throws AnalysisEngineProcessException {
+	public static Method getSetterMethod(Class InputAnnotationClass, String inputFeatureString, Type inputFeatureType) throws AnalysisEngineProcessException {
 
-		// Récupère la méthode pour "getter" la value de l'InputFeature
-		String setFeatureMethodName = getSetterFeatureMethodNameFromFeatureName(inputFeatureString);
+		// Construit le nom de laa méthode pour "setter" la value de l'InputFeature
+		String setFeatureMethodName = buildSetterMethodName(inputFeatureString);
 
+		//System.out.println("Debug: UIMAUtilities getSetterMethod inputFeatureType.getName() "+inputFeatureType.getName());
+		
 		Method setFeatureMethod = null;
 		try {
-			setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName);
+			
+			// Récupère la méthode Getter selon le type de la valeur attendue
+			if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.String")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName,String.class);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Integer.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Double")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Double.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Short")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Short.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Long")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Long.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Float")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Float.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Boolean.TYPE);
+			}
+			else  {
+				String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + inputFeatureType.getName()
+				+ " !";
+				throw new AnalysisEngineProcessException(errmsg,
+						new Object[] { setFeatureMethodName });	
+			}
+			
+			
 		} catch (SecurityException e) {
 			String errmsg = "Error: a SecurityException with getMethod " + setFeatureMethodName
 			+ " !";
@@ -335,7 +367,7 @@ public class UIMAUtilities {
 	}
 
 	/**
-	 * This method create an annotation and set one feature with a String value.
+	 * This method create an annotation and sets one feature with a String value.
 	 * 
 	 * @param aJCas
 	 *            the CAS over which the process is performed
@@ -407,7 +439,8 @@ public class UIMAUtilities {
 			Method setEnd = TgtClass.getMethod("setEnd", Integer.TYPE);
 
 			// value -> setValue
-			String setFeatureMethodName = "set" + featureNameToSet.substring(0, 1).toUpperCase() + featureNameToSet.substring(1);
+			String setFeatureMethodName = buildGetterMethodName(featureNameToSet);
+				//featureNameToSet.substring(0, 1).toUpperCase() + featureNameToSet.substring(1);
 
 			Method setValue = TgtClass.getMethod(setFeatureMethodName, String.class);
 
@@ -543,12 +576,13 @@ public class UIMAUtilities {
 	}
 	
 
+
 	/**
-	 * This method create an annotation and set up a "list" 
+	 * This method creates an annotation and sets up a "list" 
 	 * (actually an hashMap) of features (couples name/value)
 	 * 
 	 * Should replace the methods with the same names but different number of features
-	 * Should be extended to accept any feature value types
+	 * So far accepts feature with any primitive type (integer, boolean, float, string...)
 	 * 
 	 * @param aJCas
 	 *            the CAS over which the process is performed
@@ -576,30 +610,55 @@ public class UIMAUtilities {
 			t = annotationClassConstructor.newInstance(new Object[] { aJCas });
 			annotationClass.cast(t);
 
+			// Récupère la méthode addToIndexes
 			Method addToIndexes = annotationClass.getMethod("addToIndexes",
-					new Class[] {});
-			// Récupère les méthodes pour accéder aux features souhaitées
-		//	Method setBegin = annotationClass.getMethod("setBegin", Integer.TYPE);
-		//	Method setEnd = annotationClass.getMethod("setEnd", Integer.TYPE);
-
-			// Ajouts à l'annotation du type target
-		//	setBegin.invoke(t, beginFeatureValue);
-		//	setEnd.invoke(t, endFeatureValue);
+					new Class[] {});		
+			
+			// Récupère le type correspondant à l'annotation à créer
+			// Servira pour récupérer le type de ses features
+			// Qui a son tour servira pour récupérer la méthode getter adéquate
+			Type annotationType = getType(aJCas, annotationName);
 			
 			Iterator featureHashMapKeySetIterator = featureHashMap.keySet().iterator();
 			while (featureHashMapKeySetIterator.hasNext()) {
+				
+				// featureName
 				String featureName = (String) featureHashMapKeySetIterator.next();
-				// value -> setValue
-				String setFeatureMethodName = "set" + featureName.substring(0, 1).toUpperCase() + featureName.substring(1);
-			
-				//Object featureToColumnValueObject = UIMAUtilities.invokeObjectGetterMethod(annotationClass,
-				//		UIMAUtilities.getAGetterMethod(annotationClass,featureName));	
-				//featureToColumnValueString = featureToColumnValueObject.toString();
-				Method setValue = UIMAUtilities.getASetterMethod(annotationClass,featureName);
-			//	Method setValue = annotationClass.getMethod(setFeatureMethodName, String.class);
-				// TODO ce qui suit échoue
-				// voir http://java.developpez.com/faq/java/?page=langage_reflex
-				setValue.invoke(t, featureHashMap.get(featureName));
+				
+				// featureName -> setFeatureName
+				String setFeatureMethodName = buildSetterMethodName(featureName);
+
+				// Récupère le Feature d'après son featureName
+				// Puis récupère le type de la feature
+ 				Feature featureFeature = annotationType.getFeatureByBaseName(featureName);
+				Type featureType = featureFeature.getRange();
+				
+				// Récupère la method Setter pour cette featureNAme
+				Method setFeature = UIMAUtilities.getSetterMethod(annotationClass,featureName,featureType);
+		
+				// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
+				if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
+					setFeature.invoke(t, (String) featureHashMap.get(featureName));}
+				else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
+					setFeature.invoke(t,  Integer.parseInt(featureHashMap.get(featureName)));
+					}
+				else if (featureType.getName().equalsIgnoreCase("uima.cas.Double")) {
+					setFeature.invoke(t,  Double.parseDouble(featureHashMap.get(featureName)));				}
+				else if (featureType.getName().equalsIgnoreCase("uima.cas.Short")) {
+					setFeature.invoke(t,  Short.parseShort(featureHashMap.get(featureName)));				}
+				else if (featureType.getName().equalsIgnoreCase("uima.cas.Long")) {
+					setFeature.invoke(t,  Long.parseLong(featureHashMap.get(featureName)));				}
+				else if (featureType.getName().equalsIgnoreCase("uima.cas.Float")) {
+					setFeature.invoke(t,  Float.parseFloat(featureHashMap.get(featureName)));				}
+				else if (featureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
+					setFeature.invoke(t,  Boolean.parseBoolean(featureHashMap.get(featureName)));				}
+				else  {
+					String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + featureType.getName()
+					+ " !";
+					throw new AnalysisEngineProcessException(errmsg,
+							new Object[] { setFeatureMethodName });	
+				}
+				
 			}
 			
 	
@@ -644,6 +703,7 @@ public class UIMAUtilities {
 			//e.printStackTrace();
 		}
 	}
+	
 	
 	
 	/**
