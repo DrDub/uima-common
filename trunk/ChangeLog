@@ -21,7 +21,10 @@
 # Fichier ChangeLog
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
-2011-03-02  Nicolas Hernandez  <nicolas.hernandez@gmail.com> non-commited
+2011-03-25  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
+  * JavaUtilities: ajout de retrievesFilesFromDirectory; used by uima-connectors
+
+2011-03-02  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
   * AnalysisEngine: génération de setter pour outputView|Annotation et inputFeature  setInputAnnotationStringHashMap
   * AnalysisEngine: modification du comportement de process pour ne pas tenter de créer de vue lorsque celle ci correspond à une inputView ; désormais l'AE ne lance plus d'exception, au mieux un warning dans le stdout. Intérêt est que si on n'utilise pas l'outputAnnotation ni l'outputView il n'y ait pas d'echec du système du fait que l'inputView aura la même valeur que l'outputView .  
   * UIMAUtilities: refactoring du nom des methods pour manipuler les features
