@@ -552,7 +552,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 						inputViewsConcatenedResults, outputViewTypeMimeString);
 			}
 			else if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView) {
-				System.out.println("Warning! outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView");
+				System.out.println("Warning! outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView ; The process may work, if it s not the case you may search why because of this warning");
 			}
 		}
 	}
