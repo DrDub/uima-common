@@ -22,6 +22,7 @@
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
 2011-03-25  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
+  * JavaUtilities: rename retrievesFilesFromDirectory en retrieveFilesFromDirectory et readFromFileToLineArray(String fileName) en readFromFileNameToLineArray(String fileName)
   * UIMAUtilities: ajout de retrieveSourceDocumentFileName() ; used in uima-connectors CSV2CASAE.java process
   * JavaUtilities: ajout de retrievesFilesFromDirectory; used in uima-connectors
 

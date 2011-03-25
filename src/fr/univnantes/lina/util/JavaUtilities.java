@@ -111,7 +111,7 @@ public class JavaUtilities {
 	 * fileName doit intégrer le nom du répertoire dans le filename"/"
 	 * @throws IOException 
 	 */
-	public static ArrayList<String> readFromFileToLineArray(String fileName){
+	public static ArrayList<String> readFromFileNameToLineArray(String fileName){
 		System.out.println("Debug: full input File Name "+ fileName);
 		ArrayList<String> lines = new ArrayList<String>();
 
@@ -189,7 +189,7 @@ public class JavaUtilities {
 	 * Retrieves a list of files (not the directories) from a given directory 
 	 * @throws FileNotFoundException 
 	 */
-	public static ArrayList<File> retrievesFilesFromDirectory(String directoryName) throws FileNotFoundException {
+	public static ArrayList<File> retrieveFilesFromDirectory(String directoryName) throws FileNotFoundException {
 
 		File inputDirFile = new File(directoryName);
 		if (!inputDirFile.exists()) {
