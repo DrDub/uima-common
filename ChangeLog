@@ -22,7 +22,8 @@
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
 2011-03-25  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
-  * JavaUtilities: ajout de retrievesFilesFromDirectory; used by uima-connectors
+  * UIMAUtilities: ajout de retrieveSourceDocumentFileName() ; used in uima-connectors CSV2CASAE.java process
+  * JavaUtilities: ajout de retrievesFilesFromDirectory; used in uima-connectors
 
 2011-03-02  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
   * AnalysisEngine: génération de setter pour outputView|Annotation et inputFeature  setInputAnnotationStringHashMap
