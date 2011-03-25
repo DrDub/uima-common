@@ -31,6 +31,10 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.uima.resource.ResourceInitializationException;
+
 
 /**
  * @author hernandez-n
@@ -179,6 +183,31 @@ public class JavaUtilities {
 		}
 
 		return lines;
+	}
+	
+	/**
+	 * Retrieves a list of files (not the directories) from a given directory 
+	 * @throws FileNotFoundException 
+	 */
+	public static ArrayList<File> retrievesFilesFromDirectory(String directoryName) throws FileNotFoundException {
+
+		File inputDirFile = new File(directoryName);
+		if (!inputDirFile.exists()) {
+			String errorMsg =    "The input dir,  " + directoryName + ", is not valid." ;
+			throw new FileNotFoundException  (errorMsg); 
+			//MESSAGE_DIGEST, errorMsg,
+			//new Object[]{inputCSVDirString});
+		}
+
+		//get list of files (not subdirectories) in the specified directory
+		ArrayList<File> inputFileArrayList = new ArrayList();
+		File[] files = inputDirFile.listFiles();
+		for (int i = 0; i < files.length; i++) {
+			if (!files[i].isDirectory()) {
+				inputFileArrayList.add(files[i]);  
+			}
+		}
+		return inputFileArrayList;
 	}
 
 }

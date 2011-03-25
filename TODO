@@ -21,8 +21,12 @@
 # Fichier TODO
 # 2010-10-01  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+    * gestion des featurepath http://svn.apache.org/repos/asf/uima/sandbox/trunk/Tagger/src/main/java/org/apache/uima/examples/tagger/HMMModelTrainer.java voir la méthode initialize
+	* rajouter la gestion de type byte dans createannotation hashmap
+	* récupérer la partie de uima-connectors CSV2CAS qui récupère le nom de document dans uima-common UIMAUtilities
+    * mettre en place un maven pour le déploiement auto du jar
+    * la javadoc et le jar ne sont pas uptodate
 	* mettre en place des tests de uimautilities en utilisant dans un premier temps les tests de uimafits http://code.google.com/p/uimafit/source/browse/trunk/uimaFIT-examples/src/main/java/org/uimafit/examples/ puis en les combinant avec des tests junit http://www.fabienpoulard.info/post/2010/03/16/Tests-unitaires-pour-UIMA-avec-UUTUC et maven
-    * pour le createAnnotation avec hashmap de features dont le type n'est pas connu : faire un hashmap String,Object  ; Type.getfeaturebybasename(...) ca retourne une feature ; puis feature.getRAnge retourne un uima.tcas.String... ; faire instanceOf
     * suite à   * modification du comportement de process pour ne pas tenter de créer de vue lorsque celle ci correspond à une inputView ; désormais l'AE ne lance plus d'exception, au mieux un warning dans le stdout. Intérêt est que si on n'utilise pas l'outputAnnotation ni l'outputView il n'y ait pas d'echec du système du fait que l'inputView aura la même valeur que l'outputView .  
     , répercuter changement dans description sur le wiki et sur README et example de uima shell 
 	* développer public static Class retrieveAndCastAnAnnotation(FSIterator annotationToLineFSIterator, Annotation annotationToLine) 
