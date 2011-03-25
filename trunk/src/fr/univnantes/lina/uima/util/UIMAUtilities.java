@@ -18,10 +18,13 @@
  */
 package fr.univnantes.lina.uima.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ import org.apache.uima.cas.FeaturePath;
 import org.apache.uima.cas.FeatureStructure;
 import org.apache.uima.cas.Type;
 import org.apache.uima.cas.text.AnnotationIndex;
+import org.apache.uima.examples.SourceDocumentInformation;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.jcas.tcas.Annotation;
@@ -85,6 +89,10 @@ import fr.univnantes.lina.util.JavaUtilities;
  */
 public class UIMAUtilities  {
 
+	/**
+	 * Name of the default SourceDocumentInformation
+	 */
+	private static String DEFAULT_SOURCE_DOCUMENT_INFORMATION_ANNOTATION = "org.apache.uima.examples.SourceDocumentInformation";
 
 
 	/**
@@ -249,10 +257,10 @@ public class UIMAUtilities  {
 		String setFeatureMethodName = buildSetterMethodName(inputFeatureString);
 
 		//System.out.println("Debug: UIMAUtilities getSetterMethod inputFeatureType.getName() "+inputFeatureType.getName());
-		
+
 		Method setFeatureMethod = null;
 		try {
-			
+
 			// Récupère la méthode Getter selon le type de la valeur attendue
 			if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.String")) {
 				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName,String.class);
@@ -281,8 +289,8 @@ public class UIMAUtilities  {
 				throw new AnalysisEngineProcessException(errmsg,
 						new Object[] { setFeatureMethodName });	
 			}
-			
-			
+
+
 		} catch (SecurityException e) {
 			String errmsg = "Error: a SecurityException with getMethod " + setFeatureMethodName
 			+ " !";
@@ -299,7 +307,7 @@ public class UIMAUtilities  {
 		return setFeatureMethod;
 	}
 
-	
+
 	/**
 	 * Invoke a getter method of a given annotation Annotation which returns an Object  
 	 * The Object should be called then with .toString() if we want it as a String
@@ -440,7 +448,7 @@ public class UIMAUtilities  {
 
 			// value -> setValue
 			String setFeatureMethodName = buildGetterMethodName(featureNameToSet);
-				//featureNameToSet.substring(0, 1).toUpperCase() + featureNameToSet.substring(1);
+			//featureNameToSet.substring(0, 1).toUpperCase() + featureNameToSet.substring(1);
 
 			Method setValue = TgtClass.getMethod(setFeatureMethodName, String.class);
 
@@ -532,7 +540,7 @@ public class UIMAUtilities  {
 			// Ajouts à l'annotation du type target
 			setBegin.invoke(t, beginFeatureValue);
 			setEnd.invoke(t, endFeatureValue);
-			
+
 			// Test contre la création d'annotations fantomes
 			if (beginFeatureValue < endFeatureValue) 
 				addToIndexes.invoke(t, args);
@@ -574,7 +582,7 @@ public class UIMAUtilities  {
 			//e.printStackTrace();
 		}
 	}
-	
+
 
 
 	/**
@@ -613,35 +621,35 @@ public class UIMAUtilities  {
 			// Récupère la méthode addToIndexes
 			Method addToIndexes = annotationClass.getMethod("addToIndexes",
 					new Class[] {});		
-			
+
 			// Récupère le type correspondant à l'annotation à créer
 			// Servira pour récupérer le type de ses features
 			// Qui a son tour servira pour récupérer la méthode getter adéquate
 			Type annotationType = getType(aJCas, annotationName);
-			
+
 			Iterator featureHashMapKeySetIterator = featureHashMap.keySet().iterator();
 			while (featureHashMapKeySetIterator.hasNext()) {
-				
+
 				// featureName
 				String featureName = (String) featureHashMapKeySetIterator.next();
-				
+
 				// featureName -> setFeatureName
 				String setFeatureMethodName = buildSetterMethodName(featureName);
 
 				// Récupère le Feature d'après son featureName
 				// Puis récupère le type de la feature
- 				Feature featureFeature = annotationType.getFeatureByBaseName(featureName);
+				Feature featureFeature = annotationType.getFeatureByBaseName(featureName);
 				Type featureType = featureFeature.getRange();
-				
+
 				// Récupère la method Setter pour cette featureNAme
 				Method setFeature = UIMAUtilities.getSetterMethod(annotationClass,featureName,featureType);
-		
+
 				// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
 				if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
 					setFeature.invoke(t, (String) featureHashMap.get(featureName));}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
 					setFeature.invoke(t,  Integer.parseInt(featureHashMap.get(featureName)));
-					}
+				}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Double")) {
 					setFeature.invoke(t,  Double.parseDouble(featureHashMap.get(featureName)));				}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Short")) {
@@ -658,13 +666,13 @@ public class UIMAUtilities  {
 					throw new AnalysisEngineProcessException(errmsg,
 							new Object[] { setFeatureMethodName });	
 				}
-				
+
 			}
-			
-	
+
+
 			// Test contre la création d'annotations fantomes
 			//if (beginFeatureValue < endFeatureValue) 
-				addToIndexes.invoke(t, args);
+			addToIndexes.invoke(t, args);
 
 		} catch (IllegalArgumentException e) {
 			String errmsg = "Error: IllegalArgumentException  !";
@@ -703,9 +711,9 @@ public class UIMAUtilities  {
 			//e.printStackTrace();
 		}
 	}
-	
-	
-	
+
+
+
 	/**
 	 * This method create a view.
 	 * 
@@ -849,15 +857,15 @@ public class UIMAUtilities  {
 		// NH: à partir d'une Map d'annotations
 		FSTypeConstraint typeConstraint = theConstraints.createTypeConstraint();
 
-//		System.out.println("Debug: contextAnnotationType.getName()>"+contextAnnotationType.getName()+"<");
-//		System.out.println("Debug: contextAnnotation.getCoveredText()>"+contextAnnotation.getCoveredText()+"<");
-//		System.out.println("Debug: contextAnnotation.getBegin()>"+contextAnnotation.getBegin()+"<");
-//		System.out.println("Debug: contextAnnotation.getEnd()>"+contextAnnotation.getEnd()+"<");
+		//		System.out.println("Debug: contextAnnotationType.getName()>"+contextAnnotationType.getName()+"<");
+		//		System.out.println("Debug: contextAnnotation.getCoveredText()>"+contextAnnotation.getCoveredText()+"<");
+		//		System.out.println("Debug: contextAnnotation.getBegin()>"+contextAnnotation.getBegin()+"<");
+		//		System.out.println("Debug: contextAnnotation.getEnd()>"+contextAnnotation.getEnd()+"<");
 
 		Iterator keyIter = inputAnnotationHashMap.keySet().iterator();
 		while (keyIter.hasNext()){
 			String key = (String) keyIter.next();
-//			System.out.println("Debug: key>"+key+"<");
+			//			System.out.println("Debug: key>"+key+"<");
 			typeConstraint.add(getType(aJCas,key));
 		} 
 		FeaturePath typePath = aJCas.createFeaturePath();
@@ -889,12 +897,12 @@ public class UIMAUtilities  {
 	 */
 	public static void removeDuplicateFSAnnotationFromCASIndex(JCas aJCas) throws AnalysisEngineProcessException {
 		HashMap<String, String> alreadySeenFS = new HashMap<String, String>();
-		
+
 		// parse the FSIndex
 		// compute an hash of the current Annotation from Class.name alphabetcally ordered list of features with their value.toString()
 		// if alreadySeenFS this hash them remove from FS
 		// else add to alreadSeenFS
-		
+
 		//byte[] hash      = null;
 		//try {
 		//	hash= MessageDigest.getInstance("MD5").digest(aJCas.getSofaDataString().getBytes());
@@ -902,7 +910,7 @@ public class UIMAUtilities  {
 		//	// TODO Auto-generated catch block
 		//	e.printStackTrace();
 		//}
-		
+
 	}
 
 
@@ -926,4 +934,32 @@ public class UIMAUtilities  {
 		return tempTextFilePath;
 	}
 
+	/**
+	 *  Return the filename of the input file from the CAS 
+	 *  Assumes that it has the sourceDocumentInformation 
+	 *  (set by FileSystemCollectionReader or documentAnalyzer.sh)
+	 *  null otherwise
+	 */
+	public static String retrieveSourceDocumentFileName(JCas aJCas) throws AnalysisEngineProcessException{
+		FSIterator<Annotation> sourceDocumentInformationFSIterator = aJCas.getAnnotationIndex(UIMAUtilities.getType(aJCas,
+				DEFAULT_SOURCE_DOCUMENT_INFORMATION_ANNOTATION)).iterator();
+		File inFile = null;
+		String inFileName = null;
+		if (sourceDocumentInformationFSIterator.hasNext()) {
+			SourceDocumentInformation theSourceDocumentInformation = (SourceDocumentInformation) sourceDocumentInformationFSIterator.next();
+
+			try {
+				inFile = new File(new URL(theSourceDocumentInformation.getUri()).getPath());
+				inFileName = inFile.getName();
+				System.out.println("Debug: SourceDocumentInformation File Name "+ inFileName);  	
+
+
+			} catch (MalformedURLException e) {
+				// invalid URL, use default processing below
+				e.printStackTrace();
+			}
+			
+		}
+		return inFileName;
+	}
 }
