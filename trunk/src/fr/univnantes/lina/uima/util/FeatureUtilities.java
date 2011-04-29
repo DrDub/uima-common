@@ -20,6 +20,7 @@ package fr.univnantes.lina.uima.util;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.Type;
@@ -60,29 +61,29 @@ public class FeatureUtilities {
 	 * @throws AnalysisEngineProcessException
 	 */
 	public static Method getFeatureGetterMethod(Class InputAnnotationClass, String inputFeatureString)
-			throws AnalysisEngineProcessException {
-			
-				// Récupère la méthode pour "getter" la value de l'InputFeature
-				String getFeatureMethodName = buildFeatureGetterMethodName(inputFeatureString);
-			
-				Method getFeatureMethod = null;
-				try {
-					getFeatureMethod = InputAnnotationClass.getMethod(getFeatureMethodName);
-				} catch (SecurityException e) {
-					String errmsg = "Error: a SecurityException with getMethod " + getFeatureMethodName
-					+ " !";
-					throw new AnalysisEngineProcessException(errmsg,
-							new Object[] { getFeatureMethodName },e);	
-					//e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					String errmsg = "Error: NoSuchMethodException getMethod " + getFeatureMethodName
-					+ " !";
-					throw new AnalysisEngineProcessException(errmsg,
-							new Object[] { getFeatureMethodName },e);	
-					//e.printStackTrace();
-				}
-				return getFeatureMethod;
-			}
+	throws AnalysisEngineProcessException {
+
+		// Récupère la méthode pour "getter" la value de l'InputFeature
+		String getFeatureMethodName = buildFeatureGetterMethodName(inputFeatureString);
+
+		Method getFeatureMethod = null;
+		try {
+			getFeatureMethod = InputAnnotationClass.getMethod(getFeatureMethodName);
+		} catch (SecurityException e) {
+			String errmsg = "Error: a SecurityException with getMethod " + getFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { getFeatureMethodName },e);	
+			//e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			String errmsg = "Error: NoSuchMethodException getMethod " + getFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { getFeatureMethodName },e);	
+			//e.printStackTrace();
+		}
+		return getFeatureMethod;
+	}
 
 	/**
 	 * Return the corresponding method setter name of a feature name
@@ -103,63 +104,63 @@ public class FeatureUtilities {
 	 */
 	public static Method getFeatureSetterMethod(Class InputAnnotationClass, String inputFeatureString,
 			Type inputFeatureType) throws AnalysisEngineProcessException {
-			
-				// Construit le nom de laa méthode pour "setter" la value de l'InputFeature
-				String setFeatureMethodName = buildFeatureSetterMethodName(inputFeatureString);
-			
-				//System.out.println("Debug: UIMAUtilities getSetterMethod inputFeatureType.getName() "+inputFeatureType.getName());
-			
-				Method setFeatureMethod = null;
-				try {
-			
-					// Récupère la méthode Getter selon le type de la valeur attendue
-					if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.String")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName,String.class);
-					}
-					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Integer.TYPE);
-					}
-					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Double")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Double.TYPE);
-					}
-					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Short")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Short.TYPE);
-					}
-					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Long")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Long.TYPE);
-					}
-					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Float")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Float.TYPE);
-					}
-					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Boolean.TYPE);
-					}
-					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
-						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Byte.TYPE);
-					}
-					else  {
-						String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + inputFeatureType.getName()
-						+ " !";
-						throw new AnalysisEngineProcessException(errmsg,
-								new Object[] { setFeatureMethodName });	
-					}
-			
-			
-				} catch (SecurityException e) {
-					String errmsg = "Error: a SecurityException with getMethod " + setFeatureMethodName
-					+ " !";
-					throw new AnalysisEngineProcessException(errmsg,
-							new Object[] { setFeatureMethodName },e);	
-					//e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					String errmsg = "Error: NoSuchMethodException getMethod " + setFeatureMethodName
-					+ " !";
-					throw new AnalysisEngineProcessException(errmsg,
-							new Object[] { setFeatureMethodName },e);	
-					//e.printStackTrace();
-				}
-				return setFeatureMethod;
+
+		// Construit le nom de laa méthode pour "setter" la value de l'InputFeature
+		String setFeatureMethodName = buildFeatureSetterMethodName(inputFeatureString);
+
+		//System.out.println("Debug: UIMAUtilities getSetterMethod inputFeatureType.getName() "+inputFeatureType.getName());
+
+		Method setFeatureMethod = null;
+		try {
+
+			// Récupère la méthode Getter selon le type de la valeur attendue
+			if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.String")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName,String.class);
 			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Integer.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Double")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Double.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Short")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Short.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Long")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Long.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Float")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Float.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Boolean.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
+				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Byte.TYPE);
+			}
+			else  {
+				String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + inputFeatureType.getName()
+				+ " !";
+				throw new AnalysisEngineProcessException(errmsg,
+						new Object[] { setFeatureMethodName });	
+			}
+
+
+		} catch (SecurityException e) {
+			String errmsg = "Error: a SecurityException with getMethod " + setFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { setFeatureMethodName },e);	
+			//e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			String errmsg = "Error: NoSuchMethodException getMethod " + setFeatureMethodName
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { setFeatureMethodName },e);	
+			//e.printStackTrace();
+		}
+		return setFeatureMethod;
+	}
 
 	/**
 	 * Invoke a getter method of a given annotation Annotation which returns an Object  
@@ -173,35 +174,99 @@ public class FeatureUtilities {
 	 * @throws AnalysisEngineProcessException
 	 */
 	public static Object invokeFeatureGetterMethod(Annotation inputAnnotation, Method getFeatureMethod)
-			throws AnalysisEngineProcessException {
-			
-				Object result = null;
-			
-				// Test contre la création d'annotations fantomes
-				try {
-					result = (Object) getFeatureMethod.invoke(inputAnnotation);
-				} catch (IllegalArgumentException e) {
-					String errmsg = "Error: IllegalArgumentException invoked " + inputAnnotation
-					+ " !";
-					throw new AnalysisEngineProcessException(errmsg,
-							new Object[] { inputAnnotation },e);	
-					//e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					String errmsg = "Error: IllegalAccessException invoked " + inputAnnotation
-					+ " !";
-					throw new AnalysisEngineProcessException(errmsg,
-							new Object[] { inputAnnotation },e);	
-					//e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					String errmsg = "Error: InvocationTargetException invoked " + inputAnnotation
-					+ " !";
-					throw new AnalysisEngineProcessException(errmsg,
-							new Object[] { inputAnnotation },e);	
-					//e.printStackTrace();
-				}
-			
-				return result;
+	throws AnalysisEngineProcessException {
+
+		Object result = null;
+
+		// Test contre la création d'annotations fantomes
+		try {
+			result = (Object) getFeatureMethod.invoke(inputAnnotation);
+		} catch (IllegalArgumentException e) {
+			String errmsg = "Error: IllegalArgumentException invoked " + inputAnnotation
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { inputAnnotation },e);	
+			//e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			String errmsg = "Error: IllegalAccessException invoked " + inputAnnotation
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { inputAnnotation },e);	
+			//e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			String errmsg = "Error: InvocationTargetException invoked " + inputAnnotation
+			+ " !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] { inputAnnotation },e);	
+			//e.printStackTrace();
+		}
+
+		return result;
+	}
+
+
+
+	/**
+	 * Invoke a setter method of a given annotation feature name 
+	 *   
+	 * @param t
+	 * @param featureType
+	 * @param setFeatureMethod
+	 * @param featuresHashMap
+	 * @param featureName
+	 * @throws AnalysisEngineProcessException
+	 */
+	public static void invokeFeatureSetterMethod(Object t, Type featureType, Method setFeatureMethod, HashMap<String,String> featuresHashMap, String featureName)
+	throws AnalysisEngineProcessException {
+
+		try {
+
+			// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
+			if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
+				setFeatureMethod.invoke(t, (String) featuresHashMap.get(featureName));}
+			else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
+				setFeatureMethod.invoke(t,  Integer.parseInt(featuresHashMap.get(featureName)));	}
+			else if (featureType.getName().equalsIgnoreCase("uima.cas.Double")) {
+				setFeatureMethod.invoke(t,  Double.parseDouble(featuresHashMap.get(featureName)));				}
+			else if (featureType.getName().equalsIgnoreCase("uima.cas.Short")) {
+				setFeatureMethod.invoke(t,  Short.parseShort(featuresHashMap.get(featureName)));				}
+			else if (featureType.getName().equalsIgnoreCase("uima.cas.Long")) {
+				setFeatureMethod.invoke(t,  Long.parseLong(featuresHashMap.get(featureName)));				}
+			else if (featureType.getName().equalsIgnoreCase("uima.cas.Float")) {
+				setFeatureMethod.invoke(t,  Float.parseFloat(featuresHashMap.get(featureName)));				}
+			else if (featureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
+				setFeatureMethod.invoke(t,  Boolean.parseBoolean(featuresHashMap.get(featureName)));				}
+			else if (featureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
+				setFeatureMethod.invoke(t,  Byte.parseByte(featuresHashMap.get(featureName)));				}
+			else  {
+				String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + featureType.getName()
+				+ " !";
+				throw new AnalysisEngineProcessException(errmsg,
+						new Object[] { featureType.getName() });	
 			}
+		} catch (IllegalArgumentException e) {
+			String errmsg = "Error: IllegalArgumentException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			String errmsg = "Error: IllegalAccessException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			String errmsg = "Error: InvocationTargetException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		}	
+		catch (SecurityException e) {
+			String errmsg = "Error: SecurityException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} 
+	}
 
 
 }
