@@ -23,7 +23,6 @@
 
     * rajouter le param boolean pour spécifier si filtrage positif ou négatif	public static ArrayList<FeatureStructure> getAnnotationArray(JCas aJCas, HashMap<String, Integer> annotationHashMap) throws AnalysisEngineProcessException {
     * gestion des featurepath http://svn.apache.org/repos/asf/uima/sandbox/trunk/Tagger/src/main/java/org/apache/uima/examples/tagger/HMMModelTrainer.java voir la méthode initialize
-	* rajouter la gestion de type byte dans createannotation hashmap
     * mettre en place un maven pour le déploiement auto du jar
     * la javadoc et le jar ne sont pas uptodate
 	* mettre en place des tests de uimautilities en utilisant dans un premier temps les tests de uimafits http://code.google.com/p/uimafit/source/browse/trunk/uimaFIT-examples/src/main/java/org/uimafit/examples/ puis en les combinant avec des tests junit http://www.fabienpoulard.info/post/2010/03/16/Tests-unitaires-pour-UIMA-avec-UUTUC et maven
