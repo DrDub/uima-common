@@ -792,11 +792,17 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
 			/** -- Create annotation **/
 			log("Creating output annotation");
-			AnnotationUtilities.createAnnotation(outputViewJCas,
-					outputAnnotationString,
-					beginFeatureValueFromAnnotationToCreate,
-					endFeatureValueFromAnnotationToCreate,
-					outputFeatureString, commandLocalResultString);
+			HashMap<String, String>	featuresHashMap = new HashMap<String, String>();
+			featuresHashMap.put("begin", String.valueOf(beginFeatureValueFromAnnotationToCreate));
+			featuresHashMap.put("end", String.valueOf(endFeatureValueFromAnnotationToCreate));
+			featuresHashMap.put(outputFeatureString, commandLocalResultString);
+			AnnotationUtilities.createAnnotation(outputViewJCas, outputAnnotationString, featuresHashMap);
+			// @deprecated
+			// AnnotationUtilities.createAnnotation(outputViewJCas,
+			//		outputAnnotationString,
+			//		beginFeatureValueFromAnnotationToCreate,
+			//		endFeatureValueFromAnnotationToCreate,
+			//		outputFeatureString, commandLocalResultString);
 		}
 
 		return commandLocalResultString;
@@ -900,11 +906,17 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 			log("Creating output annotation");
 			// createANewAnnotation(aJCas,
 			// inputAnnotation.getBegin(),inputAnnotation.getEnd(),commandLocalResultString);
-			AnnotationUtilities.createAnnotation(outputViewJCas,
-					outputAnnotationString,
-					beginFeatureValueFromAnnotationToCreate,
-					endFeatureValueFromAnnotationToCreate, outputFeatureString,
-					commandResultString);
+			HashMap<String, String>	featuresHashMap = new HashMap<String, String>();
+			featuresHashMap.put("begin", String.valueOf(beginFeatureValueFromAnnotationToCreate));
+			featuresHashMap.put("end", String.valueOf(endFeatureValueFromAnnotationToCreate));
+			featuresHashMap.put(outputFeatureString, commandResultString);
+			AnnotationUtilities.createAnnotation(outputViewJCas, outputAnnotationString, featuresHashMap);
+			// @deprecated
+			//AnnotationUtilities.createAnnotation(outputViewJCas,
+			//		outputAnnotationString,
+			//		beginFeatureValueFromAnnotationToCreate,
+			//		endFeatureValueFromAnnotationToCreate, outputFeatureString,
+			//		commandResultString);
 		} else {
 			/** -- Create view **/
 			// L'output_type est view

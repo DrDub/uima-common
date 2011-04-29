@@ -31,7 +31,6 @@
     , répercuter changement dans description sur le wiki et sur README et example de uima shell
 	* développer public static Class retrieveAndCastAnAnnotation(FSIterator annotationToLineFSIterator, Annotation annotationToLine) 
     * développer invokeObjectSetterMethod comme invokeObjectGetterMethod voir createAnnotation hashMap pour cela
- 	* ne garder qu'une createAnnotation à partir de HashMap supprimer les autres ? une avec features et une sans à garder 
 	* ordered UIMAUtilitiles.subiterator
 	  http://uima.apache.org/downloads/releaseDocs/2.3.0-incubating/docs/api/org/apache/uima/resource/metadata/TypePriorities.html	  
 	  * http://osdir.com/ml/apache.uima.general/2008-03/msg00030.html
