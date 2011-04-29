@@ -169,7 +169,7 @@ public class AnnotationUtilities   {
 	}
 
 
-	/**
+	/*
 	 * This method create an annotation and sets one feature with a String value.
 	 * 
 	 * @deprecated
@@ -182,8 +182,7 @@ public class AnnotationUtilities   {
 	 * @param featureNameToSet            
 	 * @param valueFeatureValue
 	 * @throws AnalysisEngineProcessException 
-	 */
-	/*
+	
 	public static void createAnnotation(JCas aJCas, String annotationNameToCreate,
 			int beginFeatureValue, int endFeatureValue, String featureNameToSet, String valueFeatureValue) throws AnalysisEngineProcessException {
 
