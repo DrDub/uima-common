@@ -134,6 +134,9 @@ public class FeatureUtilities {
 					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
 						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Boolean.TYPE);
 					}
+					else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
+						setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Byte.TYPE);
+					}
 					else  {
 						String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + inputFeatureType.getName()
 						+ " !";

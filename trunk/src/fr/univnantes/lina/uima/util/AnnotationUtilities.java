@@ -391,20 +391,20 @@ public class AnnotationUtilities   {
 	 * 
 	 * @param aJCas
 	 *            the CAS over which the process is performed
-	 * @param annotationName
+	 * @param annotationNameToCreate
 	 * @param beginFeatureValue
 	 * @param endFeatureValue
 	 * @param featuresHashMap
 
 	 * @throws AnalysisEngineProcessException 
 	 */
-	public static void createAnnotation(JCas aJCas, String annotationName, HashMap<String,String> featureHashMap) throws AnalysisEngineProcessException {
+	public static void createAnnotation(JCas aJCas, String annotationNameToCreate, HashMap<String,String> featuresHashMap) throws AnalysisEngineProcessException {
 
 		try {
 			Object[] args = null;
 
 			Class<Annotation> annotationClass = (Class<Annotation>) Class
-			.forName(annotationName);
+			.forName(annotationNameToCreate);
 
 			// Génére le constructeur de la classe de l'annotation à créer
 			Constructor<?> annotationClassConstructor = annotationClass
@@ -422,9 +422,9 @@ public class AnnotationUtilities   {
 			// Récupère le type correspondant à l'annotation à créer
 			// Servira pour récupérer le type de ses features
 			// Qui a son tour servira pour récupérer la méthode getter adéquate
-			Type annotationType = JCasSofaViewUtilities.getJCasType(aJCas, annotationName);
+			Type annotationType = JCasSofaViewUtilities.getJCasType(aJCas, annotationNameToCreate);
 
-			Iterator featureHashMapKeySetIterator = featureHashMap.keySet().iterator();
+			Iterator featureHashMapKeySetIterator = featuresHashMap.keySet().iterator();
 			while (featureHashMapKeySetIterator.hasNext()) {
 
 				// featureName
@@ -443,20 +443,21 @@ public class AnnotationUtilities   {
 
 				// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
 				if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
-					setFeature.invoke(t, (String) featureHashMap.get(featureName));}
+					setFeature.invoke(t, (String) featuresHashMap.get(featureName));}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
-					setFeature.invoke(t,  Integer.parseInt(featureHashMap.get(featureName)));
-				}
+					setFeature.invoke(t,  Integer.parseInt(featuresHashMap.get(featureName)));	}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Double")) {
-					setFeature.invoke(t,  Double.parseDouble(featureHashMap.get(featureName)));				}
+					setFeature.invoke(t,  Double.parseDouble(featuresHashMap.get(featureName)));				}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Short")) {
-					setFeature.invoke(t,  Short.parseShort(featureHashMap.get(featureName)));				}
+					setFeature.invoke(t,  Short.parseShort(featuresHashMap.get(featureName)));				}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Long")) {
-					setFeature.invoke(t,  Long.parseLong(featureHashMap.get(featureName)));				}
+					setFeature.invoke(t,  Long.parseLong(featuresHashMap.get(featureName)));				}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Float")) {
-					setFeature.invoke(t,  Float.parseFloat(featureHashMap.get(featureName)));				}
+					setFeature.invoke(t,  Float.parseFloat(featuresHashMap.get(featureName)));				}
 				else if (featureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
-					setFeature.invoke(t,  Boolean.parseBoolean(featureHashMap.get(featureName)));				}
+					setFeature.invoke(t,  Boolean.parseBoolean(featuresHashMap.get(featureName)));				}
+				else if (featureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
+					setFeature.invoke(t,  Byte.parseByte(featuresHashMap.get(featureName)));				}
 				else  {
 					String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + featureType.getName()
 					+ " !";
