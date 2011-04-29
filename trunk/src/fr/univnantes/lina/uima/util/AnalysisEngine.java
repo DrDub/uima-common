@@ -454,7 +454,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		// Récupère le type de la DEFAULT_CONTEXT_ANNOTATION
 		AnnotationIndex<Annotation> absoluteContextAnnotationIndex = null;
 		Type absoluteContextAnnotationType = null;
-		absoluteContextAnnotationType = UIMAUtilities.getType(aJCas,
+		absoluteContextAnnotationType = JCasSofaViewUtilities.getJCasType(aJCas,
 				DEFAULT_CONTEXT_ANNOTATION);
 		// Récupération d'index d'annotations à partir de type d'annotation!
 		// soit comme cela
@@ -496,7 +496,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 				/** -- Prepare the view to be processed **/
 				log("Getting the inputViewJCas " + inputViewString);
-				JCas inputViewJCas = UIMAUtilities.getView(aJCas,
+				JCas inputViewJCas = JCasSofaViewUtilities.getView(aJCas,
 						inputViewString);
 
 				// On spécifie ici la valeur par défaut de l'outputView
@@ -519,7 +519,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 				JCas outputViewJCas = null;
 				if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
 					log("Getting the outputViewJCas");
-					outputViewJCas = UIMAUtilities.getView(aJCas,
+					outputViewJCas = JCasSofaViewUtilities.getView(aJCas,
 							outputViewString);
 				}
 
@@ -528,7 +528,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 				// inputAnnotationIterator =
 				// inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
 				FSIterator contextAnnotationsFSIter = null;
-				contextAnnotationsFSIter = UIMAUtilities.subiterator(
+				contextAnnotationsFSIter = AnnotationCollectionUtilities.subiterator(
 						inputViewJCas, absoluteContextAnnotation,
 						contextAnnotationStringHashMap, false);
 
@@ -548,7 +548,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 				// ici on suppose que outputViewString ne correspond à aucune
 				// vue existante (a fortiori est différent de inputViewString)
 				// et que createView génèrera une erreur si la vue existe déjà
-				UIMAUtilities.createView(aJCas, outputViewString,
+				JCasSofaViewUtilities.createView(aJCas, outputViewString,
 						inputViewsConcatenedResults, outputViewTypeMimeString);
 			}
 			else if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView) {
@@ -632,7 +632,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 			// inputAnnotationIterator =
 			// inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
 			FSIterator contextualizedInputAnnotationsFSIter = null;
-			contextualizedInputAnnotationsFSIter = UIMAUtilities.subiterator(
+			contextualizedInputAnnotationsFSIter = AnnotationCollectionUtilities.subiterator(
 					inputViewJCas, contextAnnotation,
 					inputAnnotationStringHashMap, false);
 
@@ -752,8 +752,8 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		String className = "null";
 		className = annotationClass.getName(); // .toString(
 		// System.out.println("Debug: class>"+className+"<");
-		Class<Annotation> inputAnnotationClass = UIMAUtilities
-		.getClass(className);
+		Class<Annotation> inputAnnotationClass = AnnotationUtilities
+		.getAnnotationClass(className);
 
 		Annotation inputAnnotation = (Annotation) annotationObject;
 		inputAnnotationClass.cast(inputAnnotation);
@@ -767,9 +767,9 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		String inputTextToProcess = "";
 		// inputTextToProcess = inputAnnotation.getCoveredText();
 
-		inputTextToProcess = UIMAUtilities.invokeObjectGetterMethod(
+		inputTextToProcess = FeatureUtilities.invokeFeatureGetterMethod(
 				inputAnnotation,
-				UIMAUtilities.getGetterMethod(inputAnnotationClass,
+				FeatureUtilities.getFeatureGetterMethod(inputAnnotationClass,
 						inputFeatureString)).toString();
 		// log ("Debug: inputTextToProcess>"+inputTextToProcess+"<");
 
@@ -792,7 +792,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
 			/** -- Create annotation **/
 			log("Creating output annotation");
-			UIMAUtilities.createAnnotation(outputViewJCas,
+			AnnotationUtilities.createAnnotation(outputViewJCas,
 					outputAnnotationString,
 					beginFeatureValueFromAnnotationToCreate,
 					endFeatureValueFromAnnotationToCreate,
@@ -864,7 +864,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 		/** -- Prepare the view to be processed **/
 		log("Getting the inputViewJCas");
-		JCas inputViewJCas = UIMAUtilities.getView(aJCas, inputViewString);
+		JCas inputViewJCas = JCasSofaViewUtilities.getView(aJCas, inputViewString);
 
 		/**
 		 * -- In case of the output type is annotation, get the view to store
@@ -895,12 +895,12 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
 			/** -- Create annotation **/
 			log("Getting the outputViewJCas");
-			outputViewJCas = UIMAUtilities.getView(aJCas, outputViewString);
+			outputViewJCas = JCasSofaViewUtilities.getView(aJCas, outputViewString);
 
 			log("Creating output annotation");
 			// createANewAnnotation(aJCas,
 			// inputAnnotation.getBegin(),inputAnnotation.getEnd(),commandLocalResultString);
-			UIMAUtilities.createAnnotation(outputViewJCas,
+			AnnotationUtilities.createAnnotation(outputViewJCas,
 					outputAnnotationString,
 					beginFeatureValueFromAnnotationToCreate,
 					endFeatureValueFromAnnotationToCreate, outputFeatureString,
@@ -917,7 +917,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 			// ici on suppose que outputViewString ne correspond à aucune vue
 			// existante (a fortiori est différent de inputViewString)
 			// et que createView génèrera une erreur si la vue existe déjà
-			UIMAUtilities.createView(aJCas, outputViewString,
+			JCasSofaViewUtilities.createView(aJCas, outputViewString,
 					commandResultString, outputViewTypeMimeString);
 
 		}
