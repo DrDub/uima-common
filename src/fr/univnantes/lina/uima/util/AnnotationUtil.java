@@ -58,7 +58,7 @@ import fr.univnantes.lina.util.JavaUtilities;
  * @author hernandez
  *
  */
-public class AnnotationUtilities   {
+public class AnnotationUtil   {
 
 
 	/**
@@ -420,7 +420,7 @@ public class AnnotationUtilities   {
 			// Récupère le type correspondant à l'annotation à créer
 			// Servira pour récupérer le type de ses features
 			// Qui a son tour servira pour récupérer la méthode getter adéquate
-			Type annotationType = JCasSofaViewUtilities.getJCasType(aJCas, annotationNameToCreate);
+			Type annotationType = JCasSofaViewUtil.getJCasType(aJCas, annotationNameToCreate);
 
 			Iterator featureHashMapKeySetIterator = featuresHashMap.keySet().iterator();
 			while (featureHashMapKeySetIterator.hasNext()) {
@@ -429,7 +429,7 @@ public class AnnotationUtilities   {
 				String featureName = (String) featureHashMapKeySetIterator.next();
 
 				// featureName -> setFeatureName
-				String setFeatureMethodName = FeatureUtilities.buildFeatureSetterMethodName(featureName);
+				String setFeatureMethodName = FeatureUtil.buildFeatureSetterMethodName(featureName);
 
 				// Récupère le Feature d'après son featureName
 				// Puis récupère le type de la feature
@@ -437,10 +437,10 @@ public class AnnotationUtilities   {
 				Type featureType = featureFeature.getRange();
 
 				// Récupère la method Setter pour cette featureNAme
-				Method setFeatureMethod = FeatureUtilities.getFeatureSetterMethod(annotationClass,featureName,featureType);
+				Method setFeatureMethod = FeatureUtil.getFeatureSetterMethod(annotationClass,featureName,featureType);
 
 				// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
-				FeatureUtilities.invokeFeatureSetterMethod(t, featureType, setFeatureMethod, featuresHashMap, featureName);
+				FeatureUtil.invokeFeatureSetterMethod(t, featureType, setFeatureMethod, featuresHashMap, featureName);
 				//if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
 				//					setFeature.invoke(t, (String) featuresHashMap.get(featureName));}
 				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
