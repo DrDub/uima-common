@@ -58,7 +58,7 @@ import fr.univnantes.lina.util.JavaUtilities;
  * @author hernandez
  *
  */
-public class AnnotationUtil   {
+public class AnnotationUtils   {
 
 
 	/**
@@ -420,7 +420,7 @@ public class AnnotationUtil   {
 			// Récupère le type correspondant à l'annotation à créer
 			// Servira pour récupérer le type de ses features
 			// Qui a son tour servira pour récupérer la méthode getter adéquate
-			Type annotationType = JCasSofaViewUtil.getJCasType(aJCas, annotationNameToCreate);
+			Type annotationType = JCasSofaViewUtils.getJCasType(aJCas, annotationNameToCreate);
 
 			Iterator featureHashMapKeySetIterator = featuresHashMap.keySet().iterator();
 			while (featureHashMapKeySetIterator.hasNext()) {
@@ -429,7 +429,7 @@ public class AnnotationUtil   {
 				String featureName = (String) featureHashMapKeySetIterator.next();
 
 				// featureName -> setFeatureName
-				String setFeatureMethodName = FeatureUtil.buildFeatureSetterMethodName(featureName);
+				String setFeatureMethodName = FeatureUtils.buildFeatureSetterMethodName(featureName);
 
 				// Récupère le Feature d'après son featureName
 				// Puis récupère le type de la feature
@@ -437,10 +437,10 @@ public class AnnotationUtil   {
 				Type featureType = featureFeature.getRange();
 
 				// Récupère la method Setter pour cette featureNAme
-				Method setFeatureMethod = FeatureUtil.getFeatureSetterMethod(annotationClass,featureName,featureType);
+				Method setFeatureMethod = FeatureUtils.getFeatureSetterMethod(annotationClass,featureName,featureType);
 
 				// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
-				FeatureUtil.invokeFeatureSetterMethod(t, featureType, setFeatureMethod, featuresHashMap, featureName);
+				FeatureUtils.invokeFeatureSetterMethod(t, featureType, setFeatureMethod, featuresHashMap, featureName);
 				//if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
 				//					setFeature.invoke(t, (String) featuresHashMap.get(featureName));}
 				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {

@@ -46,7 +46,7 @@ import org.apache.uima.jcas.tcas.Annotation;
  * 
  * @author hernandez
  */
-public class AnnotationCollectionUtil {
+public class AnnotationCollectionUtils {
 
 	/**
 	 * retrieveAndCastAnAnnotation
@@ -67,7 +67,7 @@ public class AnnotationCollectionUtil {
 		String className = "null";
 		className = annotationClass.getName();
 		//System.out.println("Debug: class>"+className+"<");
-		Class<Annotation> inputAnnotationClass = AnnotationUtil.getAnnotationClass(className);
+		Class<Annotation> inputAnnotationClass = AnnotationUtils.getAnnotationClass(className);
 		annotationToLine = (Annotation) annotationObject;
 		inputAnnotationClass.cast(annotationToLine);
 		return inputAnnotationClass;
@@ -152,7 +152,7 @@ public class AnnotationCollectionUtil {
 		while (keyIter.hasNext()){
 			String key = (String) keyIter.next();
 			//			System.out.println("Debug: key>"+key+"<");
-			typeConstraint.add(JCasSofaViewUtil.getJCasType(aJCas,key));
+			typeConstraint.add(JCasSofaViewUtils.getJCasType(aJCas,key));
 		} 
 		FeaturePath typePath = aJCas.createFeaturePath();
 		FSMatchConstraint type = theConstraints.embedConstraint(typePath, typeConstraint);

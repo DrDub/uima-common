@@ -64,7 +64,7 @@ import fr.univnantes.lina.util.JavaUtilities;
  * @author hernandez
  *
  */
-public class JCasSofaViewUtil  {
+public class JCasSofaViewUtils  {
 
 	/**
 	 * Name of the default SourceDocumentInformation
@@ -116,7 +116,7 @@ public class JCasSofaViewUtil  {
 
 		try {
 			aJCas.createView(outputViewString);
-			JCas outputView = JCasSofaViewUtil.getView(aJCas, outputViewString);
+			JCas outputView = JCasSofaViewUtils.getView(aJCas, outputViewString);
 			//outputView.setDocumentText(commandResultString);
 			outputView.setSofaDataString(sofaDataString,sofaDataStringTypeMimeString);
 

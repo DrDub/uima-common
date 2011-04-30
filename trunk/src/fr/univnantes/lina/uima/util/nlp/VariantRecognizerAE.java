@@ -35,9 +35,9 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 
-import fr.univnantes.lina.uima.util.AnnotationUtil;
-import fr.univnantes.lina.uima.util.JCasSofaViewUtil;
-import fr.univnantes.lina.uima.util.UIMAUtil;
+import fr.univnantes.lina.uima.util.AnnotationUtils;
+import fr.univnantes.lina.uima.util.JCasSofaViewUtils;
+import fr.univnantes.lina.uima.util.UIMAUtils;
 
 
 /**
@@ -139,7 +139,7 @@ public class VariantRecognizerAE extends JCasAnnotator_ImplBase {
 			occurrencesArrayOfHashMap = new ArrayList<HashMap>();
 			
 			// retrieve the corresponding annotations
-			FSIterator<Annotation> currentAnnotationFSIterator = aJCas.getAnnotationIndex(JCasSofaViewUtil.getJCasType(aJCas,
+			FSIterator<Annotation> currentAnnotationFSIterator = aJCas.getAnnotationIndex(JCasSofaViewUtils.getJCasType(aJCas,
 					annotation)).iterator();
 	
 			// then for each one 
@@ -185,7 +185,7 @@ public class VariantRecognizerAE extends JCasAnnotator_ImplBase {
 			for (HashMap<String, String> occurrenceHashMap : occurrencesArrayOfHashMap) {
 				//System.out.println("Debug: Here we create occurrenceHashMap.get(type)>"+occurrenceHashMap.get("type")+"< occurrenceHashMap.get(begin)>"+occurrenceHashMap.get("begin"));
 
-				AnnotationUtil.createAnnotation(aJCas, occurrenceHashMap.get("type"), Integer.valueOf(occurrenceHashMap.get("begin")),Integer.valueOf(occurrenceHashMap.get("end")));
+				AnnotationUtils.createAnnotation(aJCas, occurrenceHashMap.get("type"), Integer.valueOf(occurrenceHashMap.get("begin")),Integer.valueOf(occurrenceHashMap.get("end")));
 			}
 		
 
