@@ -58,7 +58,7 @@ import fr.univnantes.lina.util.JavaUtilities;
  * @author hernandez
  *
  */
-public class UIMAUtil extends DocumentAnnotationUtil  {
+public class UIMAUtils   {
 
 
 	/**
