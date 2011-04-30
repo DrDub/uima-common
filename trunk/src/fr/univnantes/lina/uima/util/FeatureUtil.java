@@ -41,7 +41,7 @@ import org.apache.uima.jcas.tcas.Annotation;
  * 
  * @author hernandez
  */
-public class FeatureUtilities {
+public class FeatureUtil {
 
 	/**
 	 * Return the corresponding method getter name of a feature name

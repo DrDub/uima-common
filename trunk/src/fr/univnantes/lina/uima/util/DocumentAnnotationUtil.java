@@ -53,7 +53,7 @@ public class DocumentAnnotationUtil {
 	 */
 	public static String retrieveSourceDocumentFileName(JCas aJCas)
 			throws AnalysisEngineProcessException {
-				FSIterator<Annotation> sourceDocumentInformationFSIterator = aJCas.getAnnotationIndex(JCasSofaViewUtilities.getJCasType(aJCas,
+				FSIterator<Annotation> sourceDocumentInformationFSIterator = aJCas.getAnnotationIndex(JCasSofaViewUtil.getJCasType(aJCas,
 						DEFAULT_SOURCE_DOCUMENT_INFORMATION_ANNOTATION)).iterator();
 				File inFile = null;
 				String inFileName = null;

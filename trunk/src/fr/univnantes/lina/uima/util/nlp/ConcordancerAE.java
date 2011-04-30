@@ -30,8 +30,8 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 
-import fr.univnantes.lina.uima.util.JCasSofaViewUtilities;
-import fr.univnantes.lina.uima.util.UIMAUtilities;
+import fr.univnantes.lina.uima.util.JCasSofaViewUtil;
+import fr.univnantes.lina.uima.util.UIMAUtil;
 
 
 
@@ -120,7 +120,7 @@ public class ConcordancerAE extends JCasAnnotator_ImplBase {
 			}
 		//	System.out.println("Debug: inputViewsConcatenedResults"+    inputViewsConcatenedResults);
 
-			JCasSofaViewUtilities.createView(aJCas, patternStrings[i], inputViewsConcatenedResults, DEFAULT_OUTPUTVIEW_TYPEMIME);
+			JCasSofaViewUtil.createView(aJCas, patternStrings[i], inputViewsConcatenedResults, DEFAULT_OUTPUTVIEW_TYPEMIME);
 
 		}
 	}
