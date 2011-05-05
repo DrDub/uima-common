@@ -57,7 +57,7 @@ protected String processInputView(JCas inputViewJCas,
  // Here your code
 }
 }}}
-    * implement the `processContextAnnotation` method if you want *to perform your processing on some specific text areas* (covered by some known annotations), potentially on a list of defined `InputView`. You will have to declare and define the _ContextAnnotation_ parameter to list the annotation names which delimits the text area you want to proceed.
+    * implement the `processContextAnnotation` method if you want *to perform your processing on some specific text areas* (covered by some known annotations), potentially on a list of defined `InputView`. You will have to declare and define the _ContextAnnotation_ parameter to list the annotation names which delimits the text area you want to proceed. Since the method requires a return value, if is not relevant for your case, just return the coveredTest itself by adding at the end `return contextAnnotation.getCoveredText();`
 {{{
 	protected String processContextAnnotation(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
