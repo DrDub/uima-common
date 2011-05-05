@@ -62,8 +62,10 @@ protected String processInputView(JCas inputViewJCas,
 	protected String processContextAnnotation(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
 			Annotation contextAnnotation, 
-			FSIterator contextualizedInputAnnotationsFSIter, String inputFeatureString,
-			JCas outputViewJCas, String outputAnnotationString,
+			FSIterator contextualizedInputAnnotationsFSIter,
+                        String inputFeatureString,
+			JCas outputViewJCas, 
+                        String outputAnnotationString,
 			String ouputFeatureString) throws AnalysisEngineProcessException {
  // Here your code
 }
@@ -72,6 +74,7 @@ protected String processInputView(JCas inputViewJCas,
 {{{ 
 	protected String processInputAnnotation(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
+                   	Annotation contextAnnotation, 
 			FSIterator contextualizedInputAnnotationsFSIter,    
                         Object annotationObject, 
                         String inputFeatureString,
@@ -83,8 +86,10 @@ protected String processInputView(JCas inputViewJCas,
     * implement the `processAnnotationFeatureStringValue` to benefit from the whole process chain and by only specifying the process you want to perform over an existing annotation type (the DocumentAnnotation at the InputView  level, or the ContextAnnotations, or some InputAnnotations) which holds a String feature.
 {{{	
         protected String processAnnotationFeatureStringValue(
-			JCas inputViewJCas, String inputTextToProcess,
-			int beginFeatureValue, int endFeatureValue)
+			JCas inputViewJCas, 
+                        String inputTextToProcess,
+			int beginFeatureValue, 
+                        int endFeatureValue)
 	throws AnalysisEngineProcessException {
           // Here your code
         }
