@@ -46,6 +46,36 @@ public class DocumentAnnotationUtils {
 
 
 	/**
+	 *  Return the input file from the CAS 
+	 *  Assumes that it has the sourceDocumentInformation 
+	 *  (set by FileSystemCollectionReader or documentAnalyzer.sh)
+	 *  null otherwise
+	 */
+	public static File retrieveSourceDocumentFile(JCas aJCas)
+	throws AnalysisEngineProcessException {
+		FSIterator<Annotation> sourceDocumentInformationFSIterator = aJCas.getAnnotationIndex(JCasSofaViewUtils.getJCasType(aJCas,
+				DEFAULT_SOURCE_DOCUMENT_INFORMATION_ANNOTATION)).iterator();
+		File inFile = null;
+		if (sourceDocumentInformationFSIterator.hasNext()) {
+			SourceDocumentInformation theSourceDocumentInformation = (SourceDocumentInformation) sourceDocumentInformationFSIterator.next();
+
+			try {
+				inFile = new File(new URL(theSourceDocumentInformation.getUri()).getPath());
+				// System.out.println("Debug: SourceDocumentInformation File Name "+ inFileName);  	
+
+			} catch (MalformedURLException e) {
+				// invalid URL, use default processing below
+				String errmsg = "Error: MalformedURLException !";
+				throw new AnalysisEngineProcessException(errmsg,
+						new Object[] { },e);	
+				//e.printStackTrace();
+			}
+
+		}
+		return inFile;
+	}
+	
+	/**
 	 *  Return the filename of the input file from the CAS 
 	 *  Assumes that it has the sourceDocumentInformation 
 	 *  (set by FileSystemCollectionReader or documentAnalyzer.sh)
@@ -53,27 +83,10 @@ public class DocumentAnnotationUtils {
 	 */
 	public static String retrieveSourceDocumentFileName(JCas aJCas)
 	throws AnalysisEngineProcessException {
-		FSIterator<Annotation> sourceDocumentInformationFSIterator = aJCas.getAnnotationIndex(JCasSofaViewUtils.getJCasType(aJCas,
-				DEFAULT_SOURCE_DOCUMENT_INFORMATION_ANNOTATION)).iterator();
-		File inFile = null;
-		String inFileName = null;
-		if (sourceDocumentInformationFSIterator.hasNext()) {
-			SourceDocumentInformation theSourceDocumentInformation = (SourceDocumentInformation) sourceDocumentInformationFSIterator.next();
-
-			try {
-				inFile = new File(new URL(theSourceDocumentInformation.getUri()).getPath());
-				inFileName = inFile.getName();
-				System.out.println("Debug: SourceDocumentInformation File Name "+ inFileName);  	
-
-
-			} catch (MalformedURLException e) {
-				// invalid URL, use default processing below
-				e.printStackTrace();
-			}
-
-		}
-		return inFileName;
+		
+		File inFile = retrieveSourceDocumentFile(aJCas);
+		return inFile.getName();
 	}
 
-
+	
 }

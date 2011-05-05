@@ -21,6 +21,12 @@
 # Fichier ChangeLog
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+
+2011-05-05  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not commited
+  * AnalysisEngine: refactor method signatures (addition of ContextAnnotation in processContextAnnotation and subsumed methods
+  * DocumentAnnotationUtil: ajout de retrieveSourceDocumentFile
+  * JavaUtilities: ajout de buildARandomStringName(Obj)
+
 2011-04-29  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
   * Rename all *Utilities to *Utils
   * AnnotationUtilities et FeatureUtilities:  ajout (par refactoring de createAnnotation hashmap) 

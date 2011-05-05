@@ -583,11 +583,14 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
-	protected String processInputView(JCas inputViewJCas,
+	protected String processInputView(
+			JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
 			HashMap<String, Integer> inputAnnotationStringHashMap,
-			String inputFeatureString, JCas outputViewJCas,
-			String outputAnnotationString, String ouputFeatureString)
+			String inputFeatureString, 
+			JCas outputViewJCas,
+			String outputAnnotationString, 
+			String ouputFeatureString)
 	throws AnalysisEngineProcessException {
 		log("AnalysisEngine - processInputView");
 
@@ -643,8 +646,8 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 
 			contextAnnotationResultString += processContextAnnotation(
 					inputViewJCas, contextAnnotationsFSIter,
-					contextualizedInputAnnotationsFSIter, inputFeatureString,
-					outputViewJCas, outputAnnotationString, ouputFeatureString);
+					contextAnnotation, contextualizedInputAnnotationsFSIter,
+					inputFeatureString, outputViewJCas, outputAnnotationString, ouputFeatureString);
 		}
 
 		return contextAnnotationResultString;
@@ -660,7 +663,10 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * @param inputViewJCas
 	 *            the CAS View over which the process is performed
 	 * @param contextualizedInputAnnotationsFSIter
-	 *            FSIterator of the input Annotations to process
+	 *            FSIterator of the input Annotations to process which are covered 
+	 *            by the contextAnnotation
+	 * @param contextAnnotation 
+	 *			  the current Context Annotation            
 	 * @param inputFeatureString
 	 *            Feature name of the Input Annotations whose String Value will
 	 *            be actually processed
@@ -672,16 +678,16 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * @param ouputFeatureString
 	 *            Feature name of the annotation whose string value will contain
 	 *            the analysis result
-	 * 
 	 * @return the contatenated results obtained for each InputAnnotation
 	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
 	protected String processContextAnnotation(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
-			FSIterator contextualizedInputAnnotationsFSIter, String inputFeatureString,
-			JCas outputViewJCas, String outputAnnotationString,
-			String ouputFeatureString) throws AnalysisEngineProcessException {
+			Annotation contextAnnotation, 
+			FSIterator contextualizedInputAnnotationsFSIter,
+			String inputFeatureString, JCas outputViewJCas,
+			String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
 		log("AnalysisEngine - processContextAnnotation");
 
 		String commandResultString = "";
@@ -692,12 +698,12 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 			//
 			String commandLocalResultString = processInputAnnotation(inputViewJCas,
 					contextAnnotationsFSIter,
-					contextualizedInputAnnotationsFSIter, 
+					contextAnnotation, 
+					contextualizedInputAnnotationsFSIter,
 					contextualizedInputAnnotationsFSIter.next(),
 					inputFeatureString,
 					outputViewJCas,
-					outputAnnotationString,
-					ouputFeatureString);
+					outputAnnotationString, ouputFeatureString);
 
 			// L'output_type est view
 			// On stocke les résultats obtenus pour chaque annotation
@@ -715,6 +721,8 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * 
 	 * @param inputViewJCas
 	 *            the CAS View over which the process is performed
+	 * @param contextAnnotation 
+	 * 	 		  the current Context Annotation    
 	 * @param contextualizedInputAnnotationsFSIter
 	 *            FSIterator of the input Annotations to process
 	 * @param inputFeatureString
@@ -728,16 +736,18 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * @param ouputFeatureString
 	 *            Feature name of the annotation whose string value will contain
 	 *            the analysis result
-	 * 
 	 * @return the contatenated results obtained for each InputAnnotation
 	 * 
 	 * @throws AnalysisEngineProcessException
 	 */
 	protected String processInputAnnotation(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
-			FSIterator contextualizedInputAnnotationsFSIter, Object annotationObject, String inputFeatureString,
-			JCas outputViewJCas, String outputAnnotationString,
-			String ouputFeatureString) throws AnalysisEngineProcessException {
+			Annotation contextAnnotation, 
+			FSIterator contextualizedInputAnnotationsFSIter, 
+			Object inputAnnotationObject,
+			String inputFeatureString, 
+			JCas outputViewJCas,
+			String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
 
 		log("AnalysisEngine - processInputAnnotation");
 
@@ -747,7 +757,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		log("Getting the current annotation to be proceeded");
 
 		// Récupère et cast l'inputAnnotation courante à manipuler
-		Class annotationClass = annotationObject.getClass();
+		Class annotationClass = inputAnnotationObject.getClass();
 		// if (annotationClass != null ) {
 		String className = "null";
 		className = annotationClass.getName(); // .toString(
@@ -755,7 +765,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		Class<Annotation> inputAnnotationClass = AnnotationUtils
 		.getAnnotationClass(className);
 
-		Annotation inputAnnotation = (Annotation) annotationObject;
+		Annotation inputAnnotation = (Annotation) inputAnnotationObject;
 		inputAnnotationClass.cast(inputAnnotation);
 		// System.out.println("inputAnnotationType.getName()>"+inputAnnotation.getType().getName()+"<");
 		// System.out.println("inputAnnotation.coveredText>"+inputAnnotation.getCoveredText()+"<");
@@ -832,8 +842,10 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 * @return the result of the performed processing
 	 */
 	protected String processAnnotationFeatureStringValue(
-			JCas inputViewJCas, String inputTextToProcess,
-			int beginFeatureValue, int endFeatureValue)
+			JCas inputViewJCas, 
+			String inputTextToProcess,
+			int beginFeatureValue, 
+			int endFeatureValue)
 	throws AnalysisEngineProcessException {
 
 		return inputTextToProcess;
