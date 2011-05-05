@@ -33,6 +33,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.resource.ResourceInitializationException;
 
 
@@ -210,6 +211,23 @@ public class JavaUtilities {
 			}
 		}
 		return inputFileArrayList;
+	}
+	
+	/**
+	 * Build a random String name based on the current System Time in milliseconds
+	 * (could be more sure with Calendar?) and with the name of the calling Class 
+	 * if the parameter value is <code>this</code>. Leave to <code>null</code> for 
+	 * the other case.
+	 */
+	public static String buildARandomStringName(Object obj)
+	throws AnalysisEngineProcessException {
+		
+		if (obj == null) {
+			return Long.toString(System.currentTimeMillis());
+		}
+		else { 
+			return obj.getClass().getName()+ "-" + Long.toString(System.currentTimeMillis());
+		}
 	}
 
 }
