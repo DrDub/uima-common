@@ -77,46 +77,46 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	/**
 	 * Name of the component
 	 */
-	private String COMPONENT_NAME = "";
-	private String COMPONENT_VERSION = "";
-	private String COMPONENT_ID = COMPONENT_NAME + "-" + COMPONENT_VERSION;
+	protected String COMPONENT_NAME = "";
+	protected String COMPONENT_VERSION = "";
+	protected String COMPONENT_ID = COMPONENT_NAME + "-" + COMPONENT_VERSION;
 	// exception
-	private final String MESSAGE_DIGEST = COMPONENT_ID + "_Messages";
+	protected final String MESSAGE_DIGEST = COMPONENT_ID + "_Messages";
 	// tmp file
 	// log
 
 	/** Common component parameters in descriptor file */
 	// View name to consider as the view to process
-	private static String PARAM_NAME_INPUT_VIEW = "InputView";
+	protected static String PARAM_NAME_INPUT_VIEW = "InputView";
 	// Type name of the annotations to consider as the context annotations in
 	// which
 	// the process will be performed
-	private static String PARAM_NAME_CONTEXT_ANNOTATION = "ContextAnnotation";
+	protected static String PARAM_NAME_CONTEXT_ANNOTATION = "ContextAnnotation";
 	// Type name of the annotations to consider as the token units to be
 	// processed
-	private static String PARAM_NAME_INPUT_ANNOTATION = "InputAnnotation";
+	protected static String PARAM_NAME_INPUT_ANNOTATION = "InputAnnotation";
 	// Feature name of the annotations to consider as the token units to be
 	// processed
-	private static String PARAM_NAME_INPUT_FEATURE = "InputFeature";
+	protected static String PARAM_NAME_INPUT_FEATURE = "InputFeature";
 	// View name to consider as the view to receive the result
-	private static String PARAM_NAME_OUTPUT_VIEW = "OutputView";
+	protected static String PARAM_NAME_OUTPUT_VIEW = "OutputView";
 	// Type mime to consider for storing the result in the sofaDataString
-	private static String PARAM_NAME_OUTPUT_VIEW_TYPE_MIME = "OutputViewTypeMime";
+	protected static String PARAM_NAME_OUTPUT_VIEW_TYPE_MIME = "OutputViewTypeMime";
 	// Type name of the annotations to create as the analysis result
-	private static String PARAM_NAME_OUTPUT_ANNOTATION = "OutputAnnotation";
+	protected static String PARAM_NAME_OUTPUT_ANNOTATION = "OutputAnnotation";
 	// Type name of the feature to create as the analysis result
-	private static String PARAM_NAME_OUTPUT_FEATURE = "OutputFeature";
+	protected static String PARAM_NAME_OUTPUT_FEATURE = "OutputFeature";
 	// An identifier for the current run.
 	// This identifier is added into all the annotations that are created during
 	// the current execution.
-	private static String PARAM_NAME_RUNID = "RunId";
+	protected static String PARAM_NAME_RUNID = "RunId";
 
 	/** Default common component parameter values in descriptor file **/
 	// Default view name if none are specified by the view parameter
-	private static String DEFAULT_INPUT_VIEW = "_InitialView";
+	protected static String DEFAULT_INPUT_VIEW = "_InitialView";
 	// Default context annotation name if none is specified by the context
 	// annotation parameter
-	private static String DEFAULT_CONTEXT_ANNOTATION = "uima.tcas.DocumentAnnotation";
+	protected static String DEFAULT_CONTEXT_ANNOTATION = "uima.tcas.DocumentAnnotation";
 	// Default annotation name if none are specified by the input annotation
 	// parameter
 	// Default feature name if none are specified by the input feature
@@ -132,15 +132,15 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	// public static String DEFAULT_OUTPUT_FEATURE = "value";
 	// Default type mime value for the sofaDataString in case of the output type
 	// is view
-	private static String DEFAULT_OUTPUTVIEW_TYPEMIME = "text/plain";
+	protected static String DEFAULT_OUTPUTVIEW_TYPEMIME = "text/plain";
 	// 
-	private static String INPUTTYPE_ANNOTATION = "annotation";
-	private static String INPUTTYPE_VIEW = "view";
+	protected static String INPUTTYPE_ANNOTATION = "annotation";
+	protected static String INPUTTYPE_VIEW = "view";
 	protected static String OUTPUTTYPE_ANNOTATION = "annotation";
-	private static String OUTPUTTYPE_VIEW = "view";
+	protected static String OUTPUTTYPE_VIEW = "view";
 
 	/** Common component variables */
-	private String runIdString = null;
+	protected String runIdString = null;
 
 	/**
 	 * InputView List of view names to process

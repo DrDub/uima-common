@@ -22,8 +22,9 @@
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
 
-2011-05-05  Nicolas Hernandez  <nicolas.hernandez@gmail.com> nota tagged
+2011-05-05  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
   * AnalysisEngine: refactor method signatures (addition of ContextAnnotation in processContextAnnotation and subsumed methods
+  * AnalysisEngine: refactor private data members into protected (should actually create the accessors) 
   * DocumentAnnotationUtil: ajout de retrieveSourceDocumentFile
   * JavaUtilities: ajout de buildARandomStringName(Obj)
 
