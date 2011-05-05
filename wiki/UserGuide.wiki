@@ -61,6 +61,7 @@ protected String processInputView(JCas inputViewJCas,
 {{{
 	protected String processContextAnnotation(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
+			Annotation contextAnnotation, 
 			FSIterator contextualizedInputAnnotationsFSIter, String inputFeatureString,
 			JCas outputViewJCas, String outputAnnotationString,
 			String ouputFeatureString) throws AnalysisEngineProcessException {
@@ -71,7 +72,9 @@ protected String processInputView(JCas inputViewJCas,
 {{{ 
 	protected String processInputAnnotation(JCas inputViewJCas,
 			FSIterator contextAnnotationsFSIter,
-			FSIterator contextualizedInputAnnotationsFSIter, Object annotationObject, String inputFeatureString,
+			FSIterator contextualizedInputAnnotationsFSIter,    
+                        Object annotationObject, 
+                        String inputFeatureString,
 			JCas outputViewJCas, String outputAnnotationString,
 			String ouputFeatureString) throws AnalysisEngineProcessException {
   // Here your code
