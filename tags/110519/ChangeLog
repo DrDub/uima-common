@@ -1,0 +1,104 @@
+# UIMA Common
+# Copyright (C) 2010  Nicolas Hernandez
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+# 
+#   http://www.apache.org/licenses/LICENSE-2.0
+# 
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.  
+#
+# Fichier ChangeLog
+# 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+
+
+2011-05-05  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
+  * AnalysisEngine: refactor method signatures (addition of ContextAnnotation in processContextAnnotation and subsumed methods
+  * AnalysisEngine: refactor private data members into protected (should actually create the accessors) 
+  * DocumentAnnotationUtil: ajout de retrieveSourceDocumentFile
+  * JavaUtilities: ajout de buildARandomStringName(Obj)
+
+2011-04-29  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
+  * Rename all *Utilities to *Utils
+  * AnnotationUtilities et FeatureUtilities:  ajout (par refactoring de createAnnotation hashmap) 
+  d'une méthode invokeFeatureSetterMethod de maière analogue à invokeFeatureGetterMethod
+  * AnnotationUtilities et FeatureUtilities: createAnnotation hashmap et getFeatureSetterMethod : ajout de la gestion de type byte 
+  * AnnotationUtilities: on ne retient que deux méthodes createAnnotation: une avec featuresHashMap et une seulement avec begin et end 
+  * uima.util.nlp: ajout de deux AE utilisé dans uima-nerc ConcordancerAE et VariantRecognizerAE
+  * UIMAUtilities: refactoring en ajoutant dans le même package JCasSofaView, Annotation, AnnotationCollection, Feature et DocumentAnnotation Utilities, et en renommant nombreuses méthodes afin de les rendre plus explicites sur leur rôles
+  
+2011-03-25  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
+  * JavaUtilities: rename retrievesFilesFromDirectory en retrieveFilesFromDirectory et readFromFileToLineArray(String fileName) en readFromFileNameToLineArray(String fileName)
+  * UIMAUtilities: ajout de retrieveSourceDocumentFileName() ; used in uima-connectors CSV2CASAE.java process
+  * JavaUtilities: ajout de retrievesFilesFromDirectory; used in uima-connectors
+
+2011-03-02  Nicolas Hernandez  <nicolas.hernandez@gmail.com> not tagged
+  * AnalysisEngine: génération de setter pour outputView|Annotation et inputFeature  setInputAnnotationStringHashMap
+  * AnalysisEngine: modification du comportement de process pour ne pas tenter de créer de vue lorsque celle ci correspond à une inputView ; désormais l'AE ne lance plus d'exception, au mieux un warning dans le stdout. Intérêt est que si on n'utilise pas l'outputAnnotation ni l'outputView il n'y ait pas d'echec du système du fait que l'inputView aura la même valeur que l'outputView .  
+  * UIMAUtilities: refactoring du nom des methods pour manipuler les features
+  * UIMAUtilities: mise en place de	public static void createAnnotation(JCas aJCas, String annotationName, HashMap<String,String> featureHashMap) qui accepte des features quelque soit leur type primitif (integer, boolean, float, string...)
+
+2011-02-25  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+  * refactoring de desc en desc/common
+  * src/fr/univnantes/lina/uima/util/AnalysisEngine.java: 
+    * Changement de UIMAUtilities.invokeStringGetterMethod en UIMAUtilities.invokeObjectGetterMethod
+    * Rédéfinition des méthodes principales process, processInputView, processContextAnnotation, processInputAnnotation, processAnnotationFeatureStringValue
+    * La classe n'est plus abstract
+  * src/fr/univnantes/lina/uima/util/UIMAUtilities.java
+    * getFeatureName -> getGetterFeatureMethodNameFromFeatureName
+    * getStringGetterMethod-> getASetterMethod
+    * invokeStringGetterMethod -> invokeObjectGetterMethod
+    * retrieveAndCastAnAnnotation (en cours)
+    * createAnnotation(JCas aJCas, String annotationNameToCreate, int beginFeatureValue, int endFeatureValue)
+    * createAnnotation(JCas aJCas, String annotationName, HashMap<String,String> featureHashMap)
+    * subiterator(JCas aJCas, Annotation contextAnnotation, HashMap inputAnnotationHashMap, boolean isStrict)
+    * removeDuplicateFSAnnotationFromCASIndex(JCas aJCas)
+  * src/fr/univnantes/lina/util/JavaUtilities.java
+    * ArrayList<String> readFromFileToLineArray(String fileName)
+    * ArrayList<String> readFromFileToLineArray(File file)
+
+2010-11-06  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+  * ajout du ant-javadoc.xml
+  * complement a minima du readme
+  * ajout d'un descripteur exemple
+  * passage des parametres ContextAnnotation String et InputView String en StringArray
+  * UIMAUtilitiles.subiterator pour contextAnnotation
+  * vérification de l'existence de inputAnnotationArray par rapport à null et sa taille
+  * un default inputFeatureString pour les ContextAnnotation et aussi InputView
+  * ajout de la méthode processInputViews
+  * renommage des méthodes principales en processContextAnnotations, processInputAnnotations et processAnnotationFeatureStringValue
+  * javadoc des méthodes et des variables principales
+  * passage par DocumentAnnotation pour simuler le travail sur la vue (concrètement on ne récupère plus le   inputTextToProcess par inputViewJCas.getSofaDataString() mais par la value de feature de l'annotation) 
+  * mise à jour de la forge et ajout  dans le dossier doc de l'arbre des possibles des interprétations des paramétrages
+  
+2010-10-12  Nicolas Hernandez  <nicolas.hernandez@>
+	* UIMAUtilities.java et AnalysisEngine.java: subiterator à base de FScontraint à la place du subiterator standard 
+	(notamment pour le contexte)
+
+2010-10-09  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+	* AnalysisEngine.java: Refactoring paramètre InputAnnotationString -> InputAnnotationStringArray
+	
+2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+	*  AnalysisEngine.java: Refactoring browseInput -> browseInputAnnotation et browseView
+	
+	
+YYYY-MM-DD  John Doe  <johndoe@example.com>
+
+    * myfile.ext (myfunction): my changes made
+    additional changes
+
+    * myfile.ext (unrelated_change): my changes made
+    to myfile.ext but completely unrelated to the above
+
+    * anotherfile.ext (somefunction): more changes
+
