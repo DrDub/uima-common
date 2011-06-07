@@ -83,7 +83,7 @@ public class AnnotationCollectionUtils {
 	 *                                         target annotations
 	 * @param contextAnnotation  the source annotation under which target 
 	 *                                         annotations that have to be drawn out
-	 * @param inputAnnotationType            the type of the target annotations that have 
+	 * @param inputAnnotationHashMap  a hashmap of  the types of the target annotations that have 
 	 *                                         to be drawn out from the document under 
 	 *                                         the source annotation
 	 * @param isStrict              the boolean that defines the offset matching,
@@ -167,7 +167,30 @@ public class AnnotationCollectionUtils {
 
 		return filteredIterator;
 	}
+	
+	/**
+	 * Subiterator
+	 * 
+	 * Ci-dessous des cas d'utilisation de cette méthode 
+	 * http://www.uima-fr.org/planet//index.php?post_id=4
+	 * http://jerome.rocheteau.free.fr/index/post/2011/03/10/Comment-r%C3%A9cup%C3%A9rer-les-annotations-entre-deux-annotations-donn%C3%A9es
+	 * 
+	 * Il s'agit juste d'un simple appel au subiterator
+	 * Creates annotation which wont be added to the index but 4 or 5 times much faster than with the constraint approach 
+	 * @param cas
+	 * @param begin
+	 * @param end
+	 * @return
+	 */
+	public static FSIterator<Annotation> subiterator(JCas cas, Annotation begin, Annotation end) {
+		AnnotationIndex<Annotation> index = cas.getAnnotationIndex();
+//		Annotation between = new Annotation(cas, before.getEnd(),after.getBegin());
+		Annotation between = new Annotation(cas, begin.getBegin(),end.getEnd());
 
+		return index.subiterator(between);
+	}
+	
+	
 	/**
 	 * Remove duplicate annotations at the same offsets
 	 * from the index
