@@ -30,7 +30,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
@@ -46,7 +49,77 @@ import org.apache.uima.resource.ResourceInitializationException;
 public class JavaUtilities {
 
 
-	/*
+	public static final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss";
+	public static final long MILISECOND_PER_DAY = 24 * 60 * 60 * 1000; 
+
+	/**
+	 * 
+	 * @return the current Date
+	 */
+	public static Date getNow() {
+	    Calendar cal = Calendar.getInstance();
+	    return cal.getTime();
+
+	  }
+	
+	/**
+	 * 
+	 * @return a Date as a formatted String
+	 * 
+	 */
+	public static String stringFormatADate(Date aDate) {
+		    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+	    
+	    return sdf.format(aDate.getTime());
+	    // formats
+//	    System.out.println(DateUtils.now("dd MMMMM yyyy"));
+//	     System.out.println(DateUtils.now("yyyyMMdd"));
+//	     System.out.println(DateUtils.now("dd.MM.yy"));
+//	     System.out.println(DateUtils.now("MM/dd/yy"));
+//	     System.out.println(DateUtils.now("yyyy.MM.dd G 'at' hh:mm:ss z"));
+//	     System.out.println(DateUtils.now("EEE, MMM d, ''yy"));
+//	     System.out.println(DateUtils.now("h:mm a"));
+//	     System.out.println(DateUtils.now("H:mm:ss:SSS"));
+//	     System.out.println(DateUtils.now("K:mm a,z"));
+//	     System.out.println(DateUtils.now("yyyy.MMMMM.dd GGG hh:mm aaa"));
+	  }
+	
+	/**
+	 * 
+	 * @return display the current Date
+	 * 
+	 */
+	public static String now() {
+	    Calendar cal = Calendar.getInstance();
+	        
+	    return stringFormatADate (Calendar.getInstance().getTime());
+	    // formats
+//	    System.out.println(DateUtils.now("dd MMMMM yyyy"));
+//	     System.out.println(DateUtils.now("yyyyMMdd"));
+//	     System.out.println(DateUtils.now("dd.MM.yy"));
+//	     System.out.println(DateUtils.now("MM/dd/yy"));
+//	     System.out.println(DateUtils.now("yyyy.MM.dd G 'at' hh:mm:ss z"));
+//	     System.out.println(DateUtils.now("EEE, MMM d, ''yy"));
+//	     System.out.println(DateUtils.now("h:mm a"));
+//	     System.out.println(DateUtils.now("H:mm:ss:SSS"));
+//	     System.out.println(DateUtils.now("K:mm a,z"));
+//	     System.out.println(DateUtils.now("yyyy.MMMMM.dd GGG hh:mm aaa"));
+	  }
+
+	/**
+	 * 
+	 * @return the diff between two dates expressed in milliseconds (long)
+	 */
+	public static long dateDiff(Date startDate, Date endDate) {
+//		System.out.println("Debug: startDate.getTime()"+startDate.getTime());
+//		System.out.println("Debug: endDate.getTime()"+endDate.getTime());
+//		System.out.println("Debug: diff"+ (endDate.getTime()- startDate.getTime()));
+		//Math.round(Math.abs((endDate.getTime()- startDate.getTime())/MILISECOND_PER_DAY))
+		return 	endDate.getTime()- startDate.getTime();
+		 
+	}
+	
+	/**
 	 * Fusionne deux tableaux de Type T en un seul
 	 * */
 	public static <T> T[] concat (T[] a, T[] b) {

@@ -19,6 +19,8 @@
 
 package fr.univnantes.lina.uima.util;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -34,6 +36,8 @@ import org.apache.uima.cas.text.AnnotationIndex;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
+
+import fr.univnantes.lina.util.JavaUtilities;
 
 /**
  * <p>
@@ -414,6 +418,9 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	 */
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 
+		Date startDate = JavaUtilities.getNow();
+		System.err.println("Info: "+this.getClass().getName()+" starts at " + JavaUtilities.stringFormatADate(startDate));
+
 		/** -- process the analysis **/
 
 		log("-----------------------------------------------------------------------------------------------------------------");
@@ -552,9 +559,14 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 						inputViewsConcatenedResults, outputViewTypeMimeString);
 			}
 			else if (outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView) {
-				System.out.println("Warning! outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView ; The process may work, if it s not the case you may search why because of this warning");
+				System.err.println("Warning: "+this.getClass().getName()+" outputType.equalsIgnoreCase(OUTPUTTYPE_VIEW) && atLeastOneInputViewIsEqualToOutputView ; The process may work, if it s not the case you may search why because of this warning");
 			}
 		}
+		
+		Date endDate = JavaUtilities.getNow();
+		System.err.println("Info: "+this.getClass().getName()+" ends at " + JavaUtilities.stringFormatADate(endDate) + " after " + JavaUtilities.dateDiff(startDate, endDate));
+		
+		
 	}
 
 	/**
@@ -958,7 +970,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		// getContext()
 		// .getLogger()
 		// .log(Level.FINEST, COMPONENT_ID + "- "+ message);
-		System.err.println(COMPONENT_ID + "- " + message);
+		//System.out.println(COMPONENT_ID + "- " + message);
 	}
 
 	/**
