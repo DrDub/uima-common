@@ -169,24 +169,38 @@ public class AnnotationCollectionUtils {
 	}
 	
 	/**
-	 * Subiterator
+	 * A simple Subiterator call
+	 * Depending on the index size, can be much much much faster than with the constraint approach !
 	 * 
-	 * Ci-dessous des cas d'utilisation de cette méthode 
+	 * Here an example to simulate a constraint (as a post processing)
+	 * The current Annotation is compared with another (the filter) 
+	 * FSIterator wordsAnnotationIterator = AnnotationCollectionUtils.subiterator(
+				inputViewJCas, aSentenceAnnotation);
+			 
+			while (wordsAnnotationIterator.hasNext()) {
+				Annotation aWordAnnotation = (Annotation) wordsAnnotationIterator
+				.next();
+				//System.out.println("Debug: aWordAnnotation.getClass().getName() "+aWordAnnotation.getClass().getName()+" wordTypeName"+ wordTypeName);
+				if (aWordAnnotation.getClass().getName().equalsIgnoreCase(wordTypeName))  
+					if (! aWordAnnotation.getCoveredText().trim().equalsIgnoreCase("")) { 
+						//doTheRequiredProcessing;
+					}
+			}
+	 * 
+	 * 
+	 * Some discussions about it 
 	 * http://www.uima-fr.org/planet//index.php?post_id=4
 	 * http://jerome.rocheteau.free.fr/index/post/2011/03/10/Comment-r%C3%A9cup%C3%A9rer-les-annotations-entre-deux-annotations-donn%C3%A9es
-	 * 
-	 * Il s'agit juste d'un simple appel au subiterator
-	 * Creates annotation which wont be added to the index but 4 or 5 times much faster than with the constraint approach 
+	 *
 	 * @param cas
 	 * @param begin
 	 * @param end
+	 * if (aWordAnnotation.getClass().getName().equalsIgnoreCase(wordTypeName))  
 	 * @return
 	 */
-	public static FSIterator<Annotation> subiterator(JCas cas, Annotation begin, Annotation end) {
+	public static FSIterator<Annotation> subiterator(JCas cas, Annotation beginEndAnnotation) {
 		AnnotationIndex<Annotation> index = cas.getAnnotationIndex();
-//		Annotation between = new Annotation(cas, before.getEnd(),after.getBegin());
-		Annotation between = new Annotation(cas, begin.getBegin(),end.getEnd());
-
+		Annotation between = new Annotation(cas, beginEndAnnotation.getBegin(),beginEndAnnotation.getEnd());
 		return index.subiterator(between);
 	}
 	
