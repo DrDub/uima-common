@@ -564,7 +564,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		}
 		
 		Date endDate = JavaUtilities.getNow();
-		System.err.println("Info: "+this.getClass().getName()+" ends at " + JavaUtilities.stringFormatADate(endDate) + " after " + JavaUtilities.dateDiff(startDate, endDate));
+		System.err.println("Info: "+this.getClass().getName()+" ends at " + JavaUtilities.stringFormatADate(endDate) + " after " + JavaUtilities.dateDiff(startDate, endDate)+" milliseconds");
 		
 		
 	}
