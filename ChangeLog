@@ -21,6 +21,9 @@
 # Fichier ChangeLog
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+2011-06-10  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
+  * AnnotationUtils: add of the updateAnnotation method
+
 2011-06-06  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
   * JavaUtilities: add some date operations
   * AnnotationCollection: Add a simple subiterator function

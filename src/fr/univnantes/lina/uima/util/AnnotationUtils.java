@@ -390,8 +390,6 @@ public class AnnotationUtils   {
 	 * @param aJCas
 	 *            the CAS over which the process is performed
 	 * @param annotationNameToCreate
-	 * @param beginFeatureValue
-	 * @param endFeatureValue
 	 * @param featuresHashMap
 
 	 * @throws AnalysisEngineProcessException 
@@ -441,31 +439,8 @@ public class AnnotationUtils   {
 
 				// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
 				FeatureUtils.invokeFeatureSetterMethod(t, featureType, setFeatureMethod, featuresHashMap, featureName);
-				//if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
-				//					setFeature.invoke(t, (String) featuresHashMap.get(featureName));}
-				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
-				//					setFeature.invoke(t,  Integer.parseInt(featuresHashMap.get(featureName)));	}
-				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Double")) {
-				//					setFeature.invoke(t,  Double.parseDouble(featuresHashMap.get(featureName)));				}
-				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Short")) {
-				//					setFeature.invoke(t,  Short.parseShort(featuresHashMap.get(featureName)));				}
-				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Long")) {
-				//					setFeature.invoke(t,  Long.parseLong(featuresHashMap.get(featureName)));				}
-				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Float")) {
-				//					setFeature.invoke(t,  Float.parseFloat(featuresHashMap.get(featureName)));				}
-				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
-				//					setFeature.invoke(t,  Boolean.parseBoolean(featuresHashMap.get(featureName)));				}
-				//				else if (featureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
-				//					setFeature.invoke(t,  Byte.parseByte(featuresHashMap.get(featureName)));				}
-				//else  {
-				//					String errmsg = "Error: unhandled inputFeatureType in AnnotationUtilities getSetterMethod :" + featureType.getName()
-				//					+ " !";
-				//					throw new AnalysisEngineProcessException(errmsg,
-				//							new Object[] { setFeatureMethodName });	
-				//				}
 
 			}
-
 
 			// Test contre la création d'annotations fantomes
 			//if (beginFeatureValue < endFeatureValue) 
@@ -509,6 +484,78 @@ public class AnnotationUtils   {
 		}
 	}
 
+
+	/**
+	 * This method update a given annotation by setting some of its features 
+	 * given as an hashMap of couples name/value
+	 * 
+	 * So far accepts feature with any primitive type (integer, boolean, float, string...)
+	 * 
+	 * @param aJCas
+	 *            the CAS over which the process is performed
+	 * @param annotationToUpdate
+	 * @param annotationToProcessString
+	 * @param featuresHashMap
+
+	 * @throws AnalysisEngineProcessException 
+	 */
+	public static void updateAnnotation(JCas aJCas, Object annotationToUpdate, String annotationToProcessString, HashMap<String,String> featuresHashMap) throws AnalysisEngineProcessException {
+
+		try {
+
+			Object[] args = null;
+
+			Class<Annotation> annotationClass = (Class<Annotation>) Class
+			.forName(annotationToUpdate.getClass().getName());
+
+			annotationClass = (Class<Annotation>) Class
+			.forName(annotationToProcessString);
+
+			annotationClass.cast(annotationToUpdate);
+
+			// Récupère le type correspondant à l'annotation à créer
+			// Servira pour récupérer le type de ses features
+			// Qui a son tour servira pour récupérer la méthode getter adéquate
+			Type annotationType = JCasSofaViewUtils.getJCasType(aJCas, annotationToUpdate.getClass().getName());
+
+			Iterator featureHashMapKeySetIterator = featuresHashMap.keySet().iterator();
+			while (featureHashMapKeySetIterator.hasNext()) {
+
+				// featureName
+				String featureName = (String) featureHashMapKeySetIterator.next();
+
+				// featureName -> setFeatureName
+				String setFeatureMethodName = FeatureUtils.buildFeatureSetterMethodName(featureName);
+
+				// Récupère le Feature d'après son featureName
+				// Puis récupère le type de la feature
+				Feature featureFeature = annotationType.getFeatureByBaseName(featureName);
+				Type featureType = featureFeature.getRange();
+
+				// Récupère la method Setter pour cette featureNAme
+				Method setFeatureMethod = FeatureUtils.getFeatureSetterMethod(annotationClass,featureName,featureType);
+
+				// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
+				FeatureUtils.invokeFeatureSetterMethod(annotationToUpdate, featureType, setFeatureMethod, featuresHashMap, featureName);
+			}
+
+		} catch (IllegalArgumentException e) {
+			String errmsg = "Error: IllegalArgumentException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		}  catch (ClassNotFoundException e) {
+			String errmsg = "Error: ClassNotFoundException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} catch (SecurityException e) {
+			String errmsg = "Error: SecurityException  !";
+			throw new AnalysisEngineProcessException(errmsg,
+					new Object[] {  },e);	
+			//e.printStackTrace();
+		} 
+	}
 
 
 }
