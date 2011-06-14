@@ -157,7 +157,7 @@ public class JavaUtilities {
 	 * Utility method to write a given text to a file
 	 * fileName doit intégrer le nom du répertoire +"/"
 	 */
-	public static boolean writeLineArrayToFile(String fileName, String[] lines  ) {
+	public static boolean writeStringArrayToFileName(String fileName, String[] lines  ) {
 
 		Writer out = null;
 		//System.out.println("Debug: full Output File Name "+ fileName);
@@ -171,6 +171,31 @@ public class JavaUtilities {
 
 				out.write(lines[l]);
 			}
+			out.close();
+		} catch (FileNotFoundException ex) {
+			return (false);
+		} catch (IOException ex) {
+			return (false);
+		}
+		return (true);
+
+	}
+	
+	/**
+	 * Utility method to write a given text to a file
+	 * fileName doit intégrer le nom du répertoire +"/"
+	 */
+	public static boolean writeStringToFileName(String fileName, String line  ) {
+
+		Writer out = null;
+		//System.out.println("Debug: full Output File Name "+ fileName);
+
+		try {
+
+			out = new OutputStreamWriter(new FileOutputStream(fileName),"UTF8");
+
+			out.write(line);
+
 			out.close();
 		} catch (FileNotFoundException ex) {
 			return (false);
