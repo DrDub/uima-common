@@ -21,7 +21,10 @@
 # Fichier ChangeLog
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
-2011-06-10  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
+2011-06-15  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
+  * util.nlp: add RegexSubstituteAE which creates a new view by substituting a list of source regex expressions to a list of target ones (target) 
+
+2011-06-14  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
   * JavaUtilities: add writeStringToFileName + refactoring writeStringArrayToFileName (répercussion dans uima-connectors pour cas2csv)
 
 2011-06-10  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
