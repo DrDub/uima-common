@@ -2,4 +2,4 @@
 #labels Featured
 
 
-Click here to consult the [https://code.google.com/p/uima-connectors/source/browse/trunk/INSTALL the current version of the INSTALL file]
+Click here to consult the [https://code.google.com/p/uima-common/source/browse/trunk/INSTALL the current version of the INSTALL file]
