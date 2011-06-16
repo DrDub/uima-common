@@ -18,8 +18,11 @@
 # specific language governing permissions and limitations
 # under the License.  
 #
-# Fichier ChangeLog
+# ChangeLog File
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
+
+2011-06-16  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
+  * add INSTALL file and refactoring of the README file
 
 2011-06-15  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
   * util.nlp: add RegexSubstituteAE which creates a new view by substituting a list of source regex expressions to a list of target ones (target) 
@@ -102,15 +105,3 @@
 	
 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 	*  AnalysisEngine.java: Refactoring browseInput -> browseInputAnnotation et browseView
-	
-	
-YYYY-MM-DD  John Doe  <johndoe@example.com>
-
-    * myfile.ext (myfunction): my changes made
-    additional changes
-
-    * myfile.ext (unrelated_change): my changes made
-    to myfile.ext but completely unrelated to the above
-
-    * anotherfile.ext (somefunction): more changes
-
