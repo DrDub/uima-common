@@ -21,6 +21,10 @@
 # ChangeLog File
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+2011-10-14  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
+  * fr.univnantes.lina.uima.util.FeatureUtils:add getFeatureValue(Annotation anAnnotation,  String aFeatureName)
+  * refactoring presentation  
+
 2011-06-16  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
   * add INSTALL file and refactoring of the README file
 

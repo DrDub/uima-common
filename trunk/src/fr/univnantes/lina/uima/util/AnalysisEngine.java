@@ -419,7 +419,7 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 	public void process(JCas aJCas) throws AnalysisEngineProcessException {
 
 		Date startDate = JavaUtilities.getNow();
-		System.err.println("Info: "+this.getClass().getName()+" starts at " + JavaUtilities.stringFormatADate(startDate));
+		System.err.println("INFO: "+this.getClass().getName()+" starts at " + JavaUtilities.stringFormatADate(startDate));
 
 		/** -- process the analysis **/
 
@@ -478,6 +478,8 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 		// avec reflect
 		// FSIndex<Annotation> inputAnnotationFSIdx = aJCas
 		// .getAnnotationIndex(inputAnnotationType);
+		
+		
 		Iterator<Annotation> absoluteContextAnnotationIndexIterator = null;
 		absoluteContextAnnotationIndex = (AnnotationIndex<Annotation>) aJCas
 		.getAnnotationIndex(absoluteContextAnnotationType);
@@ -698,8 +700,10 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 			FSIterator contextAnnotationsFSIter,
 			Annotation contextAnnotation, 
 			FSIterator contextualizedInputAnnotationsFSIter,
-			String inputFeatureString, JCas outputViewJCas,
-			String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
+			String inputFeatureString, 
+			JCas outputViewJCas,
+			String outputAnnotationString, 
+			String ouputFeatureString) throws AnalysisEngineProcessException {
 		log("AnalysisEngine - processContextAnnotation");
 
 		String commandResultString = "";
@@ -715,7 +719,8 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 					contextualizedInputAnnotationsFSIter.next(),
 					inputFeatureString,
 					outputViewJCas,
-					outputAnnotationString, ouputFeatureString);
+					outputAnnotationString, 
+					ouputFeatureString);
 
 			// L'output_type est view
 			// On stocke les résultats obtenus pour chaque annotation
@@ -759,7 +764,8 @@ public  class AnalysisEngine extends JCasAnnotator_ImplBase {
 			Object inputAnnotationObject,
 			String inputFeatureString, 
 			JCas outputViewJCas,
-			String outputAnnotationString, String ouputFeatureString) throws AnalysisEngineProcessException {
+			String outputAnnotationString, 
+			String ouputFeatureString) throws AnalysisEngineProcessException {
 
 		log("AnalysisEngine - processInputAnnotation");
 
