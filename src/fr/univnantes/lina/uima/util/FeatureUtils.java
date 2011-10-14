@@ -28,6 +28,11 @@ import org.apache.uima.jcas.tcas.Annotation;
 
 
 /**
+ * Try to encourage the use of 
+ * 		Return a feature anyAnnotation.getType().getFeatureByBaseName(featureName)
+ * 		Return a string value anyAnnotation.getStringValue(anyAnnotation.getType().getFeatureByBaseName(featureName)) 
+ * which is much simpler for getting the feature values ...
+ * 
  * <p>
  * Methods dealing with annotation features handling such as 
  * <ul>
@@ -268,5 +273,18 @@ public class FeatureUtils {
 		} 
 	}
 
+	/**
+	 * Return the value of a given feature name from a given annotation
+	 * @param anAnnotation
+	 * @param aFeatureName
+	 * @return an Object to cast
+	 * @throws AnalysisEngineProcessException
+	 */
+	public static Object getFeatureValue(Annotation anAnnotation,  String aFeatureName)
+	throws AnalysisEngineProcessException {
+		Method anAnnotationFeatureGetterMethod = FeatureUtils.getFeatureGetterMethod(anAnnotation.getClass(), aFeatureName);
+		return FeatureUtils.invokeFeatureGetterMethod(anAnnotation, anAnnotationFeatureGetterMethod);
+		
+	}
 
 }

@@ -18,12 +18,15 @@
 # specific language governing permissions and limitations
 # under the License.  
 #
-# Fichier TODO
+# TODO File
 # 2010-10-01  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
-	* nettoyer la partie src/desc sur swap
+  * FeatureUtils create methods to do that Return a feature anyAnnotation.getType().getFeatureByBaseName(featureName) or Return a string value anyAnnotation.getStringValue(anyAnnotation.getType().getFeatureByBaseName(featureName))  
+ 
+  * about removing uima annotation see the user@uima.apache.org Rashad rash.m2k@gmail.com Fri, Jun 3, 2011 at 12:55 PM subject	How to remove UIMA annotations? : only a cas reset removed the annotations from the cas, in the other cases the annotations are only removed from the index so it does not free some space memory
+  *	 nettoyer la partie src/desc sur swap
 	* refactoring de JCasSofaView en autant de classes
-	* faire un createView non dédié à un sofaDataString !
+	* faire un createView non dédié à un sofaDataString ! Il y a un exemple dans ViewRenamerAE de uima-connectors
 	* to interface http://download.oracle.com/javase/tutorial/extra/certification/index.html
     * rajouter le param boolean pour spécifier si filtrage positif ou négatif	public static ArrayList<FeatureStructure> getAnnotationArray(JCas aJCas, HashMap<String, Integer> annotationHashMap) throws AnalysisEngineProcessException {
     * gestion des featurepath http://svn.apache.org/repos/asf/uima/sandbox/trunk/Tagger/src/main/java/org/apache/uima/examples/tagger/HMMModelTrainer.java voir la méthode initialize
