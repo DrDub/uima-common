@@ -1,10 +1,10 @@
 #summary User Guide
 #labels Featured
-This page mainly presents the  `fr.univnantes.lina.uima.util.AnalysisEngine` class which allow you to develop AEs handling input/output view/annotations generically.
+This page mainly presents the  `fr.univnantes.lina.uima.util.CommonAE` class which allow you to develop AEs handling input/output view/annotations generically.
 
 == How does the class work ?  ==
 
-The  `AnalysisEngine` class extends the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase`. Similarly you will find the same `initialize` and `process` methods.
+The  `CommonAE` class extends the class `org.apache.uima.analysis_component.JCasAnnotator_ImplBase`. Similarly you will find the same `initialize` and `process` methods.
 
 In extension,  for each specified _InputView_ (with default the `_InitialView`), the `process` method calls  the `processInputView` method. 
 In turn, for each specified _ContextAnnotation_ (annotation covering some text area or others annotations with DocumentAnnotation as default value), the `processInputView` method calls  the `processContextAnnotation` method. 
@@ -25,9 +25,9 @@ Many of the tricks works because the handled annotations are based on `uima.tcas
 
 == How can I use it to develop my own generic Annotator Engine? In a few words ==
 
-Each extension of the `AnalysisEngine` class can choose the methods to re-implement to short-circuit the procedure and to take the benefit from the subsuming methods.
+Each extension of the `CommonAE` class can choose the methods to re-implement to short-circuit the procedure and to take the benefit from the subsuming methods.
 
-_Roughly speaking_ you have to extend the `AnalysisEngine` class.
+_Roughly speaking_ you have to extend the `CommonAE` class.
 
 Then you implement `initialize` method if you have some configParameterValues to get from the AE descriptor.
 {{{
@@ -113,7 +113,7 @@ Some other parameters allows you
 
 The current package contains a descriptor example n the `desc/common` directory. The Annotor won t work if none parameter is defined. This configuration will correspond to the creation of an OutputView whose default value will be the InputView value (_InitialView or whatever). Consequently the view to create will already exist and an error will occur. In the current example, only the _OutputView_ parameter is set. A new view is created with a full echo of the InputView.
 
-You may consult  the [http://code.google.com/p/uima-shell/ uima-shell AE] project. Its [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] is an extension of the `AnalysisEngine` class. The project has also some descriptor examples with the `desc/shell/test*` files.
+You may consult  the [http://code.google.com/p/uima-shell/ uima-shell AE] project. Its [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] is an extension of the `CommonAE` class. The project has also some descriptor examples with the `desc/shell/test*` files.
 
 
 == Tell me again what are the default values and the parameter constraints ==
