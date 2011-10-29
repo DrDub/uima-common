@@ -49,7 +49,7 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.jcas.tcas.Annotation;
 
-import fr.univnantes.lina.util.JavaUtilities;
+import fr.univnantes.lina.java.util.JavaUtilities;
 
 /**
  * Part of the UIMA Utilities dedicated to handle

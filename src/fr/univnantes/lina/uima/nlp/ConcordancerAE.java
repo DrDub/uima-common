@@ -1,4 +1,4 @@
-package fr.univnantes.lina.uima.util.nlp;
+package fr.univnantes.lina.uima.nlp;
 /** 
  * UIMA Common
  * Copyright (C) 2010  Nicolas Hernandez

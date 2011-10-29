@@ -74,6 +74,37 @@ public class AnnotationCollectionUtils {
 	}
 
 	/**
+	 * removeAnnotation
+	 * Somehow based on http://permalink.gmane.org/gmane.comp.apache.uima.general/3501
+	 * TODO 
+	 * 
+	 * @param annotationToLineFSIterator
+	 * @param annotationToLine
+	 * @return class Class<Annotation> inputAnnotationClass = 
+	 * @throws AnalysisEngineProcessException
+	 */
+	public static Class removeAnnotation(FSIterator annotationToLineFSIterator, Annotation annotationToLine)
+	throws AnalysisEngineProcessException {
+
+		// Récupère et cast l'annotationToLine courante à manipuler
+		Object annotationObject = annotationToLineFSIterator.next();
+		Class  annotationClass = annotationObject.getClass();
+		String className = "null";
+		className = annotationClass.getName();
+		//System.out.println("Debug: class>"+className+"<");
+		Class<Annotation> inputAnnotationClass = AnnotationUtils.getAnnotationClass(className);
+		annotationToLine = (Annotation) annotationObject;
+		inputAnnotationClass.cast(annotationToLine);
+		return inputAnnotationClass;
+	}
+	
+	/*public static FSIterator<Annotation> subiterator(JCas cas, Annotation beginEndAnnotation) {
+		AnnotationIndex<Annotation> index = cas.getAnnotationIndex();
+		Annotation between = new Annotation(cas, beginEndAnnotation.getBegin(),beginEndAnnotation.getEnd());
+		return index.subiterator(between);
+	}*/
+	
+	/**
 	 * 
 	 * This method provides an iterator over typed annotations that either 
 	 * have an offset embedded in that of a given annotation in a document, 
@@ -192,11 +223,9 @@ public class AnnotationCollectionUtils {
 	 * http://www.uima-fr.org/planet//index.php?post_id=4
 	 * http://jerome.rocheteau.free.fr/index/post/2011/03/10/Comment-r%C3%A9cup%C3%A9rer-les-annotations-entre-deux-annotations-donn%C3%A9es
 	 *
-	 * @param cas
-	 * @param begin
-	 * @param end
-	 * if (aWordAnnotation.getClass().getName().equalsIgnoreCase(wordTypeName))  
-	 * @return
+	 * @param jcas
+	 * @param annotation
+ 	 * @return an index of annotations subsumed by the annotation given in parameter
 	 */
 	public static FSIterator<Annotation> subiterator(JCas cas, Annotation beginEndAnnotation) {
 		AnnotationIndex<Annotation> index = cas.getAnnotationIndex();

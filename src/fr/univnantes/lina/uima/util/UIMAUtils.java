@@ -20,7 +20,8 @@ package fr.univnantes.lina.uima.util;
 
 import java.io.IOException;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
-import fr.univnantes.lina.util.JavaUtilities;
+
+import fr.univnantes.lina.java.util.JavaUtilities;
 
 /**
  * Library of UIMA Utilities such as methods to get 
