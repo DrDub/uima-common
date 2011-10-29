@@ -1,6 +1,6 @@
 #summary User Guide
 #labels Featured
-This page mainly presents the  `fr.univnantes.lina.uima.util.CommonAE` class which allow you to develop AEs handling input/output view/annotations generically.
+This page mainly presents the  `fr.univnantes.lina.uima.common.CommonAE` class which allow you to develop AEs handling input/output view/annotations generically.
 
 == How does the class work ?  ==
 
