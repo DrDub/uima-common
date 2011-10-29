@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package fr.univnantes.lina.util;
+package fr.univnantes.lina.java.util;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

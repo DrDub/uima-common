@@ -1,4 +1,4 @@
-package fr.univnantes.lina.uima.util.nlp;
+package fr.univnantes.lina.uima.nlp;
 
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
@@ -41,13 +41,14 @@ import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.resource.ResourceProcessException;
 import org.apache.uima.util.CasToInlineXml;
+
+import fr.univnantes.lina.java.util.JavaUtilities;
 import fr.univnantes.lina.uima.util.AnalysisEngine;
 import fr.univnantes.lina.uima.util.AnnotationCollectionUtils;
 import fr.univnantes.lina.uima.util.AnnotationUtils;
 import fr.univnantes.lina.uima.util.DocumentAnnotationUtils;
 import fr.univnantes.lina.uima.util.JCasSofaViewUtils;
 import fr.univnantes.lina.uima.util.UIMAUtils;
-import fr.univnantes.lina.util.JavaUtilities;
 
 import java.io.BufferedReader;
 import java.io.File;

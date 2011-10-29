@@ -44,7 +44,7 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.jcas.tcas.Annotation;
 
-import fr.univnantes.lina.util.JavaUtilities;
+import fr.univnantes.lina.java.util.JavaUtilities;
 
 /**
  * <p>
