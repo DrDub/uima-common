@@ -35,9 +35,9 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.tcas.Annotation;
 import org.apache.uima.resource.ResourceInitializationException;
 
-import fr.univnantes.lina.uima.util.AnnotationUtils;
-import fr.univnantes.lina.uima.util.JCasSofaViewUtils;
-import fr.univnantes.lina.uima.util.UIMAUtils;
+import fr.univnantes.lina.uima.common.AnnotationUtils;
+import fr.univnantes.lina.uima.common.JCasSofaViewUtils;
+import fr.univnantes.lina.uima.common.UIMAUtils;
 
 
 /**

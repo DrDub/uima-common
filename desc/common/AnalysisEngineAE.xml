@@ -2,12 +2,12 @@
 <analysisEngineDescription xmlns="http://uima.apache.org/resourceSpecifier">
   <frameworkImplementation>org.apache.uima.java</frameworkImplementation>
   <primitive>true</primitive>
-  <annotatorImplementationName>fr.univnantes.lina.uima.util.AnalysisEngine</annotatorImplementationName>
+  <annotatorImplementationName>fr.univnantes.lina.uima.common.CommonAE</annotatorImplementationName>
   <analysisEngineMetaData>
-    <name>Analysis Engine</name>
+    <name>Common Analysis Engine</name>
     <description>Apache 2.0 License
 
-Example of descriptor for an AE which extends the fr.univnantes.lina.uima.util.AnalysisEngine.
+Example of descriptor for an AE which extends the fr.univnantes.lina.uima.common.CommonAE.
 
 The name of the java class file should be changed to point the class which extends the AnalysisEngine class.
 

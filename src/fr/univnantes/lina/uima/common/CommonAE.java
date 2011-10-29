@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package fr.univnantes.lina.uima.util;
+package fr.univnantes.lina.uima.common;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -66,7 +66,7 @@ import fr.univnantes.lina.java.util.JavaUtilities;
  * 
  * @author Nicolas Hernandez
  */
-public  class AnalysisEngine extends JCasAnnotator_ImplBase {
+public  class CommonAE extends JCasAnnotator_ImplBase {
 
 	/**
 	 * When you use the code source as an AE example, please redefine the

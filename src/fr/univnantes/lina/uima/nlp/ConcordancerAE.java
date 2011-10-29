@@ -30,8 +30,8 @@ import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
 import org.apache.uima.util.Level;
 
-import fr.univnantes.lina.uima.util.JCasSofaViewUtils;
-import fr.univnantes.lina.uima.util.UIMAUtils;
+import fr.univnantes.lina.uima.common.JCasSofaViewUtils;
+import fr.univnantes.lina.uima.common.UIMAUtils;
 
 
 

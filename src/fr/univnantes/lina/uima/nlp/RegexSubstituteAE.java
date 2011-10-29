@@ -43,12 +43,12 @@ import org.apache.uima.resource.ResourceProcessException;
 import org.apache.uima.util.CasToInlineXml;
 
 import fr.univnantes.lina.java.util.JavaUtilities;
-import fr.univnantes.lina.uima.util.AnalysisEngine;
-import fr.univnantes.lina.uima.util.AnnotationCollectionUtils;
-import fr.univnantes.lina.uima.util.AnnotationUtils;
-import fr.univnantes.lina.uima.util.DocumentAnnotationUtils;
-import fr.univnantes.lina.uima.util.JCasSofaViewUtils;
-import fr.univnantes.lina.uima.util.UIMAUtils;
+import fr.univnantes.lina.uima.common.AnnotationCollectionUtils;
+import fr.univnantes.lina.uima.common.AnnotationUtils;
+import fr.univnantes.lina.uima.common.CommonAE;
+import fr.univnantes.lina.uima.common.DocumentAnnotationUtils;
+import fr.univnantes.lina.uima.common.JCasSofaViewUtils;
+import fr.univnantes.lina.uima.common.UIMAUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -73,7 +73,7 @@ import java.net.URL;
  * 
  * 
  */
-public class RegexSubstituteAE extends AnalysisEngine {
+public class RegexSubstituteAE extends CommonAE {
 
 	/*
 	 * PARAMETERS NAMES
