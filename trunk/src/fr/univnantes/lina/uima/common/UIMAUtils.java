@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package fr.univnantes.lina.uima.util;
+package fr.univnantes.lina.uima.common;
 
 import java.io.IOException;
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;

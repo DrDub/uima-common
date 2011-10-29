@@ -22,7 +22,10 @@
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
 2011-10-29  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
-  * fr.univnantes.lina.uima.utils.nlp -> fr.univnantes.lina.uima.nlp
+  * AnalysisEngine -> CommonAE
+  * NullProcessAE: move from uima-connectors to uima-common
+  * fr.univnantes.lina.uima.util.nlp -> fr.univnantes.lina.uima.nlp
+  * fr.univnantes.lina.uima.util -> fr.univnantes.lina.uima.common
   * fr.univnantes.lina.util -> fr.univnantes.lina.java.util
   
 2011-10-14  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited

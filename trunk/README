@@ -29,7 +29,7 @@ OVERVIEW
 	developments (like analysis engine or any application).
 
 	It is made of three parts 
-	  * an  `AnalysisEngine` class which extends `JCasAnnotator_ImplBase`.
+	  * an  `CommonAE` class which extends `JCasAnnotator_ImplBase`.
 	  * some UIMA Utilities 
 	  * and some Java Utilities 
 

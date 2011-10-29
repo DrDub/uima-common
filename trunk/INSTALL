@@ -30,10 +30,10 @@ INSTALLATION & USE INSTRUCTIONS
 
   * If you want to develop a generic AE, look at the 
   [http://code.google.com/p/uima-common/wiki/UserGuide UserGuide] to learn more
-   on how to extend the `AnalysisEngine`  class
+   on how to extend the `CommonAE`  class
   
   * In addition, you may consult the following examples which are extensions of 
-  the `AnalysisEngine` class and which consequently use also the UIMA and Java Utilities.
+  the `CommonAE` class and which consequently use also the UIMA and Java Utilities.
     * [http://code.google.com/p/uima-shell/source/browse/trunk/src/fr/univnantes/lina/uima/shell/ae/ShellAE.java ShellAE.java class] 
     of the [http://code.google.com/p/uima-shell/ uima-shell AE] project. 
     The descriptor examples illustrate various combination of generic parameters. 
