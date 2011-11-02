@@ -75,7 +75,7 @@ public class AnnotationCollectionUtils {
 	}
 
 	/**
-	 * Remove subsumed annotation from a subsuming annotation 
+	 * Remove some subsumed annotations from a given type of subsuming annotation 
 	 * Somehow based on 
 	 * http://permalink.gmane.org/gmane.comp.apache.uima.general/3501
 	 * http://www.mail-archive.com/uima-user@incubator.apache.org/msg01645.html
