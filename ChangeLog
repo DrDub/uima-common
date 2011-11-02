@@ -21,6 +21,15 @@
 # ChangeLog File
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+2011-10-30  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
+  * add removeSubsumedAnnotation(JCas aJCas, String subsumingAnnotation, String subsumedAnnotation)
+  * add my common type system : common.types (other alternatives :my.types. (shorter than my.common.types))
+  * add JavaUtilities codePointToString method
+  * add datamodel package and prefixTree model
+  * add ResourceUtils and package to handle the loading, parsing, and building of a prefix node tree
+  * add removeDuplicateAnnotations(JCas aJCas), removeDuplicateAndSubsumedAnnotations(JCas aJCas, String subsumingAnnotation) 
+  
+  
 2011-10-29  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
   * AnalysisEngine -> CommonAE
   * NullProcessAE: move from uima-connectors to uima-common
