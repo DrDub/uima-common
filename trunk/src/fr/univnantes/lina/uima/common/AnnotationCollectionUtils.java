@@ -20,6 +20,7 @@ package fr.univnantes.lina.uima.common;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.ConstraintFactory;
@@ -59,7 +60,7 @@ public class AnnotationCollectionUtils {
 	 * @throws AnalysisEngineProcessException
 	 */
 	public static Class retrieveAndCastAnAnnotation(FSIterator annotationToLineFSIterator, Annotation annotationToLine)
-	throws AnalysisEngineProcessException {
+			throws AnalysisEngineProcessException {
 
 		// Récupère et cast l'annotationToLine courante à manipuler
 		Object annotationObject = annotationToLineFSIterator.next();
@@ -74,36 +75,106 @@ public class AnnotationCollectionUtils {
 	}
 
 	/**
-	 * removeAnnotation
-	 * Somehow based on http://permalink.gmane.org/gmane.comp.apache.uima.general/3501
-	 * TODO 
-	 * 
-	 * @param annotationToLineFSIterator
-	 * @param annotationToLine
-	 * @return class Class<Annotation> inputAnnotationClass = 
-	 * @throws AnalysisEngineProcessException
-	 */
-	public static Class removeAnnotation(FSIterator annotationToLineFSIterator, Annotation annotationToLine)
-	throws AnalysisEngineProcessException {
+	 * Remove subsumed annotation from a subsuming annotation 
+	 * Somehow based on 
+	 * http://permalink.gmane.org/gmane.comp.apache.uima.general/3501
+	 * http://www.mail-archive.com/uima-user@incubator.apache.org/msg01645.html
+	 * http://uima.apache.org/downloads/releaseDocs/2.3.0-incubating/docs/api/org/apache/uima/jcas/JCas.html#removeFsFromIndexes(org.apache.uima.cas.FeatureStructure)
+	 * @param aJCas 
+	 * @param subsumingAnnotation
+	 * @param subsumedAnnotation
+	 * @param strictOffset
 
-		// Récupère et cast l'annotationToLine courante à manipuler
-		Object annotationObject = annotationToLineFSIterator.next();
-		Class  annotationClass = annotationObject.getClass();
-		String className = "null";
-		className = annotationClass.getName();
-		//System.out.println("Debug: class>"+className+"<");
-		Class<Annotation> inputAnnotationClass = AnnotationUtils.getAnnotationClass(className);
-		annotationToLine = (Annotation) annotationObject;
-		inputAnnotationClass.cast(annotationToLine);
-		return inputAnnotationClass;
+	 */
+	public static void removeSubsumedAnnotation(JCas aJCas, String subsumingAnnotation, String subsumedAnnotation, boolean strictOffset) {
+		List<Annotation> annotationToRemoveList = new ArrayList<Annotation>();
+
+		Type subsumingAnnotationType = aJCas.getTypeSystem().getType(subsumingAnnotation);
+		AnnotationIndex<Annotation> subsumingAnnotationIndex = aJCas.getAnnotationIndex(subsumingAnnotationType);
+
+		Type subsumedAnnotationType = aJCas.getTypeSystem().getType(subsumedAnnotation);
+		AnnotationIndex<Annotation> subsumedAnnotationIndex = aJCas.getAnnotationIndex(subsumedAnnotationType);
+
+		FSIterator<Annotation> subsumingAnnotationIterator = subsumingAnnotationIndex.iterator();
+
+		while (subsumingAnnotationIterator.hasNext()) {
+			Annotation aSubsumingAnnotation = subsumingAnnotationIterator.next();
+			FSIterator<Annotation> subsumedAnnotationIterator = subsumedAnnotationIndex.subiterator(aSubsumingAnnotation);
+			while (subsumedAnnotationIterator.hasNext()) {
+				Annotation aSubsumedAnnotation = subsumedAnnotationIterator.next();
+				if (strictOffset) { 
+					if ((aSubsumingAnnotation.getBegin() == aSubsumedAnnotation.getBegin()) && (aSubsumingAnnotation.getEnd() == aSubsumedAnnotation.getEnd()) ) {
+						annotationToRemoveList.add(aSubsumedAnnotation);
+					} } 
+				else annotationToRemoveList.add(aSubsumedAnnotation);
+			}
+		}
+
+
+		for (Annotation remove : annotationToRemoveList) {
+			remove.removeFromIndexes();
+		}
 	}
-	
-	/*public static FSIterator<Annotation> subiterator(JCas cas, Annotation beginEndAnnotation) {
-		AnnotationIndex<Annotation> index = cas.getAnnotationIndex();
-		Annotation between = new Annotation(cas, beginEndAnnotation.getBegin(),beginEndAnnotation.getEnd());
-		return index.subiterator(between);
-	}*/
-	
+
+
+	/**
+	 * Remove duplicate annotations at the same offsets
+	 * from the index
+	 *
+	 * Only based on testing the offset, may have distinct features values !
+	 * In case of duplicate, no guarantee about which one will be removed  
+	 * 
+	 * @param aJCas  the CAS which contains the FSindex       
+
+	 * @author hernandez
+	 * @throws AnalysisEngineProcessException 
+	 * 
+	 */
+	public static void removeDuplicateAnnotations(JCas aJCas) {
+		AnnotationIndex<Annotation> anAnnotationIndex = aJCas.getAnnotationIndex();
+		FSIterator<Annotation> anAnnotationIterator = anAnnotationIndex.iterator();
+
+		while (anAnnotationIterator.hasNext()) {
+			Annotation anAnnotation = anAnnotationIterator.next();
+			removeSubsumedAnnotation(aJCas,anAnnotation.getClass().getName(),anAnnotation.getClass().getName(),true);
+		}
+		//HashMap<String, String> alreadySeenFS = new HashMap<String, String>();
+		//
+		// parse the FSIndex
+		// compute an hash of the current Annotation from Class.name alphabetcally ordered list of features with their value.toString()
+		// if alreadySeenFS this hash them remove from FS
+		// else add to alreadSeenFS
+		//
+		//byte[] hash      = null;
+		//try {
+		//	hash= MessageDigest.getInstance("MD5").digest(aJCas.getSofaDataString().getBytes());
+		//} catch (NoSuchAlgorithmException e) {
+		//	// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+
+	}
+
+
+	/**
+	 * Remove duplicate and subsumed annotations of the given type name
+	 *
+	 * Only based on testing the offset, may have distinct features values !
+	 * In case of duplicate, no guarantee about which one will be removed  
+	 * 
+	 * @param aJCas  the CAS which contains the FSindex       
+
+	 * @author hernandez
+	 * @throws AnalysisEngineProcessException 
+	 * 
+	 */
+	public static void removeDuplicateAndSubsumedAnnotations(JCas aJCas, String subsumingAnnotation) {
+
+		removeSubsumedAnnotation(aJCas,subsumingAnnotation,subsumingAnnotation,false);
+	}
+
+
+
 	/**
 	 * 
 	 * This method provides an iterator over typed annotations that either 
@@ -198,7 +269,7 @@ public class AnnotationCollectionUtils {
 
 		return filteredIterator;
 	}
-	
+
 	/**
 	 * A simple Subiterator call
 	 * Depending on the index size, can be much much much faster than with the constraint approach !
@@ -207,7 +278,7 @@ public class AnnotationCollectionUtils {
 	 * The current Annotation is compared with another (the filter) 
 	 * FSIterator wordsAnnotationIterator = AnnotationCollectionUtils.subiterator(
 				inputViewJCas, aSentenceAnnotation);
-			 
+
 			while (wordsAnnotationIterator.hasNext()) {
 				Annotation aWordAnnotation = (Annotation) wordsAnnotationIterator
 				.next();
@@ -225,48 +296,14 @@ public class AnnotationCollectionUtils {
 	 *
 	 * @param jcas
 	 * @param annotation
- 	 * @return an index of annotations subsumed by the annotation given in parameter
+	 * @return an index of annotations subsumed by the annotation given in parameter
 	 */
 	public static FSIterator<Annotation> subiterator(JCas cas, Annotation beginEndAnnotation) {
 		AnnotationIndex<Annotation> index = cas.getAnnotationIndex();
 		Annotation between = new Annotation(cas, beginEndAnnotation.getBegin(),beginEndAnnotation.getEnd());
 		return index.subiterator(between);
 	}
-	
-	
-	/**
-	 * Remove duplicate annotations at the same offsets
-	 * from the index
-	 * 
-	 * TODO to implement
-	 * 
-	 * http://www.mail-archive.com/uima-user@incubator.apache.org/msg01645.html
-	 * http://uima.apache.org/downloads/releaseDocs/2.3.0-incubating/docs/api/org/apache/uima/jcas/JCas.html#removeFsFromIndexes(org.apache.uima.cas.FeatureStructure)
-	 * 
-	 * @param aJCas  the CAS which contains the FSindex       
 
-	 * @author hernandez
-	 * @throws AnalysisEngineProcessException 
-	 * 
-	 */
-	public static void removeDuplicateFSAnnotationFromCASIndex(JCas aJCas)
-	throws AnalysisEngineProcessException {
-		HashMap<String, String> alreadySeenFS = new HashMap<String, String>();
-
-		// parse the FSIndex
-		// compute an hash of the current Annotation from Class.name alphabetcally ordered list of features with their value.toString()
-		// if alreadySeenFS this hash them remove from FS
-		// else add to alreadSeenFS
-
-		//byte[] hash      = null;
-		//try {
-		//	hash= MessageDigest.getInstance("MD5").digest(aJCas.getSofaDataString().getBytes());
-		//} catch (NoSuchAlgorithmException e) {
-		//	// TODO Auto-generated catch block
-		//	e.printStackTrace();
-		//}
-
-	}
 
 	/**
 	 * This method get an FeatureStructure Array of selected annotation types
@@ -287,7 +324,7 @@ public class AnnotationCollectionUtils {
 		ArrayList<FeatureStructure> result =  new ArrayList<FeatureStructure>();
 		//FSIndex<Annotation> result =  null;
 		AnnotationIndex annotationIndex = (AnnotationIndex)
-		aJCas.getAnnotationIndex();
+				aJCas.getAnnotationIndex();
 		FSIterator annotationIndexIterator = annotationIndex.iterator();
 
 		//Iterator keyIter = annotationHashMap.keySet().iterator();
