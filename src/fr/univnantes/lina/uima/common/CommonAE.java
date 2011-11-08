@@ -340,14 +340,18 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 		.getConfigParameterValue(PARAM_NAME_OUTPUT_FEATURE);
 		// outputAnnotationString ET outputFeatureString doivent être
 		// initialisés les deux à la fois ou aucun d'eux
-		if (((outputAnnotationString != null) && (outputFeatureString == null))
+		/*if (((outputAnnotationString != null) && (outputFeatureString == null))
 				|| ((outputAnnotationString == null) && (outputFeatureString != null))) {
 			String errmsg = "Error: If one of the parameter "
 				+ PARAM_NAME_OUTPUT_ANNOTATION + " or "
 				+ PARAM_NAME_OUTPUT_FEATURE + " is defined, both must be !";
 			throw new ResourceInitializationException(errmsg, new Object[] {});
 			// e.printStackTrace();
-		}
+		}*/
+		System.err.println("Warning: uima-shell may require the " +
+				"definition of the couple "+ PARAM_NAME_OUTPUT_ANNOTATION + " and "
+				+ PARAM_NAME_OUTPUT_FEATURE +  " but it is not necessary for uima-word-segmenter" +
+						" so we remove the test");
 
 		// Si l'input_type est annotation, alors on va traiter chacune d'elle
 		if (inputAnnotationStringArray != null)
@@ -820,7 +824,7 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 		if (outputType.equalsIgnoreCase(OUTPUTTYPE_ANNOTATION)) {
 			/** -- Create annotation **/
 			log("Creating output annotation");
-			HashMap<String, String>	featuresHashMap = new HashMap<String, String>();
+			HashMap<String, Object>	featuresHashMap = new HashMap<String, Object>();
 			featuresHashMap.put("begin", String.valueOf(beginFeatureValueFromAnnotationToCreate));
 			featuresHashMap.put("end", String.valueOf(endFeatureValueFromAnnotationToCreate));
 			featuresHashMap.put(outputFeatureString, commandLocalResultString);
@@ -936,7 +940,7 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 			log("Creating output annotation");
 			// createANewAnnotation(aJCas,
 			// inputAnnotation.getBegin(),inputAnnotation.getEnd(),commandLocalResultString);
-			HashMap<String, String>	featuresHashMap = new HashMap<String, String>();
+			HashMap<String, Object>	featuresHashMap = new HashMap<String, Object>();
 			featuresHashMap.put("begin", String.valueOf(beginFeatureValueFromAnnotationToCreate));
 			featuresHashMap.put("end", String.valueOf(endFeatureValueFromAnnotationToCreate));
 			featuresHashMap.put(outputFeatureString, commandResultString);

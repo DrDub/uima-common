@@ -6,9 +6,9 @@
   <vendor>Université de Nantes - LINA - Nicolas Hernandez</vendor>
   <types>
     <typeDescription>
-      <name>common.types.Word</name>
+      <name>common.types.text.LexicalUnit</name>
       <description/>
-      <supertypeName>common.types.Annotation</supertypeName>
+      <supertypeName>common.types.text.Annotation</supertypeName>
       <features>
         <featureDescription>
           <name>lemma</name>
@@ -43,14 +43,14 @@
       </features>
     </typeDescription>
     <typeDescription>
-      <name>common.types.Sentence</name>
+      <name>common.types.text.Sentence</name>
       <description/>
-      <supertypeName>common.types.Annotation</supertypeName>
+      <supertypeName>common.types.text.Annotation</supertypeName>
     </typeDescription>
     <typeDescription>
-      <name>common.types.Chunk</name>
+      <name>common.types.text.Chunk</name>
       <description/>
-      <supertypeName>common.types.Annotation</supertypeName>
+      <supertypeName>common.types.text.Annotation</supertypeName>
       <features>
         <featureDescription>
           <name>chunkType</name>
@@ -60,19 +60,45 @@
       </features>
     </typeDescription>
     <typeDescription>
-      <name>common.types.DiscourseSegment</name>
+      <name>common.types.text.DiscourseSegment</name>
       <description/>
-      <supertypeName>common.types.Annotation</supertypeName>
+      <supertypeName>common.types.text.Annotation</supertypeName>
     </typeDescription>
     <typeDescription>
-      <name>common.types.Token</name>
+      <name>common.types.text.Token</name>
       <description/>
-      <supertypeName>common.types.Annotation</supertypeName>
+      <supertypeName>common.types.text.Annotation</supertypeName>
     </typeDescription>
     <typeDescription>
-      <name>common.types.Annotation</name>
+      <name>common.types.text.Annotation</name>
       <description/>
       <supertypeName>uima.tcas.Annotation</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>common.types.resource.DictEntry</name>
+      <description/>
+      <supertypeName>common.types.text.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>values</name>
+          <description/>
+          <rangeTypeName>uima.cas.StringArray</rangeTypeName>
+          <multipleReferencesAllowed>true</multipleReferencesAllowed>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>common.types.resource.RegexEntry</name>
+      <description/>
+      <supertypeName>common.types.text.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>values</name>
+          <description/>
+          <rangeTypeName>uima.cas.StringArray</rangeTypeName>
+          <multipleReferencesAllowed>true</multipleReferencesAllowed>
+        </featureDescription>
+      </features>
     </typeDescription>
   </types>
 </typeSystemDescription>
