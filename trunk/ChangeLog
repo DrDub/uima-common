@@ -21,6 +21,11 @@
 # ChangeLog File
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+
+2011-11-03  Nicolas Hernandez  <nicolas.hernandez@gmail.com> 
+  * change in AnnotationUtils and FeatureUtils to get more abstraction with the createAnnotation from a Map of features : accept Map of object instead of Map of Strings (String were casted depending on the range of the feature name). In addition, accept StringArray as feature type (fixed-length array)
+  * move common.types -> common.types.text. (my.types.t. ; my.types.ne. were shorter but not enough explicit, my.types.* wo any structure would be ok but no structure so too simple)  
+  
 2011-10-30  Nicolas Hernandez  <nicolas.hernandez@gmail.com> commited
   * add removeSubsumedAnnotation(JCas aJCas, String subsumingAnnotation, String subsumedAnnotation)
   * add my common type system : common.types (other alternatives :my.types. (shorter than my.common.types))

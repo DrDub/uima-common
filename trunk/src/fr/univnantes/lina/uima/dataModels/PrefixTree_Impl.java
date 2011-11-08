@@ -19,11 +19,19 @@ import fr.univnantes.lina.java.util.JavaUtilities;
 public class PrefixTree_Impl implements PrefixTree {
 
 	private PrefixTree_Impl parent;
-	//private Map<Character,Node_Impl> children;
 	private Map<Integer,PrefixTree_Impl> children;
 
+	/**
+	 * Is a final node of a branch corresponding to the last character of an entry
+	 */
 	private boolean leaf;
-	private List<String> values;
+	
+	/**
+	 * Associated values (from CSV columns) 
+	 * to the branch defined by the path from the root node to the current node 
+	 */
+	//private List<String> values;
+	private List<List<String>> valuesList;
 
 	public PrefixTree_Impl() {
 		this.setChildren();
@@ -48,8 +56,12 @@ public class PrefixTree_Impl implements PrefixTree {
 	}
 
 	public void setValues (ArrayList<String> values) {
-		this.values = new ArrayList<String>();
-		this.values = values;
+		if (this.valuesList == null) this.valuesList = new ArrayList<List<String>>();
+		List<String> currentValues = new ArrayList<String>();
+		currentValues = values;
+		this.valuesList.add(currentValues);
+		//this.values = new ArrayList<String>();
+		//this.values = values;
 	}
 
 	/*
@@ -65,18 +77,30 @@ public class PrefixTree_Impl implements PrefixTree {
 		return this.children;
 	}
 
+	/**
+	 * An implementation of getChild
+	 * Define the way to access and test if a character (char Character or codePoint) is present in the children
+	 * @see fr.univnantes.lina.uima.dataModels.PrefixTree Interface 
+	 */
 	@Override
 	public PrefixTree_Impl getChild(Character character) {
 		return this.getChildren().get(character);
 	}
-	
+
+	/**
+	 * An implementation of getChild
+	 * Define the way to access and test if a character (char Character or codePoint) is present in the children
+	 * @see fr.univnantes.lina.uima.dataModels.PrefixTree Interface 
+	 */
 	@Override
 	public PrefixTree_Impl getChild(int codePoint) {
 		return this.getChildren().get(codePoint);
 	}	
 	
-	public List<String> getValues () {
-		return this.values;
+	public List<List<String>> getValues () {
+	//	public List<String> getValues () {
+		//return this.values;
+		return this.valuesList;
 	}
 
 
@@ -89,16 +113,17 @@ public class PrefixTree_Impl implements PrefixTree {
 	}
 
 	/**
-	 * Add a new node to the tree
-	 * Recursive method which parse the string of the key
+	 * An implementation of the add method to add a new node to the tree
+	 * Recursive method which parses the string of the key
 	 * 
-	 * @param characters
-	 * @param index
-	 * @param length
-	 * @param values TODO
+	 * @param characters the string whose characters have to be added to the tree as nodes
+	 * @param index cursor which points to the current character parsed in the characters string
+	 * @param values list of values to associate with a leaf node
+	 * @see fr.univnantes.lina.uima.dataModels.PrefixTree Interface 
 	 */
 	@Override
-	public void add(String characters,int index,int length, ArrayList<String> values) {
+	public void add(String characters, int index, ArrayList<String> values) {
+		int length = characters.length(); 
 		if (index < length) {
 			//char ch = characters.charAt(index);
 			//Character character = new Character(ch);
@@ -133,7 +158,7 @@ public class PrefixTree_Impl implements PrefixTree {
 			}
 
 			// recursively call the add method with the following characters 
-			node.add(characters, index + 1, length, values);
+			node.add(characters, index + 1, values);
 		}
 	}
 

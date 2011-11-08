@@ -394,7 +394,7 @@ public class AnnotationUtils   {
 
 	 * @throws AnalysisEngineProcessException 
 	 */
-	public static void createAnnotation(JCas aJCas, String annotationNameToCreate, HashMap<String,String> featuresHashMap) throws AnalysisEngineProcessException {
+	public static void createAnnotation(JCas aJCas, String annotationNameToCreate, HashMap<String,Object> featuresHashMap) throws AnalysisEngineProcessException {
 
 		try {
 			Object[] args = null;
@@ -427,7 +427,7 @@ public class AnnotationUtils   {
 				String featureName = (String) featureHashMapKeySetIterator.next();
 
 				// featureName -> setFeatureName
-				String setFeatureMethodName = FeatureUtils.buildFeatureSetterMethodName(featureName);
+				//String setFeatureMethodName = FeatureUtils.buildFeatureSetterMethodName(featureName);
 
 				// Récupère le Feature d'après son featureName
 				// Puis récupère le type de la feature
@@ -483,8 +483,7 @@ public class AnnotationUtils   {
 			//e.printStackTrace();
 		}
 	}
-
-
+	
 	/**
 	 * This method update a given annotation by setting some of its features 
 	 * given as an hashMap of couples name/value
@@ -499,7 +498,7 @@ public class AnnotationUtils   {
 
 	 * @throws AnalysisEngineProcessException 
 	 */
-	public static void updateAnnotation(JCas aJCas, Object annotationToUpdate, String annotationToProcessString, HashMap<String,String> featuresHashMap) throws AnalysisEngineProcessException {
+	public static void updateAnnotation(JCas aJCas, Object annotationToUpdate, String annotationToProcessString, HashMap<String,Object> featuresHashMap) throws AnalysisEngineProcessException {
 
 		try {
 

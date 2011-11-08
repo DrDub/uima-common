@@ -21,6 +21,7 @@ package fr.univnantes.lina.uima.common;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import org.apache.uima.jcas.cas.StringArray;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.Type;
@@ -60,12 +61,12 @@ public class FeatureUtils {
 
 	/**
 	 * Return the getter method of a given feature name
-	 * @param InputAnnotationClass
+	 * @param inputAnnotationClass
 	 * @param inputFeatureString
 	 * @return Method Get
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static Method getFeatureGetterMethod(Class InputAnnotationClass, String inputFeatureString)
+	public static Method getFeatureGetterMethod(Class inputAnnotationClass, String inputFeatureString)
 	throws AnalysisEngineProcessException {
 
 		// Récupère la méthode pour "getter" la value de l'InputFeature
@@ -73,7 +74,7 @@ public class FeatureUtils {
 
 		Method getFeatureMethod = null;
 		try {
-			getFeatureMethod = InputAnnotationClass.getMethod(getFeatureMethodName);
+			getFeatureMethod = inputAnnotationClass.getMethod(getFeatureMethodName);
 		} catch (SecurityException e) {
 			String errmsg = "Error: a SecurityException with getMethod " + getFeatureMethodName
 			+ " !";
@@ -102,12 +103,12 @@ public class FeatureUtils {
 
 	/**
 	 * Return the setter method of a given feature name
-	 * @param InputAnnotationClass
+	 * @param inputAnnotationClass
 	 * @param inputFeatureString
 	 * @return a Method set
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static Method getFeatureSetterMethod(Class InputAnnotationClass, String inputFeatureString,
+	public static Method getFeatureSetterMethod(Class inputAnnotationClass, String inputFeatureString,
 			Type inputFeatureType) throws AnalysisEngineProcessException {
 
 		// Construit le nom de laa méthode pour "setter" la value de l'InputFeature
@@ -120,28 +121,31 @@ public class FeatureUtils {
 
 			// Récupère la méthode Getter selon le type de la valeur attendue
 			if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.String")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName,String.class);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName,String.class);
 			}
 			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Integer.TYPE);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, Integer.TYPE);
 			}
 			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Double")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Double.TYPE);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, Double.TYPE);
 			}
 			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Short")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Short.TYPE);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, Short.TYPE);
 			}
 			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Long")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Long.TYPE);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, Long.TYPE);
 			}
 			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Float")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Float.TYPE);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, Float.TYPE);
 			}
 			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Boolean.TYPE);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, Boolean.TYPE);
 			}
 			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
-				setFeatureMethod = InputAnnotationClass.getMethod(setFeatureMethodName, Byte.TYPE);
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, Byte.TYPE);
+			}
+			else if (inputFeatureType.getName().equalsIgnoreCase("uima.cas.StringArray")) {
+				setFeatureMethod = inputAnnotationClass.getMethod(setFeatureMethodName, StringArray.class);
 			}
 			else  {
 				String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + inputFeatureType.getName()
@@ -221,58 +225,69 @@ public class FeatureUtils {
 	 * @param featureName
 	 * @throws AnalysisEngineProcessException
 	 */
-	public static void invokeFeatureSetterMethod(Object t, Type featureType, Method setFeatureMethod, HashMap<String,String> featuresHashMap, String featureName)
-	throws AnalysisEngineProcessException {
+	public static void invokeFeatureSetterMethod(Object t, Type featureType, Method setFeatureMethod, HashMap<String,Object> featuresHashMap, String featureName)
+			throws AnalysisEngineProcessException {
 
-		try {
+				try {
 
-			// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
-			if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
-				setFeatureMethod.invoke(t, (String) featuresHashMap.get(featureName));}
-			else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
-				setFeatureMethod.invoke(t,  Integer.parseInt(featuresHashMap.get(featureName)));	}
-			else if (featureType.getName().equalsIgnoreCase("uima.cas.Double")) {
-				setFeatureMethod.invoke(t,  Double.parseDouble(featuresHashMap.get(featureName)));				}
-			else if (featureType.getName().equalsIgnoreCase("uima.cas.Short")) {
-				setFeatureMethod.invoke(t,  Short.parseShort(featuresHashMap.get(featureName)));				}
-			else if (featureType.getName().equalsIgnoreCase("uima.cas.Long")) {
-				setFeatureMethod.invoke(t,  Long.parseLong(featuresHashMap.get(featureName)));				}
-			else if (featureType.getName().equalsIgnoreCase("uima.cas.Float")) {
-				setFeatureMethod.invoke(t,  Float.parseFloat(featuresHashMap.get(featureName)));				}
-			else if (featureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
-				setFeatureMethod.invoke(t,  Boolean.parseBoolean(featuresHashMap.get(featureName)));				}
-			else if (featureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
-				setFeatureMethod.invoke(t,  Byte.parseByte(featuresHashMap.get(featureName)));				}
-			else  {
-				String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + featureType.getName()
-				+ " !";
-				throw new AnalysisEngineProcessException(errmsg,
-						new Object[] { featureType.getName() });	
+					// En fonction du type, invoque la méthode en castant selon la valeur adéquate attendue
+					if (featureType.getName().equalsIgnoreCase("uima.cas.String")) {
+						setFeatureMethod.invoke(t, (String) featuresHashMap.get(featureName));}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.Integer")) {
+						setFeatureMethod.invoke(t,  Integer.parseInt((String)featuresHashMap.get(featureName)));	}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.Double")) {
+						setFeatureMethod.invoke(t,  Double.parseDouble((String)featuresHashMap.get(featureName)));				}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.Short")) {
+						setFeatureMethod.invoke(t,  Short.parseShort((String)featuresHashMap.get(featureName)));				}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.Long")) {
+						setFeatureMethod.invoke(t,  Long.parseLong((String)featuresHashMap.get(featureName)));				}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.Float")) {
+						setFeatureMethod.invoke(t,  Float.parseFloat((String)featuresHashMap.get(featureName)));				}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.Boolean")) {
+						setFeatureMethod.invoke(t,  Boolean.parseBoolean((String)featuresHashMap.get(featureName)));				}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.Byte")) {
+						setFeatureMethod.invoke(t,  Byte.parseByte((String)featuresHashMap.get(featureName)));				}
+					
+					else if (featureType.getName().equalsIgnoreCase("uima.cas.StringArray")) {
+						setFeatureMethod.invoke(t, (StringArray) featuresHashMap.get(featureName));
+					}
+					else  {
+						String errmsg = "Error: unhandled inputFeatureType in UIMAUtilities getSetterMethod :" + featureType.getName()
+						+ " !";
+						throw new AnalysisEngineProcessException(errmsg,
+								new Object[] { featureType.getName() });	
+					}
+				} catch (IllegalArgumentException e) {
+					String errmsg = "Error: IllegalArgumentException  !";
+					throw new AnalysisEngineProcessException(errmsg,
+							new Object[] {  },e);	
+					//e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					String errmsg = "Error: IllegalAccessException  !";
+					throw new AnalysisEngineProcessException(errmsg,
+							new Object[] {  },e);	
+					//e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					String errmsg = "Error: InvocationTargetException  !";
+					throw new AnalysisEngineProcessException(errmsg,
+							new Object[] {  },e);	
+					//e.printStackTrace();
+				}	
+				catch (SecurityException e) {
+					String errmsg = "Error: SecurityException  !";
+					throw new AnalysisEngineProcessException(errmsg,
+							new Object[] {  },e);	
+					//e.printStackTrace();
+				} 
 			}
-		} catch (IllegalArgumentException e) {
-			String errmsg = "Error: IllegalArgumentException  !";
-			throw new AnalysisEngineProcessException(errmsg,
-					new Object[] {  },e);	
-			//e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			String errmsg = "Error: IllegalAccessException  !";
-			throw new AnalysisEngineProcessException(errmsg,
-					new Object[] {  },e);	
-			//e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			String errmsg = "Error: InvocationTargetException  !";
-			throw new AnalysisEngineProcessException(errmsg,
-					new Object[] {  },e);	
-			//e.printStackTrace();
-		}	
-		catch (SecurityException e) {
-			String errmsg = "Error: SecurityException  !";
-			throw new AnalysisEngineProcessException(errmsg,
-					new Object[] {  },e);	
-			//e.printStackTrace();
-		} 
-	}
-
+	
 	/**
 	 * Return the value of a given feature name from a given annotation
 	 * @param anAnnotation

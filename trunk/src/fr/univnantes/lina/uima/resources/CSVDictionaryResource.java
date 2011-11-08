@@ -49,12 +49,15 @@ public class CSVDictionaryResource extends DictionaryResource {
 		 } else {
 			 String characters = line.trim();
 			 
+			 // Here is the code which connects the CSV columns to the internal data structure to store the values (an ArrayList<String>)
 			 String[] columns = characters.split(CSV_COLUMN_SEPARATOR);
 			 ArrayList<String> values = new ArrayList<String>();
 			 for (int i = 1 ; i< columns.length ; i++) {
 				 values.add(columns[i]);
 			 }
-			 this.getRoot().add(columns[0],0,columns[0].length(), values);
+			 
+			 // Add the current entry (columns[0]) and its values (values) to the tree (this.getRoot())
+			 this.getRoot().add(columns[0],0,values);
 		 }
 	 }
 

@@ -24,7 +24,6 @@
   * extract fr.univnantes.lina.uima.nlp into a new project
   * method pour copier une annotation d'une vue à une autre : voir tmp, http://www.fabienpoulard.info/post/2011/06/05/Copier-une-annotation-d-une-vue-%C3%A0-une-autre-dans-UIMA
   * FeatureUtils create methods to do that Return a feature anyAnnotation.getType().getFeatureByBaseName(featureName) or Return a string value anyAnnotation.getStringValue(anyAnnotation.getType().getFeatureByBaseName(featureName))  
-  * about removing uima annotation see the user@uima.apache.org Rashad rash.m2k@gmail.com Fri, Jun 3, 2011 at 12:55 PM subject	How to remove UIMA annotations? : only a cas reset removed the annotations from the cas, in the other cases the annotations are only removed from the index so it does not free some space memory
   * check the documentation (method headers, package names) http://code.google.com/p/uima-common/wiki/UserGuide?ts=1319862711&updated=UserGuide
   *	 nettoyer la partie src/desc sur swap
 	* refactoring de JCasSofaView en autant de classes
