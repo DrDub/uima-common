@@ -12,7 +12,7 @@ import org.apache.uima.jcas.cas.StringArray;
 
 
 /** 
- * Updated by JCasGen Tue Nov 08 16:34:08 CET 2011
+ * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
  * XML source: /media/MyPassport/current/public/research/UIMA-USER-DEV-ENV/workspace/uima-common/desc/common/types/commonTS.xml
  * @generated */
 public class RegexEntry extends Annotation {
@@ -92,6 +92,24 @@ public class RegexEntry extends Annotation {
       jcasType.jcas.throwFeatMissing("values", "common.types.resource.RegexEntry");
     jcasType.jcas.checkArrayBounds(jcasType.ll_cas.ll_getRefValue(addr, ((RegexEntry_Type)jcasType).casFeatCode_values), i);
     jcasType.ll_cas.ll_setStringArrayValue(jcasType.ll_cas.ll_getRefValue(addr, ((RegexEntry_Type)jcasType).casFeatCode_values), i, v);}
+   
+    
+  //*--------------*
+  //* Feature: value
+
+  /** getter for value - gets 
+   * @generated */
+  public String getValue() {
+    if (RegexEntry_Type.featOkTst && ((RegexEntry_Type)jcasType).casFeat_value == null)
+      jcasType.jcas.throwFeatMissing("value", "common.types.resource.RegexEntry");
+    return jcasType.ll_cas.ll_getStringValue(addr, ((RegexEntry_Type)jcasType).casFeatCode_value);}
+    
+  /** setter for value - sets  
+   * @generated */
+  public void setValue(String v) {
+    if (RegexEntry_Type.featOkTst && ((RegexEntry_Type)jcasType).casFeat_value == null)
+      jcasType.jcas.throwFeatMissing("value", "common.types.resource.RegexEntry");
+    jcasType.ll_cas.ll_setStringValue(addr, ((RegexEntry_Type)jcasType).casFeatCode_value, v);}    
   }
 
     

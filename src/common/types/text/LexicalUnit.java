@@ -10,7 +10,7 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** 
- * Updated by JCasGen Tue Nov 08 16:34:09 CET 2011
+ * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
  * XML source: /media/MyPassport/current/public/research/UIMA-USER-DEV-ENV/workspace/uima-common/desc/common/types/commonTS.xml
  * @generated */
 public class LexicalUnit extends Annotation {

@@ -11,7 +11,7 @@ import org.apache.uima.cas.impl.TypeImpl;
 import org.apache.uima.cas.Type;
 
 /** 
- * Updated by JCasGen Tue Nov 08 16:34:08 CET 2011
+ * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
  * @generated */
 public class DiscourseSegment_Type extends Annotation_Type {
   /** @generated */
