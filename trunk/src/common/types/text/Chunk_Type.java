@@ -13,7 +13,7 @@ import org.apache.uima.cas.impl.FeatureImpl;
 import org.apache.uima.cas.Feature;
 
 /** 
- * Updated by JCasGen Tue Nov 08 16:34:08 CET 2011
+ * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
  * @generated */
 public class Chunk_Type extends Annotation_Type {
   /** @generated */

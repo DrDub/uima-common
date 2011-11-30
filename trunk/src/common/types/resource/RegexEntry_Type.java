@@ -14,7 +14,7 @@ import org.apache.uima.cas.Feature;
 import common.types.text.Annotation_Type;
 
 /** 
- * Updated by JCasGen Tue Nov 08 16:34:08 CET 2011
+ * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
  * @generated */
 public class RegexEntry_Type extends Annotation_Type {
   /** @generated */
@@ -77,6 +77,24 @@ public class RegexEntry_Type extends Annotation_Type {
     ll_cas.ll_setStringArrayValue(ll_cas.ll_getRefValue(addr, casFeatCode_values), i, v);
   }
  
+ 
+  /** @generated */
+  final Feature casFeat_value;
+  /** @generated */
+  final int     casFeatCode_value;
+  /** @generated */ 
+  public String getValue(int addr) {
+        if (featOkTst && casFeat_value == null)
+      jcas.throwFeatMissing("value", "common.types.resource.RegexEntry");
+    return ll_cas.ll_getStringValue(addr, casFeatCode_value);
+  }
+  /** @generated */    
+  public void setValue(int addr, String v) {
+        if (featOkTst && casFeat_value == null)
+      jcas.throwFeatMissing("value", "common.types.resource.RegexEntry");
+    ll_cas.ll_setStringValue(addr, casFeatCode_value, v);}
+    
+  
 
 
 
@@ -89,6 +107,10 @@ public class RegexEntry_Type extends Annotation_Type {
  
     casFeat_values = jcas.getRequiredFeatureDE(casType, "values", "uima.cas.StringArray", featOkTst);
     casFeatCode_values  = (null == casFeat_values) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_values).getCode();
+
+ 
+    casFeat_value = jcas.getRequiredFeatureDE(casType, "value", "uima.cas.String", featOkTst);
+    casFeatCode_value  = (null == casFeat_value) ? JCas.INVALID_FEATURE_CODE : ((FeatureImpl)casFeat_value).getCode();
 
   }
 }

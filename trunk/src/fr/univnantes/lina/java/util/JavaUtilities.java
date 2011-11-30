@@ -327,5 +327,18 @@ public class JavaUtilities {
 			return obj.getClass().getName()+ "-" + Long.toString(System.currentTimeMillis());
 		}
 	}
+	
+	/**
+	 * Convert unicode CodePoint to String
+	 */
+	public static String codePointToString (int codePoint) {
+		char[] currentChars = Character.toChars(codePoint);
+		String currentString = "";
+		for (int i = 0 ; i < currentChars.length ; i++) {
+			currentString += currentChars[i];
+		}
+		return currentString;
+	}
+
 
 }
