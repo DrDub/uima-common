@@ -33,6 +33,7 @@ import java.util.Iterator;
 
 import org.apache.uima.analysis_engine.AnalysisEngineProcessException;
 import org.apache.uima.cas.CASException;
+import org.apache.uima.cas.CASRuntimeException;
 import org.apache.uima.cas.ConstraintFactory;
 import org.apache.uima.cas.FSIndex;
 import org.apache.uima.cas.FSIntConstraint;
@@ -171,6 +172,139 @@ public class JCasSofaViewUtils  {
 					new Object[] { });
 		}
 		return inputSofaDataString;
+	}
+
+	/**
+	 * Get the name part of the uri stored in the source documentation of the annotation index of the current view
+	 * @param aJCas
+	 * @return
+	 * @throws CASRuntimeException
+	 * @throws AnalysisEngineProcessException
+	 */
+	public static String getArtifactViewName(JCas aJCas) throws CASRuntimeException, AnalysisEngineProcessException  {
+		FSIterator<Annotation> sourceDocumentInformationFSIterator = aJCas.getAnnotationIndex(JCasSofaViewUtils.getJCasType(aJCas,
+				DEFAULT_SOURCE_DOCUMENT_INFORMATION_ANNOTATION)).iterator();
+		String outFileName = "";
+		File inFile = null;
+		if (sourceDocumentInformationFSIterator.hasNext()) {
+			SourceDocumentInformation theSourceDocumentInformation = (SourceDocumentInformation) sourceDocumentInformationFSIterator.next();
+
+			try {
+				inFile = new File(new URL(theSourceDocumentInformation.getUri()).getPath());
+				outFileName = inFile.getName();
+				if (theSourceDocumentInformation.getOffsetInSource() > 0) {
+					outFileName += ("-" + theSourceDocumentInformation.getOffsetInSource());
+				}
+				//outFile = new File(outputDirForCSV, outFileName);
+				//System.out.println("Debug: outputDirForCSV "+ outputDirForCSVString+ " outFileName "+outFileName);  	
+
+			} catch (MalformedURLException e) {
+				// invalid URL, use default processing below
+				e.printStackTrace();
+			}
+		}
+		return outFileName;
+	}
+
+	/**
+	 * This designation may be clearer than getArtifactName
+	 * @param aJCas
+	 * @return
+	 * @throws AnalysisEngineProcessException 
+	 * @throws CASRuntimeException 
+	 */
+	public String getDocumentName(JCas aJCas) throws CASRuntimeException, AnalysisEngineProcessException {
+		return getTheArtifactName(aJCas);
+	}
+
+	/**
+	 * Get the name of the artifact whatever it appears in any annotation index of associated view
+	 * @param aJCas
+	 * @return
+	 * @throws AnalysisEngineProcessException 
+	 * @throws CASRuntimeException 
+	 */
+	public static String getTheArtifactName(JCas aJCas) throws CASRuntimeException, AnalysisEngineProcessException {
+		String artifactName = "";
+		try {
+			Iterator<JCas>	jCasViewIter =  aJCas.getViewIterator();
+
+			while (jCasViewIter.hasNext()) {
+				JCas aJCasView = jCasViewIter.next();
+				String currentArtifactViewName = getArtifactViewName(aJCasView);
+				//System.out.println("Debug: one view of the current JCas >"+aJCasView.getViewName()+"< and the artifact name is >"+currentArtifactViewName+"<");
+
+				if (currentArtifactViewName != null) 
+					if (!currentArtifactViewName.equalsIgnoreCase("")) artifactName = currentArtifactViewName;
+
+			}
+		} catch (CASException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} 
+
+		return artifactName;
+	}
+
+
+	/**
+	 * Get the name of the artifact whatever it appears in any annotation index of associated view
+	 * or create one specifying default prefix and suffix elements
+	 * @param aJCas
+	 * @return
+	 * @throws AnalysisEngineProcessException 
+	 * @throws CASRuntimeException 
+	 */
+	public static String getAnArtifactName(JCas aJCas) throws CASRuntimeException, AnalysisEngineProcessException {
+		return getAnArtifactName(aJCas, true, "", "");
+	}
+
+	/**
+	 * Get the name of the artifact whatever it appears in any annotation index of associated view
+	 * or create one specifying prefix and suffix elements
+	 * @param aJCas
+	 * @return
+	 * @throws AnalysisEngineProcessException 
+	 * @throws CASRuntimeException 
+	 */
+	public static String getAnArtifactName(JCas aJCas, Boolean removeExtension, String prefix, String suffix) throws CASRuntimeException, AnalysisEngineProcessException {
+
+		String artifactName = getTheArtifactName(aJCas) ;
+		
+		if (artifactName != null) {
+			//System.out.println("Debug: SourceDocumentInformation is present in this view");
+			if (!artifactName.equalsIgnoreCase("")) {
+				int lastIndex = artifactName.lastIndexOf(".");
+				artifactName = artifactName.substring(0, lastIndex);
+			}
+			else {System.err.println("Error: an artifact name not null but empty ; in that case should create A name");}
+		}
+
+		//if (artefactName == null) 
+		else {
+			//System.out.println("Debug: SourceDocumentInformation is not present in this view");
+
+			byte[] hash      = null;
+			try {
+				hash= MessageDigest.getInstance("MD5").digest(aJCas.getSofaDataString().getBytes());
+			} catch (NoSuchAlgorithmException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			//outFileName = defaultDocumentPrefix + hash;
+
+			//cal = new GregorianCalendar(); // donne l'heure a l'instant t + x, l'heure systeme ayant change 
+			//int milliseconde = cal.get(Calendar.MILLISECOND); // de 0 a 999 
+//System.nanoTime() + '-' +
+			artifactName = "" + System.nanoTime() + '-' + hash ;
+			//artefactName = defaultDocumentPrefix + System.nanoTime() + '_' + hash;
+			//inFile = new File(outputDirForCSV, DEFAULT_DOCUMENT_PREFIX + hash );   
+			//System.out.println("Debug: outputDirForCSV "+ outputDirForCSVString+ " outFileName "+DEFAULT_DOCUMENT_PREFIX + hash + DEFAULT_CSV_EXTENSION);  	
+		}
+		
+		artifactName = prefix + artifactName + suffix;
+
+		return artifactName;
 	}
 
 
