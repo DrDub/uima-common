@@ -17,7 +17,7 @@ import org.apache.uima.cas.Feature;
     * amountDigit
     * amountLetter
     * amountUnit
- * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
+ * Updated by JCasGen Fri Dec 02 17:11:38 CET 2011
  * @generated */
 public class Amount_Type extends NamedEntity_Type {
   /** @generated */

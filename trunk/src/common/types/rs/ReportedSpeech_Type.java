@@ -12,7 +12,7 @@ import org.apache.uima.cas.Type;
 import common.types.text.Annotation_Type;
 
 /** 
- * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
+ * Updated by JCasGen Fri Dec 02 17:11:39 CET 2011
  * @generated */
 public class ReportedSpeech_Type extends Annotation_Type {
   /** @generated */

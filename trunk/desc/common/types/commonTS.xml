@@ -12,6 +12,33 @@ common.types.resource offers types based on generic recognizing tools</descripti
     <typeDescription>
       <name>common.types.text.LexicalUnit</name>
       <description/>
+      <supertypeName>common.types.text.Token</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>common.types.text.Sentence</name>
+      <description/>
+      <supertypeName>common.types.text.Annotation</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>common.types.text.Chunk</name>
+      <description/>
+      <supertypeName>common.types.text.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>chunkType</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+      </features>
+    </typeDescription>
+    <typeDescription>
+      <name>common.types.text.DiscourseSegment</name>
+      <description/>
+      <supertypeName>common.types.text.Annotation</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>common.types.text.Token</name>
+      <description/>
       <supertypeName>common.types.text.Annotation</supertypeName>
       <features>
         <featureDescription>
@@ -45,33 +72,6 @@ common.types.resource offers types based on generic recognizing tools</descripti
           <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
       </features>
-    </typeDescription>
-    <typeDescription>
-      <name>common.types.text.Sentence</name>
-      <description/>
-      <supertypeName>common.types.text.Annotation</supertypeName>
-    </typeDescription>
-    <typeDescription>
-      <name>common.types.text.Chunk</name>
-      <description/>
-      <supertypeName>common.types.text.Annotation</supertypeName>
-      <features>
-        <featureDescription>
-          <name>chunkType</name>
-          <description/>
-          <rangeTypeName>uima.cas.String</rangeTypeName>
-        </featureDescription>
-      </features>
-    </typeDescription>
-    <typeDescription>
-      <name>common.types.text.DiscourseSegment</name>
-      <description/>
-      <supertypeName>common.types.text.Annotation</supertypeName>
-    </typeDescription>
-    <typeDescription>
-      <name>common.types.text.Token</name>
-      <description/>
-      <supertypeName>common.types.text.Annotation</supertypeName>
     </typeDescription>
     <typeDescription>
       <name>common.types.text.Annotation</name>
