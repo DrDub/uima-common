@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jardesc>
+    <jar path="uima-common/target/uima-common-v110519.jar"/>
+    <options buildIfNeeded="true" compress="true" descriptionLocation="/uima-common/packaging-uima-common.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="true" overwrite="false" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
+    <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
+    <selectedProjects/>
+    <manifest generateManifest="true" manifestLocation="" manifestVersion="1.0" reuseManifest="false" saveManifest="false" usesManifest="true">
+        <sealing sealJar="false">
+            <packagesToSeal/>
+            <packagesToUnSeal/>
+        </sealing>
+    </manifest>
+    <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <file path="/uima-common/packaging-uima-common.jardesc"/>
+        <file path="/uima-common/ant-javadoc.xml"/>
+        <file path="/uima-common/.project"/>
+        <file path="/uima-common/ChangeLog"/>
+        <folder path="/uima-common/target/javadoc"/>
+        <folder path="/uima-common/.settings"/>
+        <file path="/uima-common/LICENSE"/>
+        <javaElement handleIdentifier="=uima-common/desc"/>
+        <javaElement handleIdentifier="=uima-common/src"/>
+        <file path="/uima-common/.classpath"/>
+        <file path="/uima-common/README"/>
+        <file path="/uima-common/TODO"/>
+    </selectedElements>
+</jardesc>
