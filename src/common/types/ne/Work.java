@@ -14,7 +14,7 @@ vehicule Moyen de transport,
 award Récompense, 
 art Oeuvre artistique, 
 documentary Production documentaire
- * Updated by JCasGen Tue Nov 29 20:01:49 CET 2011
+ * Updated by JCasGen Fri Dec 02 17:11:38 CET 2011
  * XML source: /media/MyPassport/current/public/research/UIMA-USER-DEV-ENV/workspace/uima-common/desc/common/types/commonTS.xml
  * @generated */
 public class Work extends NamedEntity {
