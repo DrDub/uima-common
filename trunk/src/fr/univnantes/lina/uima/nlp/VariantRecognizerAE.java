@@ -37,7 +37,6 @@ import org.apache.uima.resource.ResourceInitializationException;
 
 import fr.univnantes.lina.uima.common.AnnotationUtils;
 import fr.univnantes.lina.uima.common.JCasSofaViewUtils;
-import fr.univnantes.lina.uima.common.UIMAUtils;
 
 
 /**
@@ -92,10 +91,6 @@ public class VariantRecognizerAE extends JCasAnnotator_ImplBase {
 	 * LOCAL VARIABLES
 	 */
 
-	/**
-	 * Name of the default NAMED_ENTITY_ANNOTATION
-	 */
-	private static String DEFAULT_NAMED_ENTITY_ANNOTATION = "fr.univnantes.lina.uima.types.NamedEntity";
 
 	/**
 	 * Name of the default DOCUMENT_ANNOTATION
