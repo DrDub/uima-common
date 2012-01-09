@@ -35,7 +35,7 @@ public abstract class DictionaryResource implements SharedResourceObject {
 
 	public DictionaryResource() {
 		this.setLoaded(false);
-		this.setRoot();
+		this.setRoot();			// not protected by several calls, should be run once... when the first load occurs I think
 	}
 	/*
 	 * Getter, Setter
