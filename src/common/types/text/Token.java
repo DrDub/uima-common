@@ -10,7 +10,7 @@ import org.apache.uima.jcas.cas.TOP_Type;
 
 
 /** 
- * Updated by JCasGen Fri Dec 02 17:11:39 CET 2011
+ * Updated by JCasGen Fri Jan 06 03:22:32 CET 2012
  * XML source: /media/MyPassport/current/public/research/UIMA-USER-DEV-ENV/workspace/uima-common/desc/common/types/commonTS.xml
  * @generated */
 public class Token extends Annotation {
@@ -27,7 +27,7 @@ public class Token extends Annotation {
  
   /** Never called.  Disable default constructor
    * @generated */
-  protected Token() {}
+  protected Token() {/* intentionally empty block */}
     
   /** Internal - constructor used by generator 
    * @generated */
@@ -162,6 +162,24 @@ public class Token extends Annotation {
     if (Token_Type.featOkTst && ((Token_Type)jcasType).casFeat_subCat == null)
       jcasType.jcas.throwFeatMissing("subCat", "common.types.text.Token");
     jcasType.ll_cas.ll_setStringValue(addr, ((Token_Type)jcasType).casFeatCode_subCat, v);}    
+   
+    
+  //*--------------*
+  //* Feature: stem
+
+  /** getter for stem - gets (based on Sandbox Snowball Annotator definition)
+   * @generated */
+  public String getStem() {
+    if (Token_Type.featOkTst && ((Token_Type)jcasType).casFeat_stem == null)
+      jcasType.jcas.throwFeatMissing("stem", "common.types.text.Token");
+    return jcasType.ll_cas.ll_getStringValue(addr, ((Token_Type)jcasType).casFeatCode_stem);}
+    
+  /** setter for stem - sets (based on Sandbox Snowball Annotator definition) 
+   * @generated */
+  public void setStem(String v) {
+    if (Token_Type.featOkTst && ((Token_Type)jcasType).casFeat_stem == null)
+      jcasType.jcas.throwFeatMissing("stem", "common.types.text.Token");
+    jcasType.ll_cas.ll_setStringValue(addr, ((Token_Type)jcasType).casFeatCode_stem, v);}    
   }
 
     

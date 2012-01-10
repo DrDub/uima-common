@@ -12,7 +12,7 @@ import org.apache.uima.jcas.cas.StringArray;
 
 
 /** 
- * Updated by JCasGen Fri Dec 02 17:11:38 CET 2011
+ * Updated by JCasGen Fri Jan 06 03:22:31 CET 2012
  * XML source: /media/MyPassport/current/public/research/UIMA-USER-DEV-ENV/workspace/uima-common/desc/common/types/commonTS.xml
  * @generated */
 public class RegexEntry extends Annotation {
@@ -29,7 +29,7 @@ public class RegexEntry extends Annotation {
  
   /** Never called.  Disable default constructor
    * @generated */
-  protected RegexEntry() {}
+  protected RegexEntry() {/* intentionally empty block */}
     
   /** Internal - constructor used by generator 
    * @generated */

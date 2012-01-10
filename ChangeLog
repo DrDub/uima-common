@@ -24,7 +24,8 @@
 2011-12-01  Nicolas Hernandez  <nicolas.hernandez@gmail.com> 
   * src/fr/univnantes/lina/uima/common/JCasSofaViewUtils.java:add getArtifactName (whatever is the view which contains the source document information)
   * src/common/types/* desc/common/types/* : add new types for handling named entities, text structure, reported speech, dictionary and regex
-
+  * add desc/common/NullProcessAE.xml
+  
 2011-11-03  Nicolas Hernandez  <nicolas.hernandez@gmail.com> 
   * change in AnnotationUtils and FeatureUtils to get more abstraction with the createAnnotation from a Map of features : accept Map of object instead of Map of Strings (String were casted depending on the range of the feature name). In addition, accept StringArray as feature type (fixed-length array)
   * move common.types -> common.types.text. (my.types.t. ; my.types.ne. were shorter but not enough explicit, my.types.* wo any structure would be ok but no structure so too simple)  

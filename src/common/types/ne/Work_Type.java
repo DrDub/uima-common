@@ -15,7 +15,7 @@ vehicule Moyen de transport,
 award Récompense, 
 art Oeuvre artistique, 
 documentary Production documentaire
- * Updated by JCasGen Fri Dec 02 17:11:38 CET 2011
+ * Updated by JCasGen Fri Jan 06 03:22:31 CET 2012
  * @generated */
 public class Work_Type extends NamedEntity_Type {
   /** @generated */

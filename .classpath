@@ -24,5 +24,6 @@
 			<attribute name="javadoc_location" value="file://home/hernandez/Bureau/hernandez/workspace/CURRENT/un-lina-uima-user-dev-env/un-lina-uima-user-dev-env/applications/apache-uimaj/docs/api"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="lib/uimafit-1.1.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

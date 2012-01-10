@@ -21,7 +21,7 @@ import org.apache.uima.cas.Feature;
     * profession
     * animality:human|animal
     * reality:real|fiction
- * Updated by JCasGen Fri Dec 02 17:11:38 CET 2011
+ * Updated by JCasGen Fri Jan 06 03:22:31 CET 2012
  * @generated */
 public class Person_Type extends NamedEntity_Type {
   /** @generated */
