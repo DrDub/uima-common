@@ -14,7 +14,7 @@ vehicule Moyen de transport,
 award Récompense, 
 art Oeuvre artistique, 
 documentary Production documentaire
- * Updated by JCasGen Fri Dec 02 17:11:38 CET 2011
+ * Updated by JCasGen Fri Jan 06 03:22:31 CET 2012
  * XML source: /media/MyPassport/current/public/research/UIMA-USER-DEV-ENV/workspace/uima-common/desc/common/types/commonTS.xml
  * @generated */
 public class Work extends NamedEntity {
@@ -31,7 +31,7 @@ public class Work extends NamedEntity {
  
   /** Never called.  Disable default constructor
    * @generated */
-  protected Work() {}
+  protected Work() {/* intentionally empty block */}
     
   /** Internal - constructor used by generator 
    * @generated */

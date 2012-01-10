@@ -14,7 +14,7 @@ import org.apache.uima.jcas.cas.TOP_Type;
     * amountDigit
     * amountLetter
     * amountUnit
- * Updated by JCasGen Fri Dec 02 17:11:38 CET 2011
+ * Updated by JCasGen Fri Jan 06 03:22:30 CET 2012
  * XML source: /media/MyPassport/current/public/research/UIMA-USER-DEV-ENV/workspace/uima-common/desc/common/types/commonTS.xml
  * @generated */
 public class Amount extends NamedEntity {
@@ -31,7 +31,7 @@ public class Amount extends NamedEntity {
  
   /** Never called.  Disable default constructor
    * @generated */
-  protected Amount() {}
+  protected Amount() {/* intentionally empty block */}
     
   /** Internal - constructor used by generator 
    * @generated */

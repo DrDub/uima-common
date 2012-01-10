@@ -71,6 +71,11 @@ common.types.resource offers types based on generic recognizing tools</descripti
           <description/>
           <rangeTypeName>uima.cas.String</rangeTypeName>
         </featureDescription>
+        <featureDescription>
+          <name>stem</name>
+          <description>(based on Sandbox Snowball Annotator definition)</description>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
       </features>
     </typeDescription>
     <typeDescription>
@@ -362,6 +367,33 @@ documentary Production documentaire</description>
       <name>common.types.text.Subtitle</name>
       <description/>
       <supertypeName>common.types.text.Annotation</supertypeName>
+    </typeDescription>
+    <typeDescription>
+      <name>org.apache.uima.examples.SourceDocumentInformation</name>
+      <description/>
+      <supertypeName>uima.tcas.Annotation</supertypeName>
+      <features>
+        <featureDescription>
+          <name>uri</name>
+          <description/>
+          <rangeTypeName>uima.cas.String</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>offsetInSource</name>
+          <description/>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>documentSize</name>
+          <description/>
+          <rangeTypeName>uima.cas.Integer</rangeTypeName>
+        </featureDescription>
+        <featureDescription>
+          <name>lastSegment</name>
+          <description/>
+          <rangeTypeName>uima.cas.Boolean</rangeTypeName>
+        </featureDescription>
+      </features>
     </typeDescription>
   </types>
 </typeSystemDescription>
