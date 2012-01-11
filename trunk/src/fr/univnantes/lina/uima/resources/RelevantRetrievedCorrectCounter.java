@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.uima.UIMAFramework;
-import org.apache.uima.resource.DataResource;
-import org.apache.uima.resource.ResourceInitializationException;
-import org.apache.uima.resource.SharedResourceObject;
 import org.apache.uima.util.Level;
 
 /**
@@ -19,14 +16,14 @@ import org.apache.uima.util.Level;
 public class RelevantRetrievedCorrectCounter {
 
 	
-	  protected Map<String, Integer> mMap = new HashMap<String, Integer>();
+	  protected Map<String, Float> mMap = new HashMap<String, Float>();
 	  
 	/**
 	 * number of test (from the "automatic" tested system)
 	 */
 	//private float retrieved;
 	
-	public void addRetrieved(int retrieved) {
+	public void addRetrieved(float retrieved) {
 		mMap.put("retrieved", mMap.get("retrieved") + retrieved);
 		//System.out.println("Debug: addRetrieved "+ mMap.get("retrieved"));
 
@@ -37,7 +34,7 @@ public class RelevantRetrievedCorrectCounter {
 	 */
 	//private float relevant;
 	
-	public void addRelevant(int relevant) {
+	public void addRelevant(float relevant) {
 		mMap.put("relevant", mMap.get("relevant") + relevant);
 		//System.out.println("Debug: addRelevant "+ mMap.get("relevant"));
 	}
@@ -48,7 +45,7 @@ public class RelevantRetrievedCorrectCounter {
 	//private float correct;
 	
 	public void addCorrect() {
-		mMap.put("correct", mMap.get("correct") + 1);
+		mMap.put("correct", (float) mMap.get("correct") + 1);
 		//System.out.println("Debug: addCorrect " + mMap.get("correct"));
 
 	}
@@ -62,10 +59,10 @@ public class RelevantRetrievedCorrectCounter {
 		if (mMap.isEmpty()) {
 			//System.out.println("Debug: RelevantRetrievedCorrectCounterResource initialized to zero ");
 
-			mMap.put("retrieved", 0);
-			mMap.put("relevant", 0);
-			mMap.put("correct", 0);
-			mMap.put("enableWritten", 0);
+			mMap.put("retrieved", (float) 0);
+			mMap.put("relevant", (float) 0);
+			mMap.put("correct", (float) 0);
+			mMap.put("enableWritten", (float) 0);
 		}
 	}
 	
@@ -76,7 +73,9 @@ public class RelevantRetrievedCorrectCounter {
 	 */
 	private float getPrecision() {
 		//if (mMap.get("retrieved") == 0) return 0;
-		return mMap.get("correct") / mMap.get("retrieved");
+
+
+		return (float) (mMap.get("correct") / mMap.get("retrieved"));
 	}
 	
 	private String getPrecisionString() {
@@ -89,7 +88,7 @@ public class RelevantRetrievedCorrectCounter {
 	 */
 	private float getRecall() {
 		//if (mMap.get("relevant") == 0) return 0;
-		return Float.valueOf(mMap.get("correct") / mMap.get("relevant"));
+		return (float) (mMap.get("correct") / mMap.get("relevant"));
 	}
 	
 	private String getRecallString() {
@@ -102,7 +101,7 @@ public class RelevantRetrievedCorrectCounter {
 	 */
 	private float getFMeasure() {
 		//if (mMap.get("relevant") == 0) return 0;
-		return Float.valueOf(2 * this.getRecall() * this.getPrecision() / ( this.getRecall() + this.getPrecision()));
+		return (float) (2 * this.getRecall() * this.getPrecision() / ( this.getRecall() + this.getPrecision()));
 	}
 	
 	private String getFMeasureString() {
@@ -113,8 +112,8 @@ public class RelevantRetrievedCorrectCounter {
 	
 	private void enableWritten(boolean enabled) {
 		if (enabled) 
-		mMap.put("enableWritten", 1);
-		else 		mMap.put("enableWritten", 0);
+		mMap.put("enableWritten", (float)1);
+		else 		mMap.put("enableWritten", (float)0);
 
 		//this.written = enabled;
 	}
@@ -129,11 +128,20 @@ public class RelevantRetrievedCorrectCounter {
 		try {
 			if (!this.isEnableWritten()) {
 				this.enableWritten(true);
-				String message = "Evaluation Precision: %6.2f" + this.getPrecision() + "(" + this.getPrecisionString() + "); ";
-				message += "Recall:" + String.valueOf(this.getRecall()) + "(" + this.getRecallString() + ")";
+				System.out.println("INFO: Counter");
+				System.out.println("  * relevant="+ mMap.get("relevant"));
+				System.out.println("  * retrieved="+ mMap.get("retrieved"));
+				System.out.println("  * correct="+ mMap.get("correct"));				
+				System.out.println("INFO: Evaluation measures");
+
+				//String message = "Evaluation Precision: %6.2f" + this.getPrecision() + "(" + this.getPrecisionString() + "); ";
+				//message += "Recall:" + String.valueOf(this.getRecall()) + "(" + this.getRecallString() + ")";
 				//UIMAFramework.getLogger().log(Level.INFO,message);
 				//System.out.printf("INFO: Evaluation Precision=%6.2f",  this.getPrecision(), " (" + this.getPrecisionString() + "); Recall=%6.2f", this.getRecall()," (" + this.getRecallString() +"); F-measure=%6.2f", this.getFMeasure()," ("+getFMeasureString() +")\n" );
-				System.out.printf("INFO: Evaluation Precision=%6.2f (" + this.getPrecisionString() + "); Recall=%6.2f (" + this.getRecallString() +"); F-measure=%6.2f ("+getFMeasureString() +")\n", this.getPrecision(), this.getRecall(), this.getFMeasure() );
+				System.out.printf("  * Precision=%6.2f (" + this.getPrecisionString() + ");\n", this.getPrecision());
+				System.out.printf("  * Recall=%6.2f (" + this.getRecallString()+ ");\n", this.getRecall());
+				System.out.printf("  * F-measure=%6.2f ("+getFMeasureString() +");\n", this.getFMeasure() );
+				//System.out.printf("INFO: Evaluation Precision=%1.2d (" + this.getPrecisionString() + "); Recall=%1.2d (" + this.getRecallString() +"); F-measure=%1.2d ("+getFMeasureString() +")\n", this.getPrecision(), this.getRecall(), this.getFMeasure() );
 
 
 

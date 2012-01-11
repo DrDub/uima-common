@@ -28,10 +28,10 @@ public class RelevantRetrievedCorrectCounterResource extends RelevantRetrievedCo
 
 		
 		if (mMap.isEmpty()) {
-			mMap.put("retrieved", 0);
-			mMap.put("relevant", 0);
-			mMap.put("correct", 0);
-			mMap.put("enableWritten", 0);
+			mMap.put("retrieved", (float) 0);
+			mMap.put("relevant", (float)0);
+			mMap.put("correct", (float)0);
+			mMap.put("enableWritten", (float)0);
 		}
 
 	}
