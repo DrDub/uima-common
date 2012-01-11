@@ -173,6 +173,7 @@ public class InformationRetrievalEvaluatorAE extends JCasAnnotator_ImplBase {
 		AnnotationIndex<Annotation> testIndex = aJCas.getAnnotationIndex(testAnnotationType);
 		int testIndexSize = 0;
 		if (testIndex != null) testIndexSize = testIndex.size();
+		//System.out.println("Debug: testIndex.size() " + testIndex.size());
 		this.getRelevantRetrievedCorrectCounterResource().addRetrieved(testIndexSize);
 		//aRelevantRetrievedCorrectCounter.addRetrieved(testIndexSize);
 
@@ -185,7 +186,14 @@ public class InformationRetrievalEvaluatorAE extends JCasAnnotator_ImplBase {
 			Annotation aTestAnnotation = testIter.next();
 			// check its presence in the gold index
 			FSIterator<Annotation> result = this.filter(aJCas,goldIndex,goldAnnotationType,featureNames,aTestAnnotation);
+			/*while (result.hasNext()) {
+				Annotation aResult = result.next();
+				System.out.println("Debug: aResult "+aResult.getCoveredText());
+
+			}*/
 			if (result.hasNext()) {
+			//if (result != null) {
+				//System.out.println("Debug: test "+aTestAnnotation.getCoveredText());
 				// 
 				this.getRelevantRetrievedCorrectCounterResource().addCorrect();
 				//aRelevantRetrievedCorrectCounter.addCorrect();
@@ -209,6 +217,7 @@ public class InformationRetrievalEvaluatorAE extends JCasAnnotator_ImplBase {
 		FSMatchConstraint constraint = null;
 		// For each feature name
 		for (String name : featureNames) {
+			//System.out.println("Debug: feature name "+name);
 			Feature aTestAnnotationTypeFeature = aTestAnnotation.getType().getFeatureByBaseName(name);
 			Feature aGoldAnnotationTypeFeature = gold.getFeatureByBaseName(name);
 			FeaturePath path = aJCas.createFeaturePath();
@@ -218,14 +227,30 @@ public class InformationRetrievalEvaluatorAE extends JCasAnnotator_ImplBase {
 			if (featureRange.equals("uima.cas.String")) {
 				String value = aTestAnnotation.getStringValue(aTestAnnotationTypeFeature);
 				FSStringConstraint primitive = factory.createStringConstraint();
+				primitive.equals(value);
 				constraint = this.getConstraint(factory,constraint,primitive,path,value);
 			} else if (featureRange.equals("uima.cas.Integer")) {
 				Integer value = aTestAnnotation.getIntValue(aTestAnnotationTypeFeature);
 				FSIntConstraint primitive = factory.createIntConstraint();
+				// Without the following line the constraint is not complete 
+				// Types were only considered not the values.
+				primitive.eq(value);
 				constraint = this.getConstraint(factory,constraint,primitive,path,value);
 			} else {
-				throw new Exception("Not yet implemented for " + featureRange);
+				throw new Exception("Error in "+ this.getClass().getName() +": Not yet implemented for " + featureRange);
 			}
+			
+			
+			/*FSIntConstraint endConstraint = theConstraints.createIntConstraint();
+			if (isStrict) {
+				endConstraint.eq(contextAnnotation.getEnd());
+			} else {
+				endConstraint.leq(contextAnnotation.getEnd()+1);
+			}
+			Feature endFeature = contextAnnotationType.getFeatureByBaseName("end");
+			FeaturePath endPath = aJCas.createFeaturePath();
+			endPath.addFeature(endFeature);
+			FSMatchConstraint end = theConstraints.embedConstraint(endPath, endConstraint);*/
 		}
 		return aJCas.createFilteredIterator(goldIndex.iterator(),constraint);
 	}

@@ -11,10 +11,10 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.nlp{ConcordancerAE.java"/>
         <file path="/uima-common/.project"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Location_Type.java"/>
         <file path="/uima-common/NOTICE"/>
-        <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.nlp"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Annotation.java"/>
         <file path="/uima-common/README"/>
         <javaElement handleIdentifier="=uima-common/desc&lt;common.types"/>
@@ -35,8 +35,8 @@
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Time_Type.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types"/>
         <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.dataModels"/>
-        <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Event.java"/>
         <file path="/uima-common/TODO"/>
+        <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Event.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.resources"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Annotation_Type.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.text"/>
@@ -47,18 +47,21 @@
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Time.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.java"/>
         <file path="/uima-common/ChangeLog"/>
+        <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.nlp{RegexSubstituteAE.java"/>
+        <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.nlp{InformationRetrievalEvaluatorAE.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima"/>
         <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.common"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Amount.java"/>
-        <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Date.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Work.java"/>
+        <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Date.java"/>
+        <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{NamedEntity.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;fr"/>
         <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes"/>
-        <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{NamedEntity.java"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Location.java"/>
         <file path="/uima-common/.classpath"/>
         <file path="/uima-common/INSTALL"/>
         <javaElement handleIdentifier="=uima-common/src&lt;common.types.ne{Event_Type.java"/>
+        <javaElement handleIdentifier="=uima-common/src&lt;fr.univnantes.lina.uima.nlp{VariantRecognizerAE.java"/>
     </selectedElements>
 </jardesc>
