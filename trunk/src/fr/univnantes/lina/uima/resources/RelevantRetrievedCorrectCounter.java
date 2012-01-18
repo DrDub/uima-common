@@ -57,7 +57,7 @@ public class RelevantRetrievedCorrectCounter {
 		this.correct = 0;
 		this.enableWritten(false);*/
 		if (mMap.isEmpty()) {
-			//System.out.println("Debug: RelevantRetrievedCorrectCounterResource initialized to zero ");
+			//System.out.println("Debug: RelevantRetrievedCorrectCounter initialized to zero ");
 
 			mMap.put("retrieved", (float) 0);
 			mMap.put("relevant", (float) 0);
@@ -128,22 +128,30 @@ public class RelevantRetrievedCorrectCounter {
 		try {
 			if (!this.isEnableWritten()) {
 				this.enableWritten(true);
-				System.out.println("INFO: Counter");
+				//String message = "Evaluation Precision: %6.2f" + this.getPrecision() + "(" + this.getPrecisionString() + "); ";
+				//message += "Recall:" + String.valueOf(this.getRecall()) + "(" + this.getRecallString() + ")";
+				//UIMAFramework.getLogger().log(Level.INFO,message);
+				
+				/*System.out.println("INFO: Counter");
 				System.out.println("  * relevant="+ mMap.get("relevant"));
 				System.out.println("  * retrieved="+ mMap.get("retrieved"));
 				System.out.println("  * correct="+ mMap.get("correct"));				
 				System.out.println("INFO: Evaluation measures");
-
-				//String message = "Evaluation Precision: %6.2f" + this.getPrecision() + "(" + this.getPrecisionString() + "); ";
-				//message += "Recall:" + String.valueOf(this.getRecall()) + "(" + this.getRecallString() + ")";
-				//UIMAFramework.getLogger().log(Level.INFO,message);
-				//System.out.printf("INFO: Evaluation Precision=%6.2f",  this.getPrecision(), " (" + this.getPrecisionString() + "); Recall=%6.2f", this.getRecall()," (" + this.getRecallString() +"); F-measure=%6.2f", this.getFMeasure()," ("+getFMeasureString() +")\n" );
-				System.out.printf("  * Precision=%6.2f (" + this.getPrecisionString() + ");\n", this.getPrecision());
+				*/
+				//System.out.println("INFO: Evaluation relevant="+ mMap.get("relevant") + ", retrieved="+ mMap.get("retrieved") + ", correct="+ mMap.get("correct"));
+				
+				System.out.println("INFO: Evaluation & Relevant & Retrieved & Correct \\\\");
+				System.out.println("INFO: Evaluation & "+ mMap.get("relevant") + " & "+ mMap.get("retrieved") + " & "+ mMap.get("correct") + " \\\\");
+				
+				
+				/*System.out.printf("  * Precision=%6.2f (" + this.getPrecisionString() + ");\n", this.getPrecision());
 				System.out.printf("  * Recall=%6.2f (" + this.getRecallString()+ ");\n", this.getRecall());
 				System.out.printf("  * F-measure=%6.2f ("+getFMeasureString() +");\n", this.getFMeasure() );
-				//System.out.printf("INFO: Evaluation Precision=%1.2d (" + this.getPrecisionString() + "); Recall=%1.2d (" + this.getRecallString() +"); F-measure=%1.2d ("+getFMeasureString() +")\n", this.getPrecision(), this.getRecall(), this.getFMeasure() );
-
-
+				*/
+				//System.out.printf("INFO: Evaluation Precision=%1.2f (" + this.getPrecisionString() + "); Recall=%1.2f (" + this.getRecallString() +"); F-measure=%1.2f ("+getFMeasureString() +")\n", this.getPrecision(), this.getRecall(), this.getFMeasure() );
+				System.out.println("INFO: Evaluation & Precision & Recall & F-measure \\\\" );
+				System.out.printf("INFO: Evaluation & %1.2f & %1.2f & %1.2f \\\\\n", this.getPrecision(), this.getRecall(), this.getFMeasure() );
+				System.out.printf("INFO: Evaluation & ($" + this.getPrecisionString() + "$) & ($" + this.getRecallString() +"$) & ($"+getFMeasureString() +"$) \\\\\n");
 
 			}
 		} catch (Exception e) {

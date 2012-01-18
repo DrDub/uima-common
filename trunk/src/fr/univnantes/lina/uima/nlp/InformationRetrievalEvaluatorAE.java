@@ -119,9 +119,15 @@ public class InformationRetrievalEvaluatorAE extends JCasAnnotator_ImplBase {
 		try {
 			//RelevantRetrievedCorrectCounterResource resource = (RelevantRetrievedCorrectCounterResource) context.getResourceObject("SharedRelevantRetrievedAndCorrectCounterResource");
 			RelevantRetrievedCorrectCounterResource resource = (RelevantRetrievedCorrectCounterResource)getContext().getResourceObject("SharedRelevantRetrievedAndCorrectCounterResource");
+			//RelevantRetrievedCorrectCounterResource resource = (RelevantRetrievedCorrectCounterResource)getContext().getResourceObject("DefaultSharedRelevantRetrievedAndCorrectCounterResource");
 			//if (resource == null) System.out.println("Debug: resource == null");
-
-			if (resource == null) resource = new RelevantRetrievedCorrectCounterResource();
+			// la ressource était à null car il ne trouvait pas d'objet avec ce nom là SharedRelevantRetrievedAndCorrectCounterResource
+			// le problème a été résolu lorsque j'ai déclaré la resource dependencies directement dans l AE.xml 
+			// la méthode load est appelé par chaque AE à l'initialisation ; ainsi c'est à la création qu'on load des external data et non lors de l'appel du load... 
+			// 
+			
+			//DefaultSharedRelevantRetrievedAndCorrectCounterResource
+			//if (resource == null) resource = new RelevantRetrievedCorrectCounterResource();
 
 			this.setRelevantRetrievedCorrectCounterResource(resource);
 			String annotationType = (String) context.getConfigParameterValue("TestAnnotationType");
