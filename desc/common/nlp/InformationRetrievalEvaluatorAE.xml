@@ -45,5 +45,30 @@
       <outputsNewCASes>false</outputsNewCASes>
     </operationalProperties>
   </analysisEngineMetaData>
-  <resourceManagerConfiguration/>
+  <externalResourceDependencies>
+    <externalResourceDependency>
+      <key>SharedRelevantRetrievedAndCorrectCounterResource</key>
+      <description/>
+      <interfaceName>fr.univnantes.lina.uima.resources.RelevantRetrievedCorrectCounterResource_interface</interfaceName>
+      <optional>false</optional>
+    </externalResourceDependency>
+  </externalResourceDependencies>
+  <resourceManagerConfiguration>
+    <externalResources>
+      <externalResource>
+        <name>DefaultSharedRelevantRetrievedAndCorrectCounterResource</name>
+        <description/>
+        <fileResourceSpecifier>
+          <fileUrl>reportedSpeechDetector/relevantRetrievedCorrectCounterResource.tmp</fileUrl>
+        </fileResourceSpecifier>
+        <implementationName>fr.univnantes.lina.uima.resources.RelevantRetrievedCorrectCounterResource</implementationName>
+      </externalResource>
+    </externalResources>
+    <externalResourceBindings>
+      <externalResourceBinding>
+        <key>SharedRelevantRetrievedAndCorrectCounterResource</key>
+        <resourceName>DefaultSharedRelevantRetrievedAndCorrectCounterResource</resourceName>
+      </externalResourceBinding>
+    </externalResourceBindings>
+  </resourceManagerConfiguration>
 </analysisEngineDescription>
