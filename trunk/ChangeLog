@@ -21,6 +21,9 @@
 # ChangeLog File
 # 2010-10-08  Nicolas Hernandez  <nicolas.hernandez@gmail.com>
 
+2012-03-15  Nicolas Hernandez  <nicolas.hernandez@gmail.com> 
+  * BugFix: CommonAE use the the contextAnnotation of the given inputView not the one from the Jcas ; concequently ShellAE works with a different inputview from _InitialView 
+
 2011-12-01  Nicolas Hernandez  <nicolas.hernandez@gmail.com> 
   * src/fr/univnantes/lina/uima/common/JCasSofaViewUtils.java:add getArtifactName (whatever is the view which contains the source document information)
   * src/common/types/* desc/common/types/* : add new types for handling named entities, text structure, reported speech, dictionary and regex

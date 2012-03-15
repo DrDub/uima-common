@@ -518,6 +518,15 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 					// inputViewString
 					outputViewString = inputViewString;
 				}
+				
+				//
+				absoluteContextAnnotationIndex = (AnnotationIndex<Annotation>) inputViewJCas
+						.getAnnotationIndex(absoluteContextAnnotationType);
+				absoluteContextAnnotationIndexIterator = absoluteContextAnnotationIndex
+						.iterator();
+				Annotation inputViewJCasAbsoluteContextAnnotation = null;
+				inputViewJCasAbsoluteContextAnnotation = (Annotation) absoluteContextAnnotationIndexIterator
+					.next();
 
 				/**
 				 * -- In case of the output type is annotation, get the view to
@@ -540,9 +549,16 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 				// Iterator<Annotation> inputAnnotationIterator = null;
 				// inputAnnotationIterator =
 				// inputViewJCas.getAnnotationIndex(inputAnnotationType).subiterator(contextAnnotation);
+				//System.out.println("Debug: CommonAE process absoluteContextAnnotation " + absoluteContextAnnotation);
+				//System.out.println("Debug: CommonAE process absoluteContextAnnotation " + inputViewJCasAbsoluteContextAnnotation);
+				//System.out.println("Debug: CommonAE process inputViewJCas.getViewName() " + inputViewJCas.getViewName());
+
 				FSIterator contextAnnotationsFSIter = null;
+				
+				//AnnotationUtils.createAnnotation(inputViewJCas, "org.apache.uima.jcas.tcas.DocumentAnnotation", 0, sofaDataString.length());
+
 				contextAnnotationsFSIter = AnnotationCollectionUtils.subiterator(
-						inputViewJCas, absoluteContextAnnotation,
+						inputViewJCas, inputViewJCasAbsoluteContextAnnotation,
 						contextAnnotationStringHashMap, false);
 
 				inputViewsConcatenedResults += processInputView(inputViewJCas,
@@ -611,12 +627,15 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 			String ouputFeatureString)
 	throws AnalysisEngineProcessException {
 		log("AnalysisEngine - processInputView");
-
+		//System.out.println("Debug: CommonAE processInputView");
+		
 		// var to concat the results in case of a view as the output type
 		String contextAnnotationResultString = "";
 
 		// Pour chaque inputAnnotation présent dans le context
 		while (contextAnnotationsFSIter.hasNext()) {
+
+			//System.out.println("Debug: CommonAE contextAnnotationsFSIter.hasNext()");
 
 			Annotation contextAnnotation = (Annotation) contextAnnotationsFSIter
 			.next();
@@ -709,7 +728,9 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 			String outputAnnotationString, 
 			String ouputFeatureString) throws AnalysisEngineProcessException {
 		log("AnalysisEngine - processContextAnnotation");
+		//System.out.println("Debug: CommonAE processContextAnnotation");
 
+		
 		String commandResultString = "";
 
 		// Pour chaque inputAnnotation présent dans le context
@@ -773,6 +794,9 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 
 		log("AnalysisEngine - processInputAnnotation");
 
+		//System.out.println("Debug: CommonAE processInputAnnotation");
+
+		
 		// Récupère le texte à traiter et ses offsets qui pourront
 		// éventuellement servir
 		// si l'outputType est Annotation
@@ -870,6 +894,7 @@ public  class CommonAE extends JCasAnnotator_ImplBase {
 			int endFeatureValue)
 	throws AnalysisEngineProcessException {
 
+		
 		return inputTextToProcess;
 	}
 
