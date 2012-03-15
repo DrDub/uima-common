@@ -49,6 +49,7 @@ import org.apache.uima.examples.SourceDocumentInformation;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.jcas.cas.FSArray;
 import org.apache.uima.jcas.tcas.Annotation;
+import org.apache.uima.jcas.tcas.DocumentAnnotation;
 
 import fr.univnantes.lina.java.util.JavaUtilities;
 
@@ -71,6 +72,11 @@ public class JCasSofaViewUtils  {
 	 * Name of the default SourceDocumentInformation
 	 */
 	private static String DEFAULT_SOURCE_DOCUMENT_INFORMATION_ANNOTATION = "org.apache.uima.examples.SourceDocumentInformation";
+
+	/**
+	 * Name of the default DocumentAnnotation
+	 */
+	private static String DEFAULT_DOCUMENT_ANNOTATION = "org.apache.uima.jcas.tcas.DocumentAnnotation";
 
 	/**
 	 * Name of the current class
@@ -120,6 +126,7 @@ public class JCasSofaViewUtils  {
 			JCas outputView = JCasSofaViewUtils.getView(aJCas, outputViewString);
 			//outputView.setDocumentText(commandResultString);
 			outputView.setSofaDataString(sofaDataString,sofaDataStringTypeMimeString);
+	
 
 		} catch (CASException e) {
 			String errmsg = "Error: Cannot create the view "+outputViewString +" !";
