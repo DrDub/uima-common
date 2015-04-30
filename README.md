@@ -1,0 +1,1 @@
+Click here to consult the [the current version of the README file](https://code.google.com/p/uima-common/source/browse/trunk/README)
